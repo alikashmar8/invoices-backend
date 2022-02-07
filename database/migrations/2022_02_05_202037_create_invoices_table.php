@@ -18,6 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->double('total')->default(0);
             $table->double('extra_amount')->default(0);
             $table->double('discount')->default(0);
+            $table->double('barcode')->default(0);
             $table->boolean('is_paid')->default(false);
             $table->date('due_date')->default(now());
             $table->string('notes')->nullable();
