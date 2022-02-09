@@ -18,7 +18,8 @@ class CreateBusinessesTable extends Migration
             $table->string('name');
             $table->double('balance')->default(0);
             $table->string('address')->nullable();
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }
