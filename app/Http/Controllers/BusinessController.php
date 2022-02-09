@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use Illuminate\Http\Request;
+use App\Models\User;
+use \Illuminate\Support\Facades\Auth;
 
 class BusinessController extends Controller
 {
@@ -46,7 +48,8 @@ class BusinessController extends Controller
      */
     public function show(Business $business)
     {
-        //
+        $businesses = Business::all();//where('userId' , Auth::user()->id);
+        return view('app.businessList' , compact('businesses'));
     }
 
     /**
