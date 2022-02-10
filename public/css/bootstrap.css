@@ -66,6 +66,41 @@ body {
 [tabindex="-1"]:focus {
   outline: 0 !important;
 }
+/*ADDED*/
+.avatar {
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  height: 48px;
+  width: 48px;
+  transition: all .2s ease-in-out;
+}
+.avatar-xl {
+  width: 74px !important;
+  height: 74px !important;
+}
+.border-radius-lg {
+  border-radius: 0.75rem;
+}
+.element{
+  color: inherit;
+  text-decoration: none;
+  border-color: none; 
+  box-shadow: none;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.element:hover{
+  color: inherit;
+  text-decoration: none;
+  border-color: #ff556e; 
+  box-shadow: 0 0 0 0.2rem #ff556e50;
+}
+.element:hover > div > i{
+  transform : translateX(4px)
+}
 
 hr {
   box-sizing: content-box;
