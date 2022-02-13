@@ -29,7 +29,7 @@
 
     <!-- Webpage Title -->
     <title>@yield('title') | Sync</title>
-    
+
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
     <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
@@ -37,20 +37,20 @@
     <link href="{{asset('css/swiper.css')}}" rel="stylesheet">
 	<link href="{{asset('css/magnific-popup.css')}}" rel="stylesheet">
 	<link href="{{asset('css/styles.css')}}" rel="stylesheet">
-	
+
 	<!-- Favicon  -->
     <link rel="icon" href="images/favicon.png">
 
     <style>
-    .wbsd-notification { 
+    .wbsd-notification {
         position:fixed;
         left: 40px;
         top: 60px;
-        z-index: 15; 
+        z-index: 15;
         animation: notification-opacity forwards;
         animation-delay: 3s;
         animation-duration: 2s;
-         
+
     }
 
     @keyframes notification-opacity {
@@ -62,7 +62,7 @@
 
 </head>
 <body data-spy="scroll" data-target=".fixed-top">
-    
+
     <!-- Preloader -->
 	<div class="spinner-wrapper">
         <div class="spinner">
@@ -72,8 +72,8 @@
         </div>
     </div>
     <!-- end of preloader -->
-    @php 
-        $currentURL = "{$_SERVER['REQUEST_URI']}" ;  
+    @php
+        $currentURL = "{$_SERVER['REQUEST_URI']}" ;
     @endphp
 
     <div class=" wbsd-notification">
@@ -103,8 +103,8 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Sync</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="/"><img src="images/logo.svg" alt="alternative"></a> 
-            
+            <a class="navbar-brand logo-image" href="/"><img src="images/logo.svg" alt="alternative"></a>
+
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-awesome fas fa-bars"></span>
@@ -114,7 +114,7 @@
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav ml-auto">
-                    
+
                     @guest
 
                         <li class="nav-item">
@@ -142,7 +142,7 @@
                             </li>
                         @endif
 
-                        <!-- Dropdown Menu ->          
+                        <!-- Dropdown Menu ->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle page-scroll" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">EXTRA</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -157,10 +157,10 @@
 
                     @else
                         <li class="nav-item">
-                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/profile-' )) active @endif" href="/profile-{{Auth::user()->id}}">Profile</a>
+                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/profile' )) active @endif" href="/profile/{{Auth::user()->id}}">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/myBusinesses' )) active @endif" href="/myBusinesses">Businesses <span class="sr-only">(current)</span></a>
+                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/my-businesses' )) active @endif" href="/my-businesses">Businesses <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll "  href="{{ route('logout') }}"
@@ -169,15 +169,15 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
-                        </li> 
+                        </li>
 
-                        {{--<!-- Dropdown Menu -->          
+                        {{--<!-- Dropdown Menu -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle page-scroll" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/profile-{{Auth::user()->id}}">
+                                <a class="dropdown-item" href="/profile/{{Auth::user()->id}}">
                                     <span class="item-text">Profile</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
@@ -193,15 +193,15 @@
                                     @csrf
                                 </form>
                                 <div class="dropdown-divider"></div>
-                                
+
                                 <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
                             </div>
                         </li>
                         <!-- end of dropdown menu -->--}}
 
                     @endguest
-                    
-                    
+
+
                 </ul>
                 <span class="nav-item">
                     @guest
@@ -220,7 +220,7 @@
     </main>
 
     @include('layouts.footer')
-        	
+
     <!-- Scripts -->
     <script src="{{asset('js/jquery.min.js')}}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
     <script src="{{asset('js/popper.min.js')}}"></script> <!-- Popper tooltip library for Bootstrap -->

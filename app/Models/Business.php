@@ -12,6 +12,6 @@ class Business extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'role_user');
+        return $this->belongsToMany(User::class, 'user_businesses')->withPivot(['role', 'salary', 'is_active']);;
     }
 }

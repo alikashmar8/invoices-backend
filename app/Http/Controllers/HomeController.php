@@ -27,13 +27,6 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    public function profile($id)
-    {
-        if(Auth::user()->id != $id){
-            return redirect('/')->with( 'messageDgr' , 'Access Denied.');
-        }
-        $user = User::findOrFail($id);
-        return view('app.profile' , compact('user'));
-    }
+
 
 }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\Business;
 use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use App\Models\User;
 use \Illuminate\Support\Facades\Auth;
 use Image;
+
 class BusinessController extends Controller
 {
     /**
@@ -17,7 +19,26 @@ class BusinessController extends Controller
      */
     public function index()
     {
-        //
+        // not sure if you need this line here, I kept it for now but I think we don't need it
+        $myBus = UserBusiness::where('user_id', Auth::user()->id)->get();
+
+        // now to get businesses you can use this calling instead of the loop below, after you check the code delete the comments plz :)
+        $businesses =  Auth::user()->businesses;
+        // $businesses = collect();
+        // if($myBus != null){
+        //     foreach($myBus as $b){
+        //         //$businesses = Business::all();//where('userId' , Auth::user()->id);
+        //         $businesses->push(Business::findOrFail($b->business_id));
+        //     }
+        // }
+
+        if( request()->is('api/*')){
+            //an api call
+            return response()->json(['businesses' => $businesses, 'myBus' => $myBus]);
+        }else{
+            //a web call
+        return view('app.businessList', compact('businesses', 'myBus'));
+        }
     }
 
     /**
@@ -43,21 +64,32 @@ class BusinessController extends Controller
         $business->is_active = 1;
         if (isset($request->logo)) {
             $image = $request->file('logo');
-            $business->logo = $this->addBizImages($image); 
-        }elseif ($request->logo == ''|| $request->logo == null){
+            $business->logo = $this->addBizImages($image);
+        } elseif ($request->logo == '' || $request->logo == null) {
             $business->logo =  'img/bizLogo.png';
-        }else{
+        } else {
             $business->logo = 'img/bizLogo.png';
-        } 
+        }
         $business->save();
 
-        $relation = new UserBusiness();
-        $relation->role	= 'SUPERADMIN';
-        $relation->user_id =Auth::user()->id;
-        $relation->business_id = $business->id;
-        $relation->save();
+        // both options work the same choose whatever you are comfortable with
+        // option1
+        Auth::user()->businesses()->attach($business->id, ['role' => UserRole::SUPERADMIN,]);
 
-        return redirect('myBusinesses')->with( 'messageSuc' , 'Business profile created successfully');
+        // option2
+        // $relation = new UserBusiness();
+        // $relation->role	= UserRole::SUPERADMIN;
+        // $relation->user_id =Auth::user()->id;
+        // $relation->business_id = $business->id;
+        // $relation->save();
+
+        if( request()->is('api/*')){
+            //an api call
+            return response()->json(['succeed' => true, 'business' => $business]);
+        }else{
+            //a web call
+        return redirect('my-businesses')->with('messageSuc', 'Business profile created successfully');
+        }
     }
 
     /**
@@ -68,16 +100,27 @@ class BusinessController extends Controller
      */
     public function show(Business $business)
     {
-        $myBus = UserBusiness::where('user_id' , Auth::user()->id)->get();
-        $businesses = collect();
-        if($myBus != null){ 
-            foreach($myBus as $b){ 
-                //$businesses = Business::all();//where('userId' , Auth::user()->id);
-                $businesses->push(Business::findOrFail($b->business_id));
-            }
-        } 
-        
-        return view('app.businessList' , compact('businesses' ,'myBus'));
+        // also here no need to get business id
+        // $business = Business::findOrFail($id);
+
+        //you can check if relation exists using this method
+
+        // you code:
+        // $auth = UserBusiness::where('business_id' ,$id)->where('user_id', Auth::user()->id)->get();
+        // if(count($auth) > 0 ){
+        //     return view('app.businessDetails' , compact('business'));
+        // }else{
+        //     return redirect('/')->with( 'messageDgr' , 'Access Denied.');
+        // }
+
+
+        // alternate way:
+        $exists = $business->users->contains(Auth::user());
+        if ($exists) {
+            return view('app.businessProfile', compact('business'));
+        } else {
+            return redirect('/')->with('messageDgr', 'Access Denied.');
+        }
     }
 
     /**
@@ -115,17 +158,10 @@ class BusinessController extends Controller
     }
     public function showBusiness($id)
     {
-        $business = Business::findOrFail($id);
-        $auth = UserBusiness::where('business_id' ,$id)->where('user_id', Auth::user()->id)->get();
-        if(count($auth) > 0 ){
-            return view('app.businessDetails' , compact('business'));
-        }else{
-            return redirect('/')->with( 'messageDgr' , 'Access Denied.');
-        }
-
     }
 
-    public function addBizImages($image){ 
+    public function addBizImages($image)
+    {
         $destinationPath = 'uploads/biz'; //public_path('uploads/biz');
 
         $img = Image::make($image->getRealPath());
@@ -140,6 +176,4 @@ class BusinessController extends Controller
         $path = $destinationPath . $imageName;*/
         return $path;
     }
-
-
 }

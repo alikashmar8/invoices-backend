@@ -1,12 +1,12 @@
 @extends('layouts.app')
- 
+
 @section('title', 'Home')
-  
- 
-@section('content') 
+
+
+@section('content')
 <div class="container " >
     <div class="row justify-content-center">
-        
+
         <div class="col-md-11">
             <div class="card">
                 <div class="card-header">Your Businesses</div>
@@ -20,25 +20,25 @@
                                                                     data-target="#CreateForm">
                             Get started
                         </button>
-                        <Br> 
+                        <Br>
                     </p>
                     @else
                     <div class='row'>
                         <div class='col-md-12'>
                             @foreach($businesses as $bus)
-                                <a href='business-{{$bus->id}}' class='not '>
+                                <a href='business/{{$bus->id}}' class='not '>
                                     <div class='row position-relative  element m-2 border-radius-lg table-bordered'>
                                         <div class="avatar avatar-xl "  alt="Logo">
                                             <img class='w-100 border-radius-lg shadow-sm'   src='{{$bus->logo}}'>
                                         </div>
-                                        <h4 class='w-auto my-auto'> 
+                                        <h4 class='w-auto my-auto'>
                                             {{$bus->name}}
                                         </h4>
                                         <div style='position: absolute;     width: auto;   right: 7px;    top: 40%;'>
-                                            
+
                                             <i class="fas  fa-arrow-right"></i>
                                         </div>
-                                        
+
                                     </div>
                                 </a>
                             @endforeach
@@ -51,12 +51,12 @@
                             Add new business profile
                         </button>
                     </p>
-                    
+
                     @endif
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -71,8 +71,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="output_content" style=""> 
-                    <form method="POST" id='create-form' action="createBusinessForm" enctype="multipart/form-data">
+                <div class="modal-body" id="output_content" style="">
+                    <form method="POST" id='create-form' action="create-business-form" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row  ">
@@ -94,43 +94,43 @@
                                     Business Name
                                 </label>
 
-                                
+
                                 <input id="name" type="name" class="form-control" name="name" required  autofocus>
-    
+
                             </div>
                         </div>
- 
-            
+
+
                     </form>
-                        
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                     <a type="submit" id="exportBtn" class="btn btn-success text-white" onclick="event.preventDefault();
                                                     document.getElementById('create-form').submit();"  >Create</a>
-                
+
                 </div>
 
             </div>
         </div>
     </div>
     <script>
-                    
-                     
+
+
               function readImg(image){
                   var imgId="imgSrc";
                   var btnId = "removeBtn" ;
                   document.getElementById(imgId).src = window.URL.createObjectURL(image);
-                  document.getElementById(btnId).style.display = 'inline';  
+                  document.getElementById(btnId).style.display = 'inline';
               }
               function removeImg(){
                   var imgId="imgSrc";
                   var btnId = "removeBtn";
                   var fileId = "imgFile";
                   document.getElementById(imgId).src ="{{asset('img/bizLogo.png')}}";
-                  document.getElementById(fileId).value =null; 
-                  document.getElementById(btnId).style.display = 'none';  
-              } 
+                  document.getElementById(fileId).value =null;
+                  document.getElementById(btnId).style.display = 'none';
+              }
           </script>
 @endsection

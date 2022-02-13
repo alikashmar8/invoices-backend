@@ -21,8 +21,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/profile-{id}', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile')->middleware('auth');
-Route::get('/myBusinesses', [App\Http\Controllers\BusinessController::class, 'show'])->name('myBusinesses')->middleware('auth');
-Route::post('/createBusinessForm', [App\Http\Controllers\BusinessController::class, 'store'])->name('createBusinessForm')->middleware('auth');
+Route::get('/profile/{user}', [App\Http\Controllers\UsersController::class, 'profile'])->name('profile')->middleware('auth');
+Route::get('/my-businesses', [App\Http\Controllers\BusinessController::class, 'index'])->name('my-businesses')->middleware('auth');
+Route::post('/create-business-form', [App\Http\Controllers\BusinessController::class, 'store'])->name('create-business-form')->middleware('auth');
 
-Route::get('/business-{id}', [App\Http\Controllers\BusinessController::class, 'showBusiness'])->middleware('auth');
+Route::get('/business/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
