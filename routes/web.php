@@ -28,3 +28,4 @@ Route::get('/my-businesses', [App\Http\Controllers\BusinessController::class, 'i
 Route::post('/create-business-form', [App\Http\Controllers\BusinessController::class, 'store'])->name('create-business-form')->middleware('auth');
 
 Route::get('/business/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
+Route::get('/business/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showEmployees'])->middleware('auth');

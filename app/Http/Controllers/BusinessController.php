@@ -37,7 +37,7 @@ class BusinessController extends Controller
             return response()->json(['businesses' => $businesses, 'myBus' => $myBus]);
         }else{
             //a web call
-            return view('app.businessList', compact('businesses', 'myBus'));
+            return view('app.businesses.list-businesses', compact('businesses', 'myBus'));
         }
     }
 
@@ -117,7 +117,7 @@ class BusinessController extends Controller
         // alternate way:
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
-            return view('app.businessProfile', compact('business'));
+            return view('app.businesses.show-business', compact('business'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
@@ -175,5 +175,11 @@ class BusinessController extends Controller
         $image->move($destinationPath, $imageName);
         $path = $destinationPath . $imageName;*/
         return $path;
+    }
+
+    public function showEmployees(Business $business )
+    {
+        $employees = $business->users;
+        return view('app.businesses.employees.list-employees', compact('business'));
     }
 }
