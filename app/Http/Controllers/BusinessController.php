@@ -37,7 +37,7 @@ class BusinessController extends Controller
             return response()->json(['businesses' => $businesses, 'myBus' => $myBus]);
         }else{
             //a web call
-        return view('app.businessList', compact('businesses', 'myBus'));
+            return view('app.businessList', compact('businesses', 'myBus'));
         }
     }
 
@@ -88,7 +88,7 @@ class BusinessController extends Controller
             return response()->json(['succeed' => true, 'business' => $business]);
         }else{
             //a web call
-        return redirect('my-businesses')->with('messageSuc', 'Business profile created successfully');
+            return redirect('my-businesses')->with('messageSuc', 'Business profile created successfully');
         }
     }
 

@@ -107,7 +107,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                    <a type="submit" id="exportBtn" class="btn btn-success text-white" onclick="event.preventDefault();
+                    <a type="submit"  class="btn btn-success text-white" onclick="event.preventDefault();
                                                     document.getElementById('create-form').submit();"  >Create</a>
 
                 </div>

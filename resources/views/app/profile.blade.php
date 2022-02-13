@@ -3,6 +3,139 @@
 @section('title', 'Home')
   
  
-@section('content')
-{{$user}}
+@section('content') 
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card-prof p-3 py-4">
+                <div class="text-center"> 
+                    <img src="{{asset($user->profile_picture)}}" width="100" class="rounded-circle"> 
+                </div>
+                <div class="text-center mt-3"> 
+                    <span class="bg-secondary p-1 px-4 rounded text-white">{{$user->name}}</span>
+                    <h5 class="mt-2 mb-0">{{$user->email}}</h5>  
+                    <span>{{$user->phone_number}}</span>
+                    <div class="px-4 mt-1">
+                        <p class="fonts-prof">
+                            @if(count(Auth::user()->businesses) > 0)
+                            You've created {{count(Auth::user()->businesses)}} business profile(s)
+                            @else
+                            <a class='btn btn-link' href="mtBusiness">Create your business profile</a>
+                            @endif
+                        </p>
+                    </div>
+                    @if(count(Auth::user()->businesses) > 0)
+                    <ul class="social-list-prof">
+                        @foreach(Auth::user()->businesses as $bus)
+                        <li>
+                            <a href='/business/{{$bus->id}}' class='not '>
+                                <div class="avatar avatar-xl "  alt="Logo">
+                                    <img class='w-100 border-radius-lg shadow-sm'   src='{{asset($bus->logo)}}'>
+                                </div>
+                            </a>
+                        </li> 
+                        @endforeach
+ 
+                    </ul>
+                    @endif
+                    <div class="buttons-prof"> 
+                        <button class="btn btn-outline-primary px-4" onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">Logout 
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form> 
+                        </button> 
+                        <button class="btn btn-primary px-4 ms-3"  data-toggle="modal"
+                                                                    data-target="#EditProfileForm">Edit Profile</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{--EditProfileForm--}}
+    <div class="modal fade"  id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true"  >
+        <div class=" modal-dialog" style="" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" id='edit-profile-form' action="/edit-profile-form" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body" id="output_content" style="">
+
+                            <div class="row  ">
+                                <div class="col-md-4 ">
+                                    <div style='margin:5px; padding :7px; display:inline-block;position: relative;'>
+                                        <label for='imgFile'>
+                                            <div class='avatar avatar-xl position-relative'>
+                                                <img src="{{asset($user->profile_picture)}}" id='imgSrc' alt="profile_picture"   class=" rounded-circle shadow-sm" style='max-width:75px;max-height:75px;'>
+                                            </div>
+                                        </label>
+                                        <input type='file'  name='profile_picture' style='display:none' accept="image/*" id='imgFile'  onchange='readImg(this.files[0])'>
+                                        <a id='removeBtn' style='display:none;z-index: 5;position: absolute;top: 0px;left: 5px;color: red;' onclick='removeImg()'>
+                                        <i class="fas fa-times-circle text-danger"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="name" class="col-form-label text-md-end">
+                                        Name
+                                    </label>
+                                    <input id="name" type="name" class="form-control" name="name" value='{{$user->name}}' placeholder='Name' required  autofocus>
+
+                                    <label for="name" class="col-form-label text-md-end">
+                                        Email address
+                                    </label>
+                                    <input id="email" type="email" class="form-control" name="email" value='{{$user->email}}' placeholder='Email' required  >
+
+                                    <label for="name" class="col-form-label text-md-end">
+                                        Phone number
+                                    </label>
+                                    <input id="phone_number" type="phone" class="form-control" value='{{$user->phone_number}}' placeholder='Phone Number' name="phone_number"   >
+
+                                </div>
+                            </div>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        <button type="submit"  class="btn btn-success text-white"    >Edit</button>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+              function readImg(image){
+                  var imgId="imgSrc";
+                  var btnId = "removeBtn" ;
+                  document.getElementById(imgId).src = window.URL.createObjectURL(image);
+                  document.getElementById(btnId).style.display = 'inline';
+              }
+              function removeImg(){
+                  var imgId="imgSrc";
+                  var btnId = "removeBtn";
+                  var fileId = "imgFile";
+                  document.getElementById(imgId).src ="{{asset('img/profile.png')}}";
+                  document.getElementById(fileId).value =null;
+                  document.getElementById(btnId).style.display = 'none';
+              }
+          </script>
+
+
 @endsection

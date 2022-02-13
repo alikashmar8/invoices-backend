@@ -39,7 +39,7 @@
 	<link href="{{asset('css/styles.css')}}" rel="stylesheet">
 
 	<!-- Favicon  -->
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{{asset('images/favicon.png')}}">
 
     <style>
     .wbsd-notification {
@@ -103,7 +103,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Sync</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="/"><img src="images/logo.svg" alt="alternative"></a>
+            <a class="navbar-brand logo-image" href="/"><img src="{{asset('images/logo.svg')}}" alt="alternative"></a>
 
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
