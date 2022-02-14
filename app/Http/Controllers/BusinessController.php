@@ -91,7 +91,7 @@ class BusinessController extends Controller
             return response()->json(['succeed' => true, 'business' => $business]);
         } else {
             //a web call
-            return redirect('my-businesses')->with('messageSuc', 'Business profile created successfully');
+            return redirect('businesses')->with('messageSuc', 'Business profile created successfully');
         }
     }
 

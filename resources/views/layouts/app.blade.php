@@ -160,7 +160,7 @@
                             <a class="nav-link page-scroll @if( str_contains( $currentURL , '/profile' )) active @endif" href="/profile/{{Auth::user()->id}}">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/my-businesses' )) active @endif" href="/my-businesses">Businesses <span class="sr-only">(current)</span></a>
+                            <a class="nav-link page-scroll @if( str_contains( $currentURL , '/businesses' )) active @endif" href="/businesses">Businesses <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll "  href="{{ route('logout') }}"
