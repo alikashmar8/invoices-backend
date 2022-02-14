@@ -26,7 +26,7 @@
                     <div class='row'>
                         <div class='col-md-12'>
                             @foreach($businesses as $bus)
-                                <a href='business/{{$bus->id}}' class='not '>
+                                <a href='businesses/{{$bus->id}}' class='not '>
                                     <div class='row position-relative  element m-2 border-radius-lg table-bordered'>
                                         <div class="avatar avatar-xl "  alt="Logo">
                                             <img class='w-100 border-radius-lg shadow-sm'   src='{{$bus->logo}}'>

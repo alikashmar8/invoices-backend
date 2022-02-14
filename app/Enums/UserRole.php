@@ -13,5 +13,6 @@ final class UserRole extends Enum
 {
     const SUPERADMIN = 'SUPERADMIN';
     const BUSINESS_ADMIN = 'BUSINESS_ADMIN';
+    const MANAGER = 'MANAGER';
     const EMPLOYEE = 'EMPLOYEE';
 }

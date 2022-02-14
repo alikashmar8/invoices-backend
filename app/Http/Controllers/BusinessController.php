@@ -7,7 +7,10 @@ use App\Models\Business;
 use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use App\Models\User;
+use BenSampo\Enum\Rules\EnumValue;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Image;
 
 class BusinessController extends Controller
@@ -32,10 +35,10 @@ class BusinessController extends Controller
         //     }
         // }
 
-        if( request()->is('api/*')){
+        if (request()->is('api/*')) {
             //an api call
             return response()->json(['businesses' => $businesses, 'myBus' => $myBus]);
-        }else{
+        } else {
             //a web call
             return view('app.businesses.list-businesses', compact('businesses', 'myBus'));
         }
@@ -83,10 +86,10 @@ class BusinessController extends Controller
         // $relation->business_id = $business->id;
         // $relation->save();
 
-        if( request()->is('api/*')){
+        if (request()->is('api/*')) {
             //an api call
             return response()->json(['succeed' => true, 'business' => $business]);
-        }else{
+        } else {
             //a web call
             return redirect('my-businesses')->with('messageSuc', 'Business profile created successfully');
         }
@@ -177,9 +180,41 @@ class BusinessController extends Controller
         return $path;
     }
 
-    public function showEmployees(Business $business )
+    public function showEmployees(Business $business)
     {
         $employees = $business->users;
         return view('app.businesses.employees.list-employees', compact('business'));
+    }
+
+    public function addEmployee(Request $request, Business $business)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', new EnumValue(UserRole::class)],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error($validator->errors());
+            return redirect('/businesses/' . $business->id . '/employees')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+        $user->businesses()->attach([$business->id => ['role' => $request['role']]]);
+
+        if (request()->is('api/*')) {
+            //an api call
+            return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
+        } else {
+            //a web call
+            return view('app.businesses.employees.list-employees', compact('business'));
+        }
     }
 }

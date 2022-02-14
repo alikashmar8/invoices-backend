@@ -34,7 +34,7 @@
                         <span class="bg-danger float-right p-1 px-4 rounded text-white">Stopped</span>
                         @endif
                         <br><br>
-                        <a href="/business/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">Employees</a>
+                        <a href="/businesses/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">My Employees</a>
                         <br><br>
 
                         <span class="bg-secondary float-right p-1 px-4 rounded text-white"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>

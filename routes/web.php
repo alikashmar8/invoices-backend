@@ -27,5 +27,6 @@ Route::post('/edit-profile-form', [App\Http\Controllers\UsersController::class, 
 Route::get('/my-businesses', [App\Http\Controllers\BusinessController::class, 'index'])->name('my-businesses')->middleware('auth');
 Route::post('/create-business-form', [App\Http\Controllers\BusinessController::class, 'store'])->name('create-business-form')->middleware('auth');
 
-Route::get('/business/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
-Route::get('/business/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showEmployees'])->middleware('auth');
+Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
+Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showEmployees'])->middleware('auth');
+Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addEmployee'])->middleware('auth');

@@ -1,19 +1,19 @@
 @extends('layouts.app')
- 
+
 @section('title', 'Home')
-  
- 
-@section('content') 
+
+
+@section('content')
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-10">
             <div class="card-prof p-3 py-4">
-                <div class="text-center"> 
-                    <img src="{{asset($user->profile_picture)}}" width="100" class="rounded-circle"> 
+                <div class="text-center">
+                    <img src="{{asset($user->profile_picture)}}" width="100" class="rounded-circle">
                 </div>
-                <div class="text-center mt-3"> 
+                <div class="text-center mt-3">
                     <span class="bg-secondary p-1 px-4 rounded text-white">{{$user->name}}</span>
-                    <h5 class="mt-2 mb-0">{{$user->email}}</h5>  
+                    <h5 class="mt-2 mb-0">{{$user->email}}</h5>
                     <span>{{$user->phone_number}}</span>
                     <div class="px-4 mt-1">
                         <p class="fonts-prof">
@@ -28,25 +28,25 @@
                     <ul class="social-list-prof">
                         @foreach(Auth::user()->businesses as $bus)
                         <li>
-                            <a href='/business/{{$bus->id}}' class='not '>
+                            <a href='/businesses/{{$bus->id}}' class='not '>
                                 <div class="avatar avatar-xl "  alt="Logo">
                                     <img class='w-100 border-radius-lg shadow-sm'   src='{{asset($bus->logo)}}'>
                                 </div>
                             </a>
-                        </li> 
+                        </li>
                         @endforeach
- 
+
                     </ul>
                     @endif
-                    <div class="buttons-prof"> 
+                    <div class="buttons-prof">
                         <button class="btn btn-outline-primary px-4" onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">Logout 
+                                                    document.getElementById('logout-form').submit();">Logout
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
-                            </form> 
-                        </button> 
+                            </form>
+                        </button>
                         <button class="btn btn-primary px-4 ms-3"  data-toggle="modal"
-                                                                    data-target="#EditProfileForm">Edit Profile</button> 
+                                                                    data-target="#EditProfileForm">Edit Profile</button>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
 {{--EditProfileForm--}}
     <div class="modal fade"  id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true"  >
-        <div class=" modal-dialog" style="" role="document">
+        <div class=" modal-dialog" role="document">
             <div class="modal-content" >
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Profile Details</h5>
@@ -69,7 +69,7 @@
                 </div>
                 <form method="POST" id='edit-profile-form' action="/edit-profile-form" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body" id="output_content" style="">
+                    <div class="modal-body" id="output_content">
 
                             <div class="row  ">
                                 <div class="col-md-4 ">
