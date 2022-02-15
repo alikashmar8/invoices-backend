@@ -14,4 +14,9 @@ class Business extends Model
     {
         return $this->belongsToMany(User::class, 'user_businesses')->withPivot(['role', 'salary', 'is_active']);;
     }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
 }

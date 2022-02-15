@@ -67,4 +67,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Business::class, 'user_businesses')->withPivot(['role', 'salary', 'is_active']);
     }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }
