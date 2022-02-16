@@ -78,7 +78,7 @@ class BusinessController extends Controller
 
         // both options work the same choose whatever you are comfortable with
         // option1
-        Auth::user()->businesses()->attach($business->id, ['role' => UserRole::SUPERADMIN,]);
+        Auth::user()->businesses()->attach($business->id, ['role' => UserRole::MANAGER,]);
 
         // option2
         // $relation = new UserBusiness();
@@ -181,15 +181,15 @@ class BusinessController extends Controller
         return $path;
     }
 
-    public function showEmployees(Business $business)
+    public function showMembers(Business $business)
     {
-        $employees = $business->users;
-        return view('app.businesses.employees.list-employees', compact('business'));
+        $members = $business->users;
+        return view('app.businesses.members.list-members', compact('business'));
     }
 
     public function addNewEmployee(Request $request, Business $business)
     {
-        /*$validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -197,11 +197,12 @@ class BusinessController extends Controller
         ]);
 
         if ($validator->fails()) {
+            //TODO: add error message for api
             Log::error($validator->errors());
-            return redirect('/businesses/' . $business->id . '/employees')
+            return redirect('/businesses/' . $business->id . '/members')
                 ->withErrors($validator)
                 ->withInput();
-        }*/
+        }
 
         $user = new User();
         $user->name = $request->name;
@@ -211,7 +212,6 @@ class BusinessController extends Controller
         $user->businesses()->attach([$business->id => ['role' => $request['role']]]);
 
         if (request()->is('api/*')) {
-            //an api call
             return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
         } else {
             //a web call
@@ -219,13 +219,15 @@ class BusinessController extends Controller
             return view('app.businesses.employees.list-employees', compact('business'));
         }
     }
+
+    //Not used yet, incase you used it remove this note plz
     public function addExistingEmployee(Request $request, Business $business)
     {
         $user = User::where('email' , $request->email )->first();
-         
+
         $user->businesses()->attach([$business->id => ['role' => $request['role']]]);
-         
-        
+
+
 
         $notify = new Notification();
         $notify->title= 'Joining a new team';

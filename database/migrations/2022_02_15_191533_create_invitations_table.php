@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\InvitationStatus;
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ class CreateInvitationsTable extends Migration
             $table->enum('status', InvitationStatus::getValues())->default(InvitationStatus::PENDING);
             $table->string('message')->nullable();
             $table->timestamp('expiry_date')->nullable();
+            $table->enum('role', UserRole::getValues())->default(UserRole::TEAM_MEMBER);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('business_id');

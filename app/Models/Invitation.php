@@ -9,6 +9,16 @@ class Invitation extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'business_id',
+        'user_id',
+        'role',
+        'status',
+        'message',
+        'expiry_date'
+    ];
+
+
 
 
     public function user()

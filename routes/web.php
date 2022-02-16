@@ -28,9 +28,10 @@ Route::post('/create-business-form', [App\Http\Controllers\BusinessController::c
 
 Route::get('/businesses', [App\Http\Controllers\BusinessController::class, 'index'])->name('businesses')->middleware('auth');
 Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
-Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showEmployees'])->middleware('auth');
+Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
-Route::post('/businesses/{business}/employees/invite', [App\Http\Controllers\BusinessController::class, 'addExistingEmployee'])->middleware('auth');
+// Route::post('/businesses/{business}/employees/invite', [App\Http\Controllers\BusinessController::class, 'addExistingEmployee'])->middleware('auth');
+Route::post('/invitations', [App\Http\Controllers\InvitationController::class, 'store'])->middleware('auth');
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');

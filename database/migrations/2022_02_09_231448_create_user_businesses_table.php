@@ -17,7 +17,7 @@ class CreateUserBusinessesTable extends Migration
     {
         Schema::create('user_businesses', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', UserRole::getValues())->default(UserRole::EMPLOYEE);
+            $table->enum('role', UserRole::getValues())->default(UserRole::TEAM_MEMBER);
             $table->boolean('is_active')->default(true);
             $table->boolean('salary')->default(0);
             $table->unsignedBigInteger('user_id');
