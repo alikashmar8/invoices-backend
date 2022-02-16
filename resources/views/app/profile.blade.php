@@ -20,7 +20,7 @@
                             @if(count(Auth::user()->businesses) > 0)
                             You've created {{count(Auth::user()->businesses)}} business profile(s)
                             @else
-                            <a class='btn btn-link' href="mtBusiness">Create your business profile</a>
+                            <a class='btn btn-link' href="businesses">Create your business profile</a>
                             @endif
                         </p>
                     </div>
@@ -55,6 +55,42 @@
 </div>
 
 
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+            <div class="card px-3  ">
+                <div class="row">
+                    <table class='table table-striped table-hover table-responsive-sm   '>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Message</th> 
+                                <th>Actions</th> 
+
+                            </tr>
+                        </thead>
+                        @if(count($notifications))
+                        <tbody>
+                            @foreach($notifications as $not)
+                            <tr style='@if(!$not->is_read) font-weight:bold @endif'>
+                                <td>{{$not->title}}</td>
+                                <td>@php echo $not->message @endphp</td> 
+                                <td>mark as read</td> 
+                            </tr> 
+                            @endforeach
+                        </tbody>
+                        @else
+                        <tbody>
+                            <tr ><td colspan=2>No notifications to show</td></tr>
+                        </tbody>
+                        @endif
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {{--EditProfileForm--}}
     <div class="modal fade"  id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"

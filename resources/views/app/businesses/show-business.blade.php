@@ -4,6 +4,7 @@
 
 
 @section('content')
+
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
@@ -34,7 +35,10 @@
                         <span class="bg-danger float-right p-1 px-4 rounded text-white">Stopped</span>
                         @endif
                         <br><br>
-                        <a href="/businesses/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">My Employees</a>
+                        @if(\Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::MANAGER ||
+                        \Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::SUPERADMIN)
+                        <a href="/businesses/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">Team members</a>
+                        @endif
                         <br><br>
 
                         <span class="bg-secondary float-right p-1 px-4 rounded text-white"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
@@ -48,7 +52,7 @@
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
-            <div class="card p-3 py-4">
+            <div class="card px-3 ">
                 <div class="row">
                     <table class='table table-striped table-hover table-responsive-sm   '>
                         <thead>

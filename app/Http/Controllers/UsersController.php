@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Notification;
 use Image;
 class UsersController extends Controller
 {
@@ -14,13 +15,14 @@ class UsersController extends Controller
         if(Auth::user()->id != $user->id){
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
+        $notifications = Notification::where('user_id' ,Auth::user()->id )->get();
 
         if( request()->is('api/*')){
             //an api call
-            return response()->json(['user' => $user]);
+            return response()->json(['user' => $user , 'notifications' => $notifications] );
         }else{
             //a web call
-            return view('app.profile' , compact('user'));
+            return view('app.profile' , compact('user', 'notifications'));
         }
     }
     public function edit(Request $request)
@@ -59,5 +61,18 @@ class UsersController extends Controller
         $image->move($destinationPath, $imageName);
         $path = $destinationPath . $imageName;*/
         return $path;
+    }
+    public function memberCheckerIfExist(Request $request)
+    {
+        $user = User::where('email', $request->email1)->get();
+        if(!$user->isEmpty()) {
+            
+            if(!$user[0]->businesses()->where('business_id', $request->id)->get()->isEmpty()){
+                return response()->json(['success' => 'isTeamMember']); 
+            }
+            return response()->json(['success' => 'exist']); 
+        }
+        else return response()->json(['success' => 'notExist']); 
+        
     }
 }

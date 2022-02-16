@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Models\Business;
+use App\Models\Notification;
 use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -186,9 +187,9 @@ class BusinessController extends Controller
         return view('app.businesses.employees.list-employees', compact('business'));
     }
 
-    public function addEmployee(Request $request, Business $business)
+    public function addNewEmployee(Request $request, Business $business)
     {
-        $validator = Validator::make($request->all(), [
+        /*$validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -200,7 +201,7 @@ class BusinessController extends Controller
             return redirect('/businesses/' . $business->id . '/employees')
                 ->withErrors($validator)
                 ->withInput();
-        }
+        }*/
 
         $user = new User();
         $user->name = $request->name;
@@ -214,6 +215,30 @@ class BusinessController extends Controller
             return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
         } else {
             //a web call
+            return redirect('/businesses/'.$business->id.'/employees');
+            return view('app.businesses.employees.list-employees', compact('business'));
+        }
+    }
+    public function addExistingEmployee(Request $request, Business $business)
+    {
+        $user = User::where('email' , $request->email )->first();
+         
+        $user->businesses()->attach([$business->id => ['role' => $request['role']]]);
+         
+        
+
+        $notify = new Notification();
+        $notify->title= 'Joining a new team';
+        $notify->message ='You were addedd as ' . $request['role'] .' to <a href="/businesses/' . $business->id .'" style="font-weight:bold" class="btn btn-link text-success">' . $business->name . '</a> team.';
+        $notify->user_id = $user->id;
+        $notify->save();
+
+        if (request()->is('api/*')) {
+            //an api call
+            return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
+        } else {
+            //a web call
+            return redirect('/businesses/'.$business->id.'/employees');
             return view('app.businesses.employees.list-employees', compact('business'));
         }
     }
