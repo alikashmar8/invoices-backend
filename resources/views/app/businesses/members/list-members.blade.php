@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', 'Team members')
 
 
 @section('content')
@@ -53,7 +53,7 @@
                             <tr>
                                 <td>{{$member->name}}</td>
                                 <td>{{$member->pivot->role}}</td>
-                                <td> @if($member->pivot->is_active) active @else inactive @endif </td>
+                                <td> @if($member->pivot->is_active) Active @else Inactive @endif </td>
                                 <td>
                                     <button type="button" class="btn">
                                         <i class="fa fa-trash text-primary"></i>
@@ -62,6 +62,25 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @if( count($invitations) > 0 )
+                                @foreach($invitations as $invite)
+                                @php 
+                                    $user = App\Models\User::where('id', $invite->user_id)->get();
+                                    if($user->isEmpty()) break;
+                                @endphp
+                                <tr>
+                                    <td>{{$user[0]->name}}</td>
+                                    <td>{{$invite->role}}</td>
+                                    <td> {{$invite->status}} </td>
+                                    <td>
+                                        <button type="button" class="btn">
+                                            <i class="fa fa-trash text-primary"></i>
+                                            <i class='fa fa-edit text-primary'></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
 

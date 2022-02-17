@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Invitation;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Notification;
@@ -65,9 +66,14 @@ class UsersController extends Controller
     public function memberCheckerIfExist(Request $request)
     {
         $user = User::where('email', $request->email1)->get();
+        
         if(!$user->isEmpty()) {
+            $invitations = Invitation::where('user_id' , $user[0]->id)
+                                    ->where('business_id', $request->id)
+                                    ->where('status' , 'PENDING')->get();
             
-            if(!$user[0]->businesses()->where('business_id', $request->id)->get()->isEmpty()){
+            if(!$user[0]->businesses()->where('business_id', $request->id)->get()->isEmpty()
+                || !$invitations->isEmpty()  ){
                 return response()->json(['success' => 'isTeamMember']); 
             }
             return response()->json(['success' => 'exist']); 

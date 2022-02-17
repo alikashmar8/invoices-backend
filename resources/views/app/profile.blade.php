@@ -20,7 +20,7 @@
                             @if(count(Auth::user()->businesses) > 0)
                             You've created {{count(Auth::user()->businesses)}} business profile(s)
                             @else
-                            <a class='btn btn-link' href="businesses">Create your business profile</a>
+                            <a class='btn btn-link' href="/businesses">Create your business profile</a>
                             @endif
                         </p>
                     </div>
@@ -66,6 +66,7 @@
                                 <th>Title</th>
                                 <th>Message</th> 
                                 <th>Actions</th> 
+                                <th>Date</th> 
 
                             </tr>
                         </thead>
@@ -75,13 +76,30 @@
                             <tr style='@if(!$not->is_read) font-weight:bold @endif'>
                                 <td>{{$not->title}}</td>
                                 <td>@php echo $not->message @endphp</td> 
-                                <td>mark as read</td> 
+                                <td>
+                                    @if(!$not->is_read)
+                                    <form method="POST"  action="/markNotificationAsRead/{{$not->id}}" >
+                                        @csrf
+                                        <button type="submit"  class="btn btn-link p-0   text-secondary"  ><i class='fa fa-envelope-open'></i> <small>Mark as read</small></button>
+                                    </form>
+                                    @else
+                                    <form method="POST"  action="/markNotificationAsUnread/{{$not->id}}" >
+                                        @csrf
+                                        <button type="submit"  class="btn btn-link p-0   text-secondary"  ><i class='fa fa-envelope'></i> <small>Mark as unread</small></button>
+                                    </form>
+                                    @endif
+                                    <form method="POST"  action="/deleteNotification/{{$not->id}}" >
+                                        @csrf
+                                        <button type="submit"  class="btn btn-link p-0 text-danger "  ><i class='fa fa-trash'></i> <small>Delete</small></button>
+                                    </form>
+                                </td> 
+                                <td>{{\Carbon\Carbon::parse($not->created_at)->format('d/m/Y') }}</td>
                             </tr> 
                             @endforeach
                         </tbody>
                         @else
                         <tbody>
-                            <tr ><td colspan=2>No notifications to show</td></tr>
+                            <tr ><td colspan=3>No notifications to show</td></tr>
                         </tbody>
                         @endif
                     </table>

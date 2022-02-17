@@ -80,6 +80,20 @@ class NotificationController extends Controller
      */
     public function destroy(Notification $notification)
     {
-        //
+        $notification->delete();
+        return back();
     }
+    public function markRead(Notification $notification)
+    {
+        $notification->is_read = 1;
+        $notification->save();
+        return back();
+    }
+    public function markUnead(Notification $notification)
+    {
+        $notification->is_read = 0;
+        $notification->save();
+        return back();
+    }
+    
 }

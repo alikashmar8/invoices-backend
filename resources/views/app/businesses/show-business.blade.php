@@ -36,7 +36,7 @@
                         @endif
                         <br><br>
                         @if(\Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::MANAGER ||
-                        \Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::SUPERADMIN)
+                        \Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::CO_MANAGER)
                         <a href="/businesses/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">Team members</a>
                         @endif
                         <br><br>

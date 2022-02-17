@@ -161,6 +161,7 @@ body {
   font-size: 19px
 }
 
+
 .buttons-prof button:nth-child(1) {
   border: 1px solid #ff556e !important;
   color: #ff556e;
@@ -180,6 +181,54 @@ body {
   color: #fff;
   height: 40px
 }
+
+/*notification in nav bar*/
+.widget-header {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.icon-sm {
+  /*width: 48px;
+  height: 48px;*/
+  line-height: 48px !important;
+  font-size: 20px;
+}
+.icon-xs, .icon-sm, .icon-md, .icon-lg {
+  display: inline-block;
+  text-align: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.rounded-circle {
+  border-radius: 50% !important;
+} 
+.notify {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 12px;
+  line-height: 1;
+  text-align: center;
+  border-radius: 3rem;
+  color: #fff;
+  background-color: #ff556e;
+} /*
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.37rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}*/
+
 
 /*end*/
 hr {

@@ -32,6 +32,12 @@ Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessCon
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
 // Route::post('/businesses/{business}/employees/invite', [App\Http\Controllers\BusinessController::class, 'addExistingEmployee'])->middleware('auth');
 Route::post('/invitations', [App\Http\Controllers\InvitationController::class, 'store'])->middleware('auth');
+Route::get('/acceptInvitation/{business}-{oldNotification}', [App\Http\Controllers\InvitationController::class, 'accept'])->name('acceptInvitation')->middleware('auth');
+Route::get('/rejectInvitation/{business}-{oldNotification}', [App\Http\Controllers\InvitationController::class, 'reject'])->name('rejectInvitation')->middleware('auth');
+Route::post('/markNotificationAsRead/{notification}', [App\Http\Controllers\NotificationController::class, 'markRead'])->middleware('auth')->name('markNotificationAsRead');
+Route::post('/deleteNotification/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
+Route::post('/markNotificationAsUnread/{notification}', [App\Http\Controllers\NotificationController::class, 'markUnead'])->middleware('auth')->name('markNotificationAsRead');
+
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');
