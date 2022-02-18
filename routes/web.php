@@ -30,10 +30,11 @@ Route::get('/businesses', [App\Http\Controllers\BusinessController::class, 'inde
 Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('auth');
 Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
-// Route::post('/businesses/{business}/employees/invite', [App\Http\Controllers\BusinessController::class, 'addExistingEmployee'])->middleware('auth');
+
 Route::post('/invitations', [App\Http\Controllers\InvitationController::class, 'store'])->middleware('auth');
-Route::get('/acceptInvitation/{business}-{oldNotification}', [App\Http\Controllers\InvitationController::class, 'accept'])->name('acceptInvitation')->middleware('auth');
-Route::get('/rejectInvitation/{business}-{oldNotification}', [App\Http\Controllers\InvitationController::class, 'reject'])->name('rejectInvitation')->middleware('auth');
+Route::post('/invitations/{invitation}/accept', [App\Http\Controllers\InvitationController::class, 'accept'])->middleware('auth');
+Route::post('/invitations/{invitation}/reject', [App\Http\Controllers\InvitationController::class, 'reject'])->middleware('auth');
+
 Route::post('/markNotificationAsRead/{notification}', [App\Http\Controllers\NotificationController::class, 'markRead'])->middleware('auth')->name('markNotificationAsRead');
 Route::post('/deleteNotification/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
 Route::post('/markNotificationAsUnread/{notification}', [App\Http\Controllers\NotificationController::class, 'markUnead'])->middleware('auth')->name('markNotificationAsRead');

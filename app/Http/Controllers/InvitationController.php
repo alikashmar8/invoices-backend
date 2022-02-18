@@ -69,14 +69,23 @@ class InvitationController extends Controller
             'role' => $request->role,
             'message' => 'Hello, I would like you to join my team.',
         ]);
-        
-        //TODO: send notification for the invited user
+
         $notify = new Notification();
-        $notify->title= 'Joining a new team';
+        $notify->title = 'Joining a new team';
         $notify->user_id = $user->id;
-        $notify->message ='';
+        $notify->message = '';
         $notify->save();
-        $notify->message ='You were invited to join ' . $business->name . ' team as ' . $request['role'] .'.<BR> <a href="/acceptInvitation/'. $business->id .'-'. $notify->id .'" class="btn btn-link text-success">Accept</a><a href="/rejectInvitation/'. $business->id .'-'. $notify->id .'" class="btn btn-link text-danger">Reject</a> ';
+        $notify->message = 'You were invited to join ' . $business->name . ' team as ' . $request['role'] . '.
+        <form method="post" action="/invitations/' . $invitation->id . '/accept">
+            <input type="hidden" name="notification_id" value="' . $notify->id . '" />
+            <BR>
+            <button type="submit" class="btn btn-link text-success">Accept</a>
+        </form>
+         <form method="post" action="/invitations/' . $invitation->id . '/reject">
+            <input type="hidden" name="notification_id" value="' . $notify->id . '" />
+         <BR>
+            <button type="submit" class="btn btn-link text-danger">Reject</a>
+         </form>';
         $notify->save();
 
         if (request()->is('api/*')) {
@@ -84,7 +93,7 @@ class InvitationController extends Controller
             return response()->json(['invitation' => $invitation]);
         } else {
             //a web call
-            return redirect('/businesses/'.$business->id.'/employees'); 
+            return redirect('/businesses/' . $business->id . '/employees');
         }
         return custom_response($request->is('api/*'), ['invitation' => $invitation], compact('invitation', 'business'), 'app.businesses.members.list-members', 200);
     }
@@ -133,68 +142,75 @@ class InvitationController extends Controller
     {
         //
     }
-    public function accept(Business $business, Notification $oldNotification)
+    public function accept(Request $request, Invitation $invitation)
     {
-        $invitation = Invitation::where('user_id' , Auth::user()->id)
-        ->where('business_id' , $business->id)
-        ->where('status', 'PENDING')->get();
- 
-        if($invitation->isEmpty()) { 
-            return back()->with( 'messageDgr' , 'Invitation Expired.');
+
+        $validator = Validator::make($request->all(), [
+            'notification_id' => ['required', 'exists:notifications,id']
+        ]);
+
+        if ($validator->fails()) {
+            //TODO: add error message for api
+            Log::error($validator->errors());
+            return redirect('/')
+                ->withErrors($validator)
+                ->withInput();
         }
-        
-        //accept the invitation
-        $invitation = $invitation[0];
-        $invitation->status = InvitationStatus::ACCEPTED; 
+
+        $invitation->status = InvitationStatus::ACCEPTED;
         $invitation->save();
 
-        $oldNotification->message = 'You were invited to join ' . $business->name . ' team as ' . $invitation['role'] .'.<BR> <a  class="btn btn-link text-success">Accepted</a> ';
-        $oldNotification->is_read = 0;
-        $oldNotification->save();
+        $notification = Notification::findOrFail($request->notification_id);
 
-        Auth::user()->businesses()->attach([$business->id => ['role' => $invitation['role']]]);
+        $notification->message = 'You were invited to join ' . $invitation->business->name . ' team as ' . $invitation['role'] . '.<BR> <a  class="btn btn-link text-success">Accepted</a> ';
+        $notification->is_read = 0;
+        $notification->save();
+
+        Auth::user()->businesses()->attach([$invitation->business->id => ['role' => $invitation['role']]]);
 
         //notify the user that he joined the new team
         $notify = new Notification();
-        $notify->title= 'Welcome to '. $business->name . ' team';
-        $notify->message ='Now you are a ' . $invitation['role'] .' in <a href="/businesses/' . $business->id .'" style="font-weight:bold" class="p-0 btn-link text-primary">' . $business->name . '</a> team.';
+        $notify->title = 'Welcome to ' . $invitation->business->name . ' team';
+        $notify->message = 'Now you are a ' . $invitation['role'] . ' in <a href="/businesses/' . $invitation->business->id . '" style="font-weight:bold" class="p-0 btn-link text-primary">' . $invitation->business->name . '</a> team.';
         $notify->user_id = Auth::user()->id;
         $notify->save();
 
         if (request()->is('api/*')) {
-            //an api call 
-
+            //an api call
+            return response()->json(['accepted' => true]);
         } else {
             //a web call
-            return redirect('/businesses/'.$business->id); 
+            return redirect('/businesses/' . $invitation->business->id);
         }
     }
-    
-    public function reject(Business $business, Notification $oldNotification)
+
+    public function reject(Request $request, Invitation $invitation)
     {
-        $invitation = Invitation::where('user_id' , Auth::user()->id)
-        ->where('business_id' , $business->id)
-        ->where('status', 'PENDING')->get();
- 
-        if($invitation->isEmpty()) { 
-            return back()->with( 'messageDgr' , 'Invitation Expired.');
+        $validator = Validator::make($request->all(), [
+            'notification_id' => ['required', 'exists:notifications,id']
+        ]);
+
+        if ($validator->fails()) {
+            Log::error($validator->errors());
+            return redirect('/')
+                ->withErrors($validator)
+                ->withInput();
         }
-        
-        //accept the invitation
-        $invitation = $invitation[0];
-        $invitation->status = InvitationStatus::REJECTED; 
+
+        $invitation->status = InvitationStatus::REJECTED;
         $invitation->save();
 
-        $oldNotification->message = 'You were invited to join ' . $business->name . ' team as ' . $invitation['role'] .'.<BR> <a  class="btn btn-link text-danger">Rejected</a> ';
-        $oldNotification->is_read = 0;
-        $oldNotification->save();
+        $notification = Notification::findOrFail($request->notification_id);
+        $notification->message = 'You were invited to join ' . $invitation->business->name . ' team as ' . $invitation['role'] . '.<BR> <a  class="btn btn-link text-danger">Rejected</a> ';
+        $notification->is_read = 0;
+        $notification->save();
 
         if (request()->is('api/*')) {
             //an api call
-            
+            return response()->json(['rejected' => true]);
         } else {
             //a web call
-            return back()->with( 'messageDgr' , 'Invitation rejected.');
+            return back()->with('messageDgr', 'Invitation rejected.');
         }
     }
 }

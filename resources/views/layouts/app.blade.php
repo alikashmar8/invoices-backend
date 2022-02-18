@@ -163,14 +163,14 @@
                             <a class="nav-link  p-1 page-scroll widget-header  " aria-haspopup="true" aria-expanded="false">
                                 <div class="icon icon-sm "><i class="fa fa-bell"></i></div>
                                 <span class="badge badge-pill  notify">{{count($navBarNotifications)}}</span>
-                            </a> 
+                            </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if(count($navBarNotifications) > 0)
                                 @foreach($navBarNotifications as $navBarNotification)
                                     <button class="dropdown-item " data-toggle="modal"
                                                                     data-target="#CreateForm{{$navBarNotification->id}}">
-                                        <span class="item-text">{{$navBarNotification->title}}</span> 
-                                    </button> 
+                                        <span class="item-text">{{$navBarNotification->title}}</span>
+                                    </button>
                                     <div class="dropdown-divider"></div>
                                 @endforeach
                                 @endif
@@ -192,7 +192,7 @@
                         </li>
 
                         <li class="nav-item">
-                            
+
                         </li>
 
                         {{--<!-- Dropdown Menu -->
@@ -238,44 +238,8 @@
         </div> <!-- end of container -->
     </nav> <!-- end of navbar -->
     <!--create modals-->
-    @if(count($navBarNotifications) > 0)
-    @foreach($navBarNotifications as $navBarNotification)
-        <div class="modal fade"  id="CreateForm{{$navBarNotification->id}}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true"  >
-            <div class=" modal-dialog" role="document">
-                <div class="modal-content" >
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{$navBarNotification->title}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="output_content" >
-                        <p>
-                            @php echo $navBarNotification->message @endphp
-                        </p>
-                        
+    <!-- TODO: refactor this, incase of guest it will cause error -->
 
-                    </div>
-                    <div class="modal-footer">
-                        <form method="POST"  action="/markNotificationAsRead/{{$navBarNotification->id}}" >
-                            @csrf
-                            <button type="submit"  class="btn btn-success text-white"  >Mark as read</button>
-                        </form>
-                        <form method="POST"  action="/deleteNotification/{{$navBarNotification->id}}" >
-                            @csrf
-                            <button type="submit"  class="btn btn-danger text-white"  >Delete</button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-
-                    </div>
-
-                </div>
-            </div>
-        </div> 
-    @endforeach
-    @endif                      
     <!-- end of navigation -->
 
     <main  style=" margin-top:7rem ">
