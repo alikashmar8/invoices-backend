@@ -89,11 +89,11 @@ class NotificationController extends Controller
         $notification->save();
         return back();
     }
-    public function markUnead(Notification $notification)
+    public function markUnread(Notification $notification)
     {
         $notification->is_read = 0;
         $notification->save();
         return back();
     }
-    
+
 }

@@ -29,8 +29,8 @@
                         @foreach(Auth::user()->businesses as $bus)
                         <li>
                             <a href='/businesses/{{$bus->id}}' class='not '>
-                                <div class="avatar avatar-xl "  alt="Logo">
-                                    <img class='w-100 border-radius-lg shadow-sm'   src='{{asset($bus->logo)}}'>
+                                <div class="avatar avatar-xl " alt="Logo">
+                                    <img class='w-100 border-radius-lg shadow-sm' src='{{asset($bus->logo)}}'>
                                 </div>
                             </a>
                         </li>
@@ -45,8 +45,7 @@
                                 @csrf
                             </form>
                         </button>
-                        <button class="btn btn-primary px-4 ms-3"  data-toggle="modal"
-                                                                    data-target="#EditProfileForm">Edit Profile</button>
+                        <button class="btn btn-primary px-4 ms-3" data-toggle="modal" data-target="#EditProfileForm">Edit Profile</button>
                     </div>
                 </div>
             </div>
@@ -64,9 +63,9 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Message</th> 
-                                <th>Actions</th> 
-                                <th>Date</th> 
+                                <th>Message</th>
+                                <th>Actions</th>
+                                <th>Date</th>
 
                             </tr>
                         </thead>
@@ -75,31 +74,34 @@
                             @foreach($notifications as $not)
                             <tr style='@if(!$not->is_read) font-weight:bold @endif'>
                                 <td>{{$not->title}}</td>
-                                <td>@php echo $not->message @endphp</td> 
+                                <td>@php echo $not->message @endphp</td>
                                 <td>
                                     @if(!$not->is_read)
-                                    <form method="POST"  action="/markNotificationAsRead/{{$not->id}}" >
+                                    <form method="POST" action="/notifications/{{$not->id}}/mark-read">
                                         @csrf
-                                        <button type="submit"  class="btn btn-link p-0   text-secondary"  ><i class='fa fa-envelope-open'></i> <small>Mark as read</small></button>
+                                        <button type="submit" class="btn btn-link p-0 text-secondary"><i class='fa fa-envelope-open'></i><small>Mark as read</small></button>
                                     </form>
                                     @else
-                                    <form method="POST"  action="/markNotificationAsUnread/{{$not->id}}" >
+                                    <form method="POST" action="/notifications/{{$not->id}}/mark-unread">
                                         @csrf
-                                        <button type="submit"  class="btn btn-link p-0   text-secondary"  ><i class='fa fa-envelope'></i> <small>Mark as unread</small></button>
+                                        <button type="submit" class="btn btn-link p-0 text-secondary"><i class='fa fa-envelope'></i><small>Mark as unread</small></button>
                                     </form>
                                     @endif
-                                    <form method="POST"  action="/deleteNotification/{{$not->id}}" >
+                                    <form method="POST" action="/notifications/{{$not->id}}">
                                         @csrf
-                                        <button type="submit"  class="btn btn-link p-0 text-danger "  ><i class='fa fa-trash'></i> <small>Delete</small></button>
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-link p-0 text-danger"><i class='fa fa-trash'></i><small>Delete</small></button>
                                     </form>
-                                </td> 
+                                </td>
                                 <td>{{\Carbon\Carbon::parse($not->created_at)->format('d/m/Y') }}</td>
-                            </tr> 
+                            </tr>
                             @endforeach
                         </tbody>
                         @else
                         <tbody>
-                            <tr ><td colspan=3>No notifications to show</td></tr>
+                            <tr>
+                                <td colspan=3>No notifications to show</td>
+                            </tr>
                         </tbody>
                         @endif
                     </table>
@@ -111,85 +113,83 @@
 </div>
 
 {{--EditProfileForm--}}
-    <div class="modal fade"  id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true"  >
-        <div class=" modal-dialog" role="document">
-            <div class="modal-content" >
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" id='edit-profile-form' action="/edit-profile-form" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body" id="output_content">
-
-                            <div class="row  ">
-                                <div class="col-md-4 ">
-                                    <div style='margin:5px; padding :7px; display:inline-block;position: relative;'>
-                                        <label for='imgFile'>
-                                            <div class='avatar avatar-xl position-relative'>
-                                                <img src="{{asset($user->profile_picture)}}" id='imgSrc' alt="profile_picture"   class=" rounded-circle shadow-sm" style='max-width:75px;max-height:75px;'>
-                                            </div>
-                                        </label>
-                                        <input type='file'  name='profile_picture' style='display:none' accept="image/*" id='imgFile'  onchange='readImg(this.files[0])'>
-                                        <a id='removeBtn' style='display:none;z-index: 5;position: absolute;top: 0px;left: 5px;color: red;' onclick='removeImg()'>
-                                        <i class="fas fa-times-circle text-danger"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="name" class="col-form-label text-md-end">
-                                        Name
-                                    </label>
-                                    <input id="name" type="name" class="form-control" name="name" value='{{$user->name}}' placeholder='Name' required  autofocus>
-
-                                    <label for="name" class="col-form-label text-md-end">
-                                        Email address
-                                    </label>
-                                    <input id="email" type="email" class="form-control" name="email" value='{{$user->email}}' placeholder='Email' required  >
-
-                                    <label for="name" class="col-form-label text-md-end">
-                                        Phone number
-                                    </label>
-                                    <input id="phone_number" type="phone" class="form-control" value='{{$user->phone_number}}' placeholder='Phone Number' name="phone_number"   >
-
-                                </div>
-                            </div>
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                        <button type="submit"  class="btn btn-success text-white"    >Edit</button>
-
-                    </div>
-                </form>
-
+<div class="modal fade" id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class=" modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Profile Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form method="POST" id='edit-profile-form' action="/edit-profile-form" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body" id="output_content">
+
+                    <div class="row  ">
+                        <div class="col-md-4 ">
+                            <div style='margin:5px; padding :7px; display:inline-block;position: relative;'>
+                                <label for='imgFile'>
+                                    <div class='avatar avatar-xl position-relative'>
+                                        <img src="{{asset($user->profile_picture)}}" id='imgSrc' alt="profile_picture" class=" rounded-circle shadow-sm" style='max-width:75px;max-height:75px;'>
+                                    </div>
+                                </label>
+                                <input type='file' name='profile_picture' style='display:none' accept="image/*" id='imgFile' onchange='readImg(this.files[0])'>
+                                <a id='removeBtn' style='display:none;z-index: 5;position: absolute;top: 0px;left: 5px;color: red;' onclick='removeImg()'>
+                                    <i class="fas fa-times-circle text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="name" class="col-form-label text-md-end">
+                                Name
+                            </label>
+                            <input id="name" type="name" class="form-control" name="name" value='{{$user->name}}' placeholder='Name' required autofocus>
+
+                            <label for="name" class="col-form-label text-md-end">
+                                Email address
+                            </label>
+                            <input id="email" type="email" class="form-control" name="email" value='{{$user->email}}' placeholder='Email' required>
+
+                            <label for="name" class="col-form-label text-md-end">
+                                Phone number
+                            </label>
+                            <input id="phone_number" type="phone" class="form-control" value='{{$user->phone_number}}' placeholder='Phone Number' name="phone_number">
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    <button type="submit" class="btn btn-success text-white">Edit</button>
+
+                </div>
+            </form>
+
         </div>
     </div>
-    <script>
+</div>
+<script>
+    function readImg(image) {
+        var imgId = "imgSrc";
+        var btnId = "removeBtn";
+        document.getElementById(imgId).src = window.URL.createObjectURL(image);
+        document.getElementById(btnId).style.display = 'inline';
+    }
 
-
-              function readImg(image){
-                  var imgId="imgSrc";
-                  var btnId = "removeBtn" ;
-                  document.getElementById(imgId).src = window.URL.createObjectURL(image);
-                  document.getElementById(btnId).style.display = 'inline';
-              }
-              function removeImg(){
-                  var imgId="imgSrc";
-                  var btnId = "removeBtn";
-                  var fileId = "imgFile";
-                  document.getElementById(imgId).src ="{{asset('img/profile.png')}}";
-                  document.getElementById(fileId).value =null;
-                  document.getElementById(btnId).style.display = 'none';
-              }
-          </script>
+    function removeImg() {
+        var imgId = "imgSrc";
+        var btnId = "removeBtn";
+        var fileId = "imgFile";
+        document.getElementById(imgId).src = "{{asset('img/profile.png')}}";
+        document.getElementById(fileId).value = null;
+        document.getElementById(btnId).style.display = 'none';
+    }
+</script>
 
 
 @endsection
