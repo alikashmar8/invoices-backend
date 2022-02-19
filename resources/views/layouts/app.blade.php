@@ -13,8 +13,10 @@
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
 
     <!-- fa fas -->
     <!link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
@@ -33,14 +35,15 @@
 
         <!-- Styles -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
-        <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-        <link href="{{asset('css/fontawesome-all.css')}}" rel="stylesheet">
-        <link href="{{asset('css/swiper.css')}}" rel="stylesheet">
-        <link href="{{asset('css/magnific-popup.css')}}" rel="stylesheet">
-        <link href="{{asset('css/styles.css')}}" rel="stylesheet">
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/fontawesome-all.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/swiper.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/magnific-popup.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
         <!-- Favicon  -->
-        <link rel="icon" href="{{asset('images/favicon.png')}}">
+        <link rel="icon" href="{{ asset('images/favicon.png') }}">
+
 
         <style>
             .wbsd-notification {
@@ -64,7 +67,6 @@
                 }
             }
         </style>
-
 
 </head>
 
@@ -110,7 +112,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Sync</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="/"><img src="{{asset('images/logo.svg')}}" alt="alternative"></a>
+            <a class="navbar-brand logo-image" href="/"><img src="{{ asset('images/logo.svg') }}" alt="alternative"></a>
 
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,13 +139,13 @@
                     <li class="nav-item px-2">
                         &nbsp;
                     </li>
-                    @if (Route::has('login'))
+                    @if(Route::has('login'))
                     <li class="nav-item">
                         <a class="nav-link @if( str_contains( $currentURL , '/login' )) active @endif" href="{{ route('login') }}">{{ __('Login') }}</a>
                     </li>
                     @endif
 
-                    @if (Route::has('register'))
+                    @if(Route::has('register'))
                     <li class="nav-item">
                         <a class="nav-link @if( str_contains( $currentURL , '/register' )) active @endif" href="{{ route('register') }}">{{ __('Register') }}</a>
                     </li>
@@ -164,18 +166,19 @@
 
                     @else
                     @php
-                    $navBarNotifications = App\Models\Notification::where('user_id' , Auth::user()->id)->where('is_read' , 0)->get();
+                    $navBarNotifications = App\Models\Notification::where('user_id' ,
+                    Auth::user()->id)->where('is_read' , 0)->get();
                     @endphp
                     <li class="nav-item dropdown px-2">
                         <a class="nav-link  p-1 page-scroll widget-header  " aria-haspopup="true" aria-expanded="false">
                             <div class="icon icon-sm "><i class="fa fa-bell"></i></div>
-                            <span class="badge badge-pill  notify">{{count($navBarNotifications)}}</span>
+                            <span class="badge badge-pill  notify">{{ count($navBarNotifications) }}</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if(count($navBarNotifications) > 0)
                             @foreach($navBarNotifications as $navBarNotification)
-                            <button class="dropdown-item " data-toggle="modal" data-target="#CreateForm{{$navBarNotification->id}}">
-                                <span class="item-text">{{$navBarNotification->title}}</span>
+                            <button class="dropdown-item " data-toggle="modal" data-target="#CreateForm{{ $navBarNotification->id }}">
+                                <span class="item-text">{{ $navBarNotification->title }}</span>
                             </button>
                             <div class="dropdown-divider"></div>
                             @endforeach
@@ -183,7 +186,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link page-scroll @if( str_contains( $currentURL , '/profile' )) active @endif" href="/profile/{{Auth::user()->id}}">Profile</a>
+                        <a class="nav-link page-scroll @if( str_contains( $currentURL , '/profile' )) active @endif" href="/profile/{{ Auth::user()->id }}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link page-scroll @if( str_contains( $currentURL , '/businesses' )) active @endif" href="/businesses">Businesses <span class="sr-only">(current)</span></a>
@@ -206,7 +209,7 @@
                                 {{ Auth::user()->name }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/profile/{{Auth::user()->id}}">
+                        <a class="dropdown-item" href="/profile/{{ Auth::user()->id }}">
                             <span class="item-text">Profile</span>
                         </a>
                         <div class="dropdown-divider"></div>
@@ -222,7 +225,8 @@
                         </form>
                         <div class="dropdown-divider"></div>
 
-                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
+                        <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY
+                                POLICY</span></a>
                     </div>
                     </li>
                     <!-- end of dropdown menu -->--}}
@@ -285,14 +289,20 @@
     @include('layouts.footer')
 
     <!-- Scripts -->
-    <script src="{{asset('js/jquery.min.js')}}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
-    <script src="{{asset('js/popper.min.js')}}"></script> <!-- Popper tooltip library for Bootstrap -->
-    <script src="{{asset('js/bootstrap.min.js')}}"></script> <!-- Bootstrap framework -->
-    <script src="{{asset('js/jquery.easing.min.js')}}"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
-    <script src="{{asset('js/swiper.min.js')}}"></script> <!-- Swiper for image and text sliders -->
-    <script src="{{asset('js/jquery.magnific-popup.js')}}"></script> <!-- Magnific Popup for lightboxes -->
-    <script src="{{asset('js/validator.min.js')}}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
-    <script src="{{asset('js/scripts.js')}}"></script> <!-- Custom scripts -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <!-- Popper tooltip library for Bootstrap -->
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script> <!-- Bootstrap framework -->
+    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
+    <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="{{ asset('js/swiper.min.js') }}"></script>
+    <!-- Swiper for image and text sliders -->
+    <script src="{{ asset('js/jquery.magnific-popup.js') }}"></script>
+    <!-- Magnific Popup for lightboxes -->
+    <script src="{{ asset('js/validator.min.js') }}"></script>
+    <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="{{ asset('js/scripts.js') }}"></script> <!-- Custom scripts -->
 </body>
 
 </html>

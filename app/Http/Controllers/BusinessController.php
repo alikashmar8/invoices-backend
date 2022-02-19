@@ -185,8 +185,9 @@ class BusinessController extends Controller
     public function showMembers(Business $business)
     {
         $members = $business->users;
-        $invitations = Invitation::where('business_id' , $business->id)->where('status', 'PENDING')->get();
-        return view('app.businesses.members.list-members', compact('business', 'invitations'));
+        $invitations = Invitation::where('business_id' , $business->id)->where('status', 'PENDING')->with('user')->get();
+        $current_user_business_details = UserBusiness::where('business_id' , $business->id)->where('user_id', Auth::user()->id)->first();
+        return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details'));
     }
 
     public function addNewEmployee(Request $request, Business $business)
@@ -222,5 +223,5 @@ class BusinessController extends Controller
         }
     }
 
-     
+
 }
