@@ -120,8 +120,8 @@ class BusinessController extends Controller
 
 
         // alternate way:
-        $exists = $business->users->contains(Auth::user());
-        if ($exists) {
+        // $exists = $business->users->contains(Auth::user());
+        if (true) {
             return view('app.businesses.show-business', compact('business'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
