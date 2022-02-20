@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Models\Invitation;
+use \Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -80,19 +82,28 @@ class NotificationController extends Controller
      */
     public function destroy(Notification $notification)
     {
+        if($notification->title == 'Joining a new team'){
+            $pendingInvitations = Invitation::where('user_id', Auth::user()->id)
+            ->where('status', 'PENDING')
+            ->where('notification_id', $notification->id)
+            ->first()->delete();
+        }
         $notification->delete();
+        return response()->json(['success' => true]); 
         return back();
     }
     public function markRead(Notification $notification)
     {
         $notification->is_read = 1;
         $notification->save();
+        return response()->json(['success' => true]); 
         return back();
     }
     public function markUnread(Notification $notification)
     {
         $notification->is_read = 0;
         $notification->save();
+        return response()->json(['success' => true]); 
         return back();
     }
 

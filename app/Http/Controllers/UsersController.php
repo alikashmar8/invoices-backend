@@ -16,7 +16,7 @@ class UsersController extends Controller
         if(Auth::user()->id != $user->id){
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
-        $notifications = Notification::where('user_id' ,Auth::user()->id )->get();
+        $notifications = Notification::where('user_id' ,Auth::user()->id )->latest()->get();
 
         if( request()->is('api/*')){
             //an api call

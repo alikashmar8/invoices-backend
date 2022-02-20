@@ -67,7 +67,7 @@ class InvitationController extends Controller
             'business_id' => $request->business_id,
             'user_id' => $user->id,
             'role' => $request->role,
-            'message' => 'Hello, I would like you to join my team.',
+            'message' => 'Hello, I would like you to join my team.',  
         ]);
 
         $notify = new Notification();
@@ -76,17 +76,22 @@ class InvitationController extends Controller
         $notify->message = '';
         $notify->save();
         $notify->message = 'You were invited to join ' . $business->name . ' team as ' . $request['role'] . '.
-        <form method="post" action="/invitations/' . $invitation->id . '/accept">
+        <div  style=" display:block">
+        <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/accept">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
-            <BR>
+            
             <button type="submit" class="btn btn-link text-success">Accept</a>
         </form>
-         <form method="post" action="/invitations/' . $invitation->id . '/reject">
+         <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/reject">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
-         <BR>
+         
             <button type="submit" class="btn btn-link text-danger">Reject</a>
-         </form>';
+         </form>
+         </div>';
         $notify->save();
+        $invitation->notification_id = $notify->id;
+        $invitation->save();
+        
 
         if (request()->is('api/*')) {
             //an api call
@@ -161,7 +166,7 @@ class InvitationController extends Controller
         $invitation->save();
 
         $notification = Notification::findOrFail($request->notification_id);
-
+        $notification->title = 'Joining a new team request is accepted';
         $notification->message = 'You were invited to join ' . $invitation->business->name . ' team as ' . $invitation['role'] . '.<BR> <a  class="btn btn-link text-success">Accepted</a> ';
         $notification->is_read = 0;
         $notification->save();
@@ -180,7 +185,7 @@ class InvitationController extends Controller
             return response()->json(['accepted' => true]);
         } else {
             //a web call
-            return redirect('/businesses/' . $invitation->business->id);
+            return redirect('/businesses/' . $invitation->business->id)->with('messageSuc', 'Invitation accepted.');
         }
     }
 
@@ -201,6 +206,7 @@ class InvitationController extends Controller
         $invitation->save();
 
         $notification = Notification::findOrFail($request->notification_id);
+        $notification->title = 'Joining a new team request is rejected';
         $notification->message = 'You were invited to join ' . $invitation->business->name . ' team as ' . $invitation['role'] . '.<BR> <a  class="btn btn-link text-danger">Rejected</a> ';
         $notification->is_read = 0;
         $notification->save();
@@ -210,6 +216,7 @@ class InvitationController extends Controller
             return response()->json(['rejected' => true]);
         } else {
             //a web call
+            return redirect('/profile/'. Auth::user()->id .'#Notifications')->with('messageDgr', 'Invitation rejected.');
             return back()->with('messageDgr', 'Invitation rejected.');
         }
     }

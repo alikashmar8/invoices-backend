@@ -25,6 +25,7 @@ class CreateInvitationsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('business_id');
             $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
+            $table->BigInteger('notification_id')->nullable();
             $table->timestamps();
         });
     }

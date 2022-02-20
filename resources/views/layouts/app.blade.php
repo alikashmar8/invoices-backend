@@ -43,8 +43,10 @@
 
         <!-- Favicon  -->
         <link rel="icon" href="{{ asset('images/favicon.png') }}">
-
-
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+  
+        
         <style>
             .wbsd-notification {
                 position: fixed;
@@ -170,19 +172,24 @@
                     Auth::user()->id)->where('is_read' , 0)->get();
                     @endphp
                     <li class="nav-item dropdown px-2">
-                        <a class="nav-link  p-1 page-scroll widget-header  " aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link  p-1  widget-header  " aria-haspopup="true" aria-expanded="false">
                             <div class="icon icon-sm "><i class="fa fa-bell"></i></div>
-                            <span class="badge badge-pill  notify">{{ count($navBarNotifications) }}</span>
+                            <span class="badge badge-pill  notify" id='numberOfNotifications'></span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if(count($navBarNotifications) > 0)
                             @foreach($navBarNotifications as $navBarNotification)
-                            <button class="dropdown-item " data-toggle="modal" data-target="#CreateForm{{ $navBarNotification->id }}">
+                            <button id='btn_{{$navBarNotification->id}}' class="dropdown-item " data-toggle="modal" data-target="#CreateForm{{ $navBarNotification->id }}">
                                 <span class="item-text">{{ $navBarNotification->title }}</span>
                             </button>
-                            <div class="dropdown-divider"></div>
+                            <div  id='btn_separator_{{$navBarNotification->id}}' class="dropdown-divider"></div>
                             @endforeach
                             @endif
+                            <a class="dropdown-item " href='/profile/{{Auth::user()->id}}#Notifications'>
+                                <span class="item-text">Manage notifications
+                                <i class="fas  fa-arrow-right"></i>
+                                </span>
+                            </a> 
                         </div>
                     </li>
                     <li class="nav-item">
@@ -246,8 +253,99 @@
         </div> <!-- end of container -->
     </nav> <!-- end of navbar -->
     <!--create modals-->
-    <!-- TODO: refactor this, incase of guest it will cause error -->
+    <!-- Done: refactor this, incase of guest it will cause error -->
+    @if(!Auth::guest() && count($navBarNotifications) > 0)
+    
+    @foreach($navBarNotifications as $navBarNotification)
+    <div class="modal fade" id="CreateForm{{$navBarNotification->id}}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class=" modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{$navBarNotification->title}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="output_content">
+                    <p>
+                        @php echo $navBarNotification->message @endphp
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <form id="mark_read_nav_{{$navBarNotification->id}}" method="post" style="display:inline-block" action="javascript:void(0)" >
+                        @csrf
+                        <button type="submit"   class="btn btn-success text-white">Mark as read</button>
+                    </form>
+                    <form id="delete_nav_{{$navBarNotification->id}}" method="post" style="display:inline-block" action="javascript:void(0)"  >
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="btn btn-danger text-white">Delete</button>
+                    </form>
+                    <button type="button" id='close_{{$navBarNotification->id}}' class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <script>    
+        var numberOfNotifications = document.getElementById("numberOfNotifications");
+        var numberOfNotifications_int ={{ count($navBarNotifications) }};
+        numberOfNotifications.innerHTML = numberOfNotifications_int;
+        
+        if ($("#mark_read_nav_{{$navBarNotification->id}}").length > 0) { 
+            $("#mark_read_nav_{{$navBarNotification->id}}").validate({
+                submitHandler: function(form) { 
+                    $.ajax({
+                        url: "/notifications/{{$navBarNotification->id}}/mark-read",
+                        type: "POST",
+                        data: $('#mark_read_nav_{{$navBarNotification->id}}').serialize(),
+                        success: function( response ) {
+                            
+                            $('#btn_{{ $navBarNotification->id}}').css('display', 'none');
+                            $('#btn_separator_{{ $navBarNotification->id}}').css('display', 'none');
+                            $('#close_{{$navBarNotification->id}}').click();
+                            numberOfNotifications_int -= 1;
+                            numberOfNotifications.innerHTML = numberOfNotifications_int;
 
+                            document.getElementById("mark_read_nav_{{$navBarNotification->id}}").reset(); 
+                            
+                                
+                        }
+                    });
+                }
+            })
+        }
+        if ($("#delete_nav_{{$navBarNotification->id}}").length > 0) {
+            $("#delete_nav_{{$navBarNotification->id}}").validate({
+                submitHandler: function(form) { 
+                    $.ajax({
+                        url: "/notifications/{{$navBarNotification->id}}",
+                        type: "post",
+                        data: $('#delete_nav_{{$navBarNotification->id}}').serialize(),
+                        success: function( response ) {
+                            $('#btn_{{ $navBarNotification->id}}').css('display', 'none');
+                            $('#btn_separator_{{ $navBarNotification->id}}').css('display', 'none');
+                            $('#close_{{$navBarNotification->id}}').click();
+
+                            numberOfNotifications_int -= 1;
+                            numberOfNotifications.innerHTML = numberOfNotifications_int;
+                            @isset($not)
+                            if( $('#tr_{{$not->id}}') ){
+                                $('#tr_{{$not->id}}').css('display', 'none');
+                            } 
+                            @endisset
+                            
+                                    
+                        }
+                    });
+                }
+            })
+        }
+    
+    </script> 
+    @endforeach
+    @endif
     <!-- end of navigation -->
 
     <main style=" margin-top:7rem ">

@@ -54,7 +54,7 @@
 </div>
 
 
-<div class="container mt-5">
+<div class="container mt-5" id='Notifications'>
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
             <div class="card px-3  ">
@@ -70,37 +70,108 @@
                             </tr>
                         </thead>
                         @if(count($notifications))
+                         
                         <tbody>
                             @foreach($notifications as $not)
-                            <tr style='@if(!$not->is_read) font-weight:bold @endif'>
+                            <tr style='@if(!$not->is_read) font-weight:bold @endif' id='tr_{{$not->id}}'>
                                 <td>{{$not->title}}</td>
                                 <td>@php echo $not->message @endphp</td>
                                 <td>
-                                    @if(!$not->is_read)
-                                    <form method="POST" action="/notifications/{{$not->id}}/mark-read">
+                                    
+                                    <form id="mark_read_{{$not->id}}" method="post" style="display:inline-block" action="javascript:void(0)" >
                                         @csrf
-                                        <button type="submit" class="btn btn-link p-0 text-secondary"><i class='fa fa-envelope-open'></i><small>Mark as read</small></button>
-                                    </form>
-                                    @else
-                                    <form method="POST" action="/notifications/{{$not->id}}/mark-unread">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0 text-secondary"><i class='fa fa-envelope'></i><small>Mark as unread</small></button>
-                                    </form>
-                                    @endif
-                                    <form method="POST" action="/notifications/{{$not->id}}">
-                                        @csrf
+                                        <button type="submit" id="submit_{{$not->id}}" class="btn btn-link p-0 text-secondary">
+                                            @if(!$not->is_read)
+                                            <i class='fa fa-envelope-open  '></i><small>Mark as read</small>
+                                            @else
+                                            <i class='fa fa-envelope'></i><small>Mark as unread</small>
+                                            @endif
+                                        </button>
+                                    </form> 
+                                    
+                                    <form id="delete_{{$not->id}}" method="post" style="display:inline-block"   >
+                                        @csrf 
                                         @method('delete')
-                                        <button type="submit" class="btn btn-link p-0 text-danger"><i class='fa fa-trash'></i><small>Delete</small></button>
+                                        <button type="submit" class="btn btn-link p-0 text-danger">
+                                            <i class='fa fa-trash'></i><small>Delete</small>
+                                        </button>
                                     </form>
+                                    <script> 
+                                    var url_{{$not->id}} = "";
+                                    @if(!$not->is_read)
+                                        url_{{$not->id}} = "/notifications/{{$not->id}}/mark-read" 
+                                    @else 
+                                        url_{{$not->id}} = "/notifications/{{$not->id}}/mark-unread" 
+                                    @endif
+                                        if ($("#mark_read_{{$not->id}}").length > 0) {
+                                            $("#mark_read_{{$not->id}}").validate({
+                                                submitHandler: function(form) {
+                                                    //$('#submit').html('Please Wait...');
+                                                    //$("#submit"). attr("disabled", true);
+                                                    $.ajax({
+                                                        url: url_{{$not->id}},
+                                                        type: "POST",
+                                                        data: $('#mark_read_{{$not->id}}').serialize(),
+                                                        success: function( response ) {
+                                                            if(url_{{$not->id}} == "/notifications/{{$not->id}}/mark-read"){ 
+                                                                //alert(url_{{$not->id}});
+                                                                url_{{$not->id}} = "/notifications/{{$not->id}}/mark-unread" ;
+                                                                $('#submit_{{$not->id}}').html('<i class="fa fa-envelope"></i><small>Mark as unread</small>');
+                                                                $('#tr_{{$not->id}}').css('font-weight', 'normal');
+                                                                numberOfNotifications_int -= 1;
+                                                                numberOfNotifications.innerHTML = numberOfNotifications_int;
+                                                            }
+                                                            else{
+                                                                //alert(url_{{$not->id}});
+                                                                url_{{$not->id}} = "/notifications/{{$not->id}}/mark-read";
+                                                                $('#submit_{{$not->id}}').html('<i class="fa fa-envelope-open  "></i><small>Mark as read</small>');
+                                                                $('#tr_{{$not->id}}').css('font-weight', 'bold');
+                                                                numberOfNotifications_int += 1;
+                                                                numberOfNotifications.innerHTML = numberOfNotifications_int;
+                                                                
+                                                            }
+
+                                                            document.getElementById("mark_read_{{$not->id}}").reset(); 
+                                                            
+                                                             
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                        }
+                                                                        
+                                        if ($("#delete_{{$not->id}}").length > 0) {
+                                            $("#delete_{{$not->id}}").validate({
+                                                submitHandler: function(form) { 
+                                                    $.ajax({
+                                                        url: "/notifications/{{$not->id}}",
+                                                        type: "post",
+                                                        data: $('#delete_{{$not->id}}').serialize(),
+                                                        success: function( response ) {
+                                                            $('#btn_{{ $not->id}}').css('display', 'none');
+                                                            $('#btn_separator_{{ $not->id}}').css('display', 'none');
+                                                            
+                                                            $('#tr_{{$not->id}}').css('display', 'none');
+                                                                   
+                                                            numberOfNotifications_int -= 1;
+                                                            numberOfNotifications.innerHTML = numberOfNotifications_int;
+                                                                    
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                        } 
+                                    </script> 
                                 </td>
-                                <td>{{\Carbon\Carbon::parse($not->created_at)->format('d/m/Y') }}</td>
+                                <td>{{\Carbon\Carbon::parse($not->created_at)->format('g:i A d/m/Y') }}</td>
+                                
                             </tr>
                             @endforeach
                         </tbody>
                         @else
                         <tbody>
                             <tr>
-                                <td colspan=3>No notifications to show</td>
+                                <td colspan=4>No notifications to show</td>
                             </tr>
                         </tbody>
                         @endif
