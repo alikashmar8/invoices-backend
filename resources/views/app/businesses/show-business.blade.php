@@ -17,7 +17,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="text-primary">
-                            <h5 class="mt-2 mb-0">{{$business->name}} <i class='fa fa-edit text-primary'> </i></h5> <br>
+                            <h5 class="mt-2 mb-0">{{$business->name}} <i class='fa fa-edit text-primary ml-3'> </i></h5>
+                            <span class="small"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
                             <ul class="social-list-prof  ">
                                 @foreach($business->users as $member)
                                 <li style='padding: 0px; margin:0px'>
@@ -25,6 +26,10 @@
 
                                 </li>
                                 @endforeach
+                                @if($current_user_business_details->role == App\Enums\UserRole::MANAGER ||
+                                $current_user_business_details->role == App\Enums\UserRole::CO_MANAGER)
+                                <li><a href="/businesses/{{$business->id}}/employees" class="small text-primary">Show more <i class="fas fa-arrow-alt-circle-right"></i></a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -35,13 +40,9 @@
                         <span class="bg-danger float-right p-1 px-4 rounded text-white">Stopped</span>
                         @endif
                         <br><br>
-                        @if(\Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::MANAGER ||
-                        \Auth::user()->businesses()->where('business_id', $business->id)->first()->pivot->role == App\Enums\UserRole::CO_MANAGER)
-                        <a href="/businesses/{{$business->id}}/employees" class=" btn btn-secondary bg-secondary float-right p-1 px-4 rounded text-white">Team members</a>
+                        @if($current_user_business_details->role != App\Enums\UserRole::MANAGER)
+                        <span class="bg-danger float-right p-1 px-4 rounded text-white" data-toggle="modal" data-target="#leave_business_modal">Leave business</span>
                         @endif
-                        <br><br>
-
-                        <span class="bg-secondary float-right p-1 px-4 rounded text-white"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
                     </div>
                 </div>
             </div>
@@ -102,5 +103,39 @@
     </div>
 </div>
 
+<!-- Leave business modal -->
+<div class="modal fade" id="leave_business_modal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class=" modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave Business</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="output_content">
+                <form method="POST" id='leave_business_form' action="/businesses/{{$business->id}}/leave" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-12">
+                                Are you sure you want to leave {{$business->name}}?
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <a type="submit" class="btn btn-success text-white" onclick="event.preventDefault();
+                                                    document.getElementById('leave_business_form').submit();">Confirm</a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @endsection

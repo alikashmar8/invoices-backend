@@ -120,9 +120,10 @@ class BusinessController extends Controller
 
 
         // alternate way:
-        // $exists = $business->users->contains(Auth::user());
-        if (true) {
-            return view('app.businesses.show-business', compact('business'));
+        $exists = $business->users->contains(Auth::user());
+        if ($exists) {
+            $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
@@ -185,8 +186,8 @@ class BusinessController extends Controller
     public function showMembers(Business $business)
     {
         $members = $business->users;
-        $invitations = Invitation::where('business_id' , $business->id)->where('status', 'PENDING')->with('user')->get();
-        $current_user_business_details = UserBusiness::where('business_id' , $business->id)->where('user_id', Auth::user()->id)->first();
+        $invitations = Invitation::where('business_id', $business->id)->where('status', 'PENDING')->with('user')->get();
+        $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
         return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details'));
     }
 
@@ -218,10 +219,16 @@ class BusinessController extends Controller
             return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
         } else {
             //a web call
-            return redirect('/businesses/'.$business->id.'/employees');
+            return redirect('/businesses/' . $business->id . '/employees');
             return view('app.businesses.employees.list-employees', compact('business'));
         }
     }
 
-
+    public function leave(Business $business)
+    {
+        $user = Auth::user();
+        $user->businesses()->detach($business->id);
+        $user->save();
+        return redirect('/businesses')->with('messageSuc', 'You have left the business');
+    }
 }
