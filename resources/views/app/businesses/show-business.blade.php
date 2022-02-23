@@ -27,7 +27,7 @@
                                 </li>
                                 @endforeach
                                 @if($current_user_business_details->role == App\Enums\UserRole::MANAGER ||
-                                $current_user_business_details->role == App\Enums\UserRole::CO_MANAGER)
+                                    $current_user_business_details->role == App\Enums\UserRole::CO_MANAGER)
                                 <li><a href="/businesses/{{$business->id}}/employees" class="small text-primary">Show more <i class="fas fa-arrow-alt-circle-right"></i></a></li>
                                 @endif
                             </ul>
@@ -118,7 +118,7 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                                Are you sure you want to leave {{$business->name}}?
+                            Are you sure you want to leave {{$business->name}}?
                         </div>
                     </div>
 

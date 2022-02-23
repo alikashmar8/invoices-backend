@@ -31,6 +31,7 @@ Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::c
 Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessController::class, 'leave'])->middleware('is_business_member');
 Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
+Route::post('/businesses/{business}/employees/{user}/remove', [App\Http\Controllers\BusinessController::class, 'removeTeamMember'])->middleware('is_business_manager');
 
 Route::post('/invitations', [App\Http\Controllers\InvitationController::class, 'store'])->middleware('auth');
 Route::post('/invitations/{invitation}/accept', [App\Http\Controllers\InvitationController::class, 'accept'])->middleware('auth');

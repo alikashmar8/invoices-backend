@@ -231,4 +231,15 @@ class BusinessController extends Controller
         $user->save();
         return redirect('/businesses')->with('messageSuc', 'You have left the business');
     }
+
+    public function removeTeamMember(Request $request, Business $business, User $user)
+    {
+        $user->businesses()->detach($business->id);
+        $user->save();
+        if ($request->is('api/*')) {
+            return response()->json(['success' => true]);
+        } else {
+            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', 'Employee removed successfully');
+        }
+    }
 }
