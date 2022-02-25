@@ -203,7 +203,7 @@ class BusinessController extends Controller
         if ($validator->fails()) {
             //TODO: add error message for api
             Log::error($validator->errors());
-            return redirect('/businesses/' . $business->id . '/members')
+            return redirect('/businesses/' . $business->id . '/employees')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -240,6 +240,35 @@ class BusinessController extends Controller
             return response()->json(['success' => true]);
         } else {
             return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', 'Employee removed successfully');
+        }
+    }
+
+    public function updateRole(Request $request, Business $business, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'role' => ['required', new EnumValue(UserRole::class)],
+        ]);
+
+        if ($validator->fails()) {
+            //TODO: add error message for api
+            Log::error($validator->errors());
+            return redirect('/businesses/' . $business->id . '/employees')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // $user->businesses()->updateExistingPivot($business->id, ['role' => $request['role']]);
+        $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', $user->id)->first();
+        Log::info($current_user_business_details);
+        $current_user_business_details->role = $request['role'];
+        $current_user_business_details->save();
+        $messageSuc = 'Role updated successfully';
+        $members = $business->users;
+        $invitations = Invitation::where('business_id', $business->id)->where('status', 'PENDING')->with('user')->get();
+        if ($request->is('api/*')) {
+            return response()->json(['success' => true]);
+        } else {
+            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', $messageSuc);
         }
     }
 }

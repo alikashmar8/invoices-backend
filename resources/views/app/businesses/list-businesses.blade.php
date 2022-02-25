@@ -109,9 +109,7 @@
 
                     <a type="submit"  class="btn btn-success text-white" onclick="event.preventDefault();
                                                     document.getElementById('create-form').submit();"  >Create</a>
-
                 </div>
-
             </div>
         </div>
     </div>

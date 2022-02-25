@@ -63,21 +63,72 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <!-- TODO: fix design and add modal -->
-                                    @if ($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
-                                    <button type="button" class="btn">
-                                        <i class="fa fa-edit text-primary"></i>
-                                    </button>
-                                    @endif
-                                    @if ($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER' || $member->id == Auth::user()->id)
-
-                                    <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/remove" enctype="multipart/form-data">
-                                        @csrf
-                                        <button type="submit" class="btn"><i class='fa fa-trash text-primary'></i></a>
-                                    </form>
-                                    @endif
+                                    <div class="row">
+                                        @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER') && $member->id != Auth::user()->id )
+                                        <button type="button" class="btn col-md-2" data-target="#updateModal-{{ $member->id }}" data-toggle="modal">
+                                            <i class="fa fa-edit text-primary"></i>
+                                        </button>
+                                        @endif
+                                        @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER') && $member->id != Auth::user()->id )
+                                        <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $member->id }}" data-toggle="modal"><i class='fa fa-trash text-primary'></i></a>
+                                            @endif
+                                    </div>
                                 </td>
                             </tr>
+                            <!-- delete modal -->
+                            <div class="modal fade" id="deleteModal-{{ $member->id }}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class=" modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete confirmation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="output_content">
+                                            Are you sure you want to delete {{$member->name}} from your business?
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/remove" enctype="multipart/form-data">
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- update modal -->
+                            <div class="modal fade" id="updateModal-{{ $member->id }}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class=" modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Update {{$member->name}} role</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="output_content">
+                                            <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/update-role" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <label for="role" class="col-form-label text-md-end">
+                                                    Choose new role:
+                                                </label>
+                                                <select name="role" id="update-role" class="form-control">
+                                                    <option value="CO_MANAGER">Co Manager</option>
+                                                    <option value="TEAM_MEMBER" selected>Team Member</option>
+                                                </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                             @if (count($invitations) > 0)
                             @foreach ($invitations as $invitation)
@@ -163,7 +214,7 @@
                                 Role
                             </label>
                             <select name="role" id="role" class="form-control">
-                                <option value="CO-MANAGER">Co Manager</option>
+                                <option value="CO_MANAGER">Co Manager</option>
                                 <option value="TEAM_MEMBER" selected>Team Member</option>
                             </select>
 
@@ -195,7 +246,7 @@
                                 <label for="role" class="col-form-label text-md-end">
                                     Role
                                 </label>
-                                <select name="role" id="role" class="form-control">
+                                <select name="role" id="role2" class="form-control">
                                     <option value="CO_MANAGER">Co Manager</option>
                                     <option value="TEAM_MEMBER" selected>Team Member</option>
                                 </select>
@@ -211,63 +262,65 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-    <script>
-        var url = "/memberCheckerIfExist";
-        if ($("#memberCheckerIfExist").length > 0) {
-            $("#memberCheckerIfExist").validate({
-                submitHandler: function(form) {
-                    $('#next1').html('Please Wait...');
-                    $("#next1").attr("disabled", true);
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        data: $('#memberCheckerIfExist').serialize(),
-                        success: function(response) {
-                            $('#next1').html("Next <i class='fa fa-arrow-right fa-xs'></i>");
-                            $("#next1").attr("disabled", false);
-                            //alert(response['success']);
-                            if (response['success'] == 'exist') {
-                                $('#createNewMember').css('display', 'none');
-                                $('#addExistingMember').css('display', 'block');
-                                $('#controllerForMember').css('display', 'none');
-                                $('#isTeamMember').css('display', 'none');
-                                $('#email3').val($('#email1').val());
-                                $('#email33').val($('#email1').val());
-                            } else if (response['success'] == 'notExist') {
-                                $('#createNewMember').css('display', 'block');
-                                $('#addExistingMember').css('display', 'none');
-                                $('#controllerForMember').css('display', 'none');
-                                $('#isTeamMember').css('display', 'none');
-                                $('#email2').val($('#email1').val());
-                                $('#email22').val($('#email1').val());
-                            } else {
-                                $('#isTeamMember').css('display', 'block');
 
-                            }
-                            document.getElementById("memberCheckerIfExist").reset();
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<script>
+    var url = "/memberCheckerIfExist";
+    if ($("#memberCheckerIfExist").length > 0) {
+        $("#memberCheckerIfExist").validate({
+            submitHandler: function(form) {
+                $('#next1').html('Please Wait...');
+                $("#next1").attr("disabled", true);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: $('#memberCheckerIfExist').serialize(),
+                    success: function(response) {
+                        $('#next1').html("Next <i class='fa fa-arrow-right fa-xs'></i>");
+                        $("#next1").attr("disabled", false);
+                        //alert(response['success']);
+                        if (response['success'] == 'exist') {
+                            $('#createNewMember').css('display', 'none');
+                            $('#addExistingMember').css('display', 'block');
+                            $('#controllerForMember').css('display', 'none');
+                            $('#isTeamMember').css('display', 'none');
+                            $('#email3').val($('#email1').val());
+                            $('#email33').val($('#email1').val());
+                        } else if (response['success'] == 'notExist') {
+                            $('#createNewMember').css('display', 'block');
+                            $('#addExistingMember').css('display', 'none');
+                            $('#controllerForMember').css('display', 'none');
+                            $('#isTeamMember').css('display', 'none');
+                            $('#email2').val($('#email1').val());
+                            $('#email22').val($('#email1').val());
+                        } else {
+                            $('#isTeamMember').css('display', 'block');
 
-                        },
-                        error: function() {
-
-                            $('#next1').html("Next <i class='fa fa-arrow-right fa-xs'></i>");
-                            $("#next1").attr("disabled", false);
-                            alert("Something went wrong! Try again");
-
-                            document.getElementById("memberCheckerIfExist").reset();
                         }
-                    });
-                }
-            })
-        }
+                        document.getElementById("memberCheckerIfExist").reset();
 
-        function back() {
-            //alert('s')
-            document.getElementById("createNewMember").style.display = 'none';
-            document.getElementById("addExistingMember").style.display = 'none';
-            document.getElementById("controllerForMember").style.display = 'block';
-        }
-    </script>
-    @endsection
+                    },
+                    error: function() {
+
+                        $('#next1').html("Next <i class='fa fa-arrow-right fa-xs'></i>");
+                        $("#next1").attr("disabled", false);
+                        alert("Something went wrong! Try again");
+
+                        document.getElementById("memberCheckerIfExist").reset();
+                    }
+                });
+            }
+        })
+    }
+
+    function back() {
+        //alert('s')
+        document.getElementById("createNewMember").style.display = 'none';
+        document.getElementById("addExistingMember").style.display = 'none';
+        document.getElementById("controllerForMember").style.display = 'block';
+    }
+</script>
+@endsection
