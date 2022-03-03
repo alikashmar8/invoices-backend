@@ -145,7 +145,24 @@ class InvitationController extends Controller
      */
     public function destroy(Invitation $invitation)
     {
-        //
+        
+        $invitation->status = InvitationStatus::EXPIRED;
+        $invitation->save();
+
+        $notification = Notification::findOrFail($invitation->notification_id);
+        $notification->title = 'Joining a new team request is expired';
+        $notification->message = 'You were invited to join ' . $invitation->business->name . ' team as ' . $invitation['role'] . '.<BR> <a  class="btn btn-link text-danger">Expired</a> ';
+        $notification->is_read = 0;
+        $notification->save();
+
+        if (request()->is('api/*')) {
+            //an api call
+            return response()->json(['rejected' => true]);
+        } else {
+            //a web call
+            //return redirect('/profile/'. Auth::user()->id .'#Notifications')->with('messageDgr', 'Invitation rejected.');
+            return back()->with('messageDgr', 'Member removed.');
+        }
     }
     public function accept(Request $request, Invitation $invitation)
     {

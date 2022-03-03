@@ -9,26 +9,66 @@
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
-            <div class="card-prof p-3 py-4" style='    border: 1px solid #ff556e30;'>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <img src="{{ asset($business->logo) }}" width="100" class="rounded-circle">
+            <div class="card-prof p-3 py-4" style='border: 1px solid #ff556e30;'>
+                
+                <form method='post' action="/edit-business-form/{{$business->id}}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div style='margin:5px; padding :7px; display:inline-block;position: relative;'>
+                                <label for='imgFile'>
+                                    <div class='avatar avatar-xl position-relative'>
+                                        <img src="{{asset($business->logo)}}" id='imgSrc' alt="profile_image"   class="w-100 border-radius-lg shadow-sm" style='max-width:75px;max-height:75px;'>
+                                    </div>
+                                </label>
+                                <input type='file'  name='logo' style='display:none' accept="image/*" id='imgFile'  onchange='readImg(this.files[0])'>
+                                
+                            </div>
+                            <!--div class="text-center">
+                                <img src="{{-- asset($business->logo) --}}" width="100" class="rounded-circle">
+                            </div-->
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-primary">
-                            <h5 class="mt-2 mb-0">{{ $business->name }} Team</h5> <br>
-                            <ul class="social-list-prof  ">
-
-                            </ul>
+                        <div class="col-md-6">
+                            <div class="text-primary">
+                                <input type="text" name='name' class="form-control border-0 mt-2 mb-0" id='editBusinessName' value='{{ $business->name }}' onkeypress="nameChanged()"> <br>
+                                <ul class="social-list-prof  ">
+                                    <input type="submit" class='btn btn-success' style=' display:none' id='editFormSubmitBtn' value='Save Changes' >
+                                    <input type="button" class='btn btn-secondary' style=' display:none' id='editFormCancelBtn' value='Cancel Changes' onclick='cancelChanges()'>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     @if($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
                     <div class="col-md-3">
                         <button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#addMemberModal">Add a new member</button>
                     </div>
                     @endif
+
+                    <script> 
+                        var imgId="imgSrc"; 
+                        var fileId = "imgFile";
+                        function readImg(image){ 
+                            document.getElementById(imgId).src = window.URL.createObjectURL(image); 
+                            document.getElementById('editFormSubmitBtn').style.display = 'inline';
+                            document.getElementById('editFormCancelBtn').style.display = 'inline';
+                        }
+                        function removeImg(){
+                            document.getElementById(imgId).src ="{{asset($business->logo)}}";
+                            document.getElementById(fileId).value =null; 
+                        }
+                        function cancelChanges(){
+                            document.getElementById('editFormSubmitBtn').style.display = 'none';
+                            document.getElementById('editFormCancelBtn').style.display = 'none';
+                            document.getElementById(imgId).src ="{{asset($business->logo)}}";
+                            document.getElementById('editBusinessName').value = '{{ $business->name }}';
+                            document.getElementById(fileId).value =null;
+                        }
+                        function nameChanged(){ 
+                            document.getElementById('editFormSubmitBtn').style.display = 'inline';
+                            document.getElementById('editFormCancelBtn').style.display = 'inline'; 
+                        }
+                    </script>
+
                 </div>
             </div>
         </div>
@@ -70,8 +110,8 @@
                                         </button>
                                         @endif
                                         @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER') && $member->id != Auth::user()->id )
-                                        <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $member->id }}" data-toggle="modal"><i class='fa fa-trash text-primary'></i></a>
-                                            @endif
+                                        <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $member->id }}" data-toggle="modal"><i class='fa fa-trash text-primary'></i></button>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -86,14 +126,14 @@
                                             </button>
                                         </div>
                                         <div class="modal-body" id="output_content">
-                                            Are you sure you want to delete {{$member->name}} from your business?
+                                            Are you sure you want to remove {{$member->name}} from your business?
                                         </div>
                                         <div class="modal-footer">
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/remove" enctype="multipart/form-data">
                                                 @csrf
-                                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                                <button type="submit" class="btn btn-danger">Remove</button>
                                             </form>
                                         </div>
                                     </div>
@@ -111,14 +151,14 @@
                                         </div>
                                         <div class="modal-body" id="output_content">
                                             <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/update-role" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('PUT')
+                                                @csrf 
                                                 <label for="role" class="col-form-label text-md-end">
                                                     Choose new role:
                                                 </label>
                                                 <select name="role" id="update-role" class="form-control">
-                                                    <option value="CO_MANAGER">Co Manager</option>
-                                                    <option value="TEAM_MEMBER" selected>Team Member</option>
+                                                    @if($member->pivot->role == 'TEAM_MEMBER') <option value="CO_MANAGER">Co Manager</option>
+                                                    @else <option value="TEAM_MEMBER" >Team Member</option>
+                                                    @endif
                                                 </select>
                                         </div>
                                         <div class="modal-footer">
@@ -135,15 +175,40 @@
                             <tr>
                                 <td>{{ $invitation->user->name }}</td>
                                 <td>{{ $invitation->role }}</td>
-                                <td>{{ $invitation->status }}</td>
-                                <td>
-                                    <button type="button" class="btn">
-
-                                        <i class="fa fa-trash text-primary"></i>
-                                        <i class='fa fa-edit text-primary'></i>
-                                    </button>
+                                <td>Pending</td>
+                                <td> 
+                                    @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')   )
+                                        <button type="button" class="btn col-md-2" data-target="#deletePendingModal-{{ $invitation->user_id }}" data-toggle="modal">
+                                            <i class='fa fa-trash text-primary'></i>
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
+                            <!-- delete modal -->
+                            <div class="modal fade" id="deletePendingModal-{{ $invitation->user_id }}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class=" modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete confirmation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="output_content">
+                                            Are you sure you want to remove {{$invitation->user->name}} from your business?
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form method="POST" action="/invitations/{{$invitation->id}}/destroy" enctype="multipart/form-data">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Remove</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             @endforeach
                             @endif
                         </tbody>

@@ -25,6 +25,7 @@ Route::get('/profile/{user}', [App\Http\Controllers\UsersController::class, 'pro
 Route::post('/edit-profile-form', [App\Http\Controllers\UsersController::class, 'edit'])->name('edit-profile-form')->middleware('auth');
 
 Route::post('/create-business-form', [App\Http\Controllers\BusinessController::class, 'store'])->name('create-business-form')->middleware('auth');
+Route::post('/edit-business-form/{business}', [App\Http\Controllers\BusinessController::class, 'update'])->name('create-business-form')->middleware('auth');
 
 Route::get('/businesses', [App\Http\Controllers\BusinessController::class, 'index'])->name('businesses')->middleware('auth');
 Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('is_business_member');
@@ -32,11 +33,12 @@ Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessContro
 Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
 Route::post('/businesses/{business}/employees/{user}/remove', [App\Http\Controllers\BusinessController::class, 'removeTeamMember'])->middleware('is_business_manager');
-Route::put('/businesses/{business}/employees/{user}/update-role', [App\Http\Controllers\BusinessController::class, 'updateRole'])->middleware('is_business_manager');
+Route::post('/businesses/{business}/employees/{user}/update-role', [App\Http\Controllers\BusinessController::class, 'updateRole'])->middleware('is_business_manager');
 
 Route::post('/invitations', [App\Http\Controllers\InvitationController::class, 'store'])->middleware('auth');
 Route::post('/invitations/{invitation}/accept', [App\Http\Controllers\InvitationController::class, 'accept'])->middleware('auth');
 Route::post('/invitations/{invitation}/reject', [App\Http\Controllers\InvitationController::class, 'reject'])->middleware('auth');
+Route::post('/invitations/{invitation}/destroy', [App\Http\Controllers\InvitationController::class, 'destroy'])->middleware('auth');
 
 Route::post('/notifications/{notification}/mark-read', [App\Http\Controllers\NotificationController::class, 'markRead'])->middleware('auth')->name('markNotificationAsRead');
 Route::post('/notifications/{notification}/mark-unread', [App\Http\Controllers\NotificationController::class, 'markUnread'])->middleware('auth')->name('markNotificationAsUnread');

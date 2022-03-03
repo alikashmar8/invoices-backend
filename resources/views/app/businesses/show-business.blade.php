@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="text-primary">
-                            <h5 class="mt-2 mb-0">{{$business->name}} <i class='fa fa-edit text-primary ml-3'> </i></h5>
+                            <h5 class="mt-2 mb-0">{{$business->name}} </h5>
                             <span class="small"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
                             <ul class="social-list-prof  ">
                                 @foreach($business->users as $member)
@@ -41,7 +41,7 @@
                         @endif
                         <br><br>
                         @if($current_user_business_details->role != App\Enums\UserRole::MANAGER)
-                        <span class="bg-danger float-right p-1 px-4 rounded text-white" data-toggle="modal" data-target="#leave_business_modal">Leave business</span>
+                        <span class="bg-danger float-right p-1 px-4 rounded text-white" style='cursor: pointer;' data-toggle="modal" data-target="#leave_business_modal">Leave business</span>
                         @endif
                     </div>
                 </div>
@@ -129,7 +129,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                <a type="submit" class="btn btn-success text-white" onclick="event.preventDefault();
+                <a type="submit" class="btn btn-danger text-white" onclick="event.preventDefault();
                                                     document.getElementById('leave_business_form').submit();">Confirm</a>
 
             </div>

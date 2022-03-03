@@ -148,8 +148,23 @@ class BusinessController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Business $business)
-    {
-        //
+    { 
+        $business->name = $request->name; 
+        
+        if (isset($request->logo)) {
+            $image = $request->file('logo');
+            $business->logo = $this->addBizImages($image);
+        }  
+        $business->save(); 
+
+        if (request()->is('api/*')) {
+            //an api call
+            return response()->json(['succeed' => true, 'business' => $business]);
+        } else {
+            //a web call
+            return back()->with('messageSuc', 'Business profile updated successfully');
+        }
+    
     }
 
     /**
@@ -171,9 +186,10 @@ class BusinessController extends Controller
         $destinationPath = 'uploads/biz'; //public_path('uploads/biz');
 
         $img = Image::make($image->getRealPath());
-        $img->resize(700, 1000, function ($constraint) {
+        /*$img->orientate()->resize(1000, 1000, function ($constraint) {
             $constraint->aspectRatio();
-        })->save($destinationPath . '/' . time() . $image->getClientOriginalName());
+        })->save($destinationPath . '/' . time() . $image->getClientOriginalName());*/
+        $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . time() . $image->getClientOriginalName());
         $path = $destinationPath . '/' . time() . $image->getClientOriginalName();
 
         /*$imageName =pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME). time() . '.' . $image->getClientOriginalExtension();
@@ -239,7 +255,7 @@ class BusinessController extends Controller
         if ($request->is('api/*')) {
             return response()->json(['success' => true]);
         } else {
-            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', 'Employee removed successfully');
+            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', 'Team member removed successfully');
         }
     }
 
