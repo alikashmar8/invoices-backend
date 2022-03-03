@@ -45,8 +45,8 @@
         <link rel="icon" href="{{ asset('images/favicon.png') }}">
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-  
-        
+
+
         <style>
             .wbsd-notification {
                 position: fixed;
@@ -189,7 +189,7 @@
                                 <span class="item-text">Manage notifications
                                 <i class="fas  fa-arrow-right"></i>
                                 </span>
-                            </a> 
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -246,7 +246,7 @@
                     @guest
                     <a class="btn-outline-sm page-scroll" href="/#download">DOWNLOAD</a>
                     @else
-                    <a class="btn-outline-sm page-scroll" href="/newInvoice">Submit Invoice</a>
+                    <a class="btn-outline-sm page-scroll" href="/invoices/create">Submit Invoice</a>
                     @endguest
                 </span>
             </div>
@@ -255,7 +255,7 @@
     <!--create modals-->
     <!-- Done: refactor this, incase of guest it will cause error -->
     @if(!Auth::guest() && count($navBarNotifications) > 0)
-    
+
     @foreach($navBarNotifications as $navBarNotification)
     <div class="modal fade" id="CreateForm{{$navBarNotification->id}}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class=" modal-dialog" role="document">
@@ -283,34 +283,34 @@
                     </form>
                     <button type="button" id='close_{{$navBarNotification->id}}' class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
-    
-    <script>    
+
+    <script>
         var numberOfNotifications = document.getElementById("numberOfNotifications");
         var numberOfNotifications_int ={{ count($navBarNotifications) }};
         numberOfNotifications.innerHTML = numberOfNotifications_int;
-        
-        if ($("#mark_read_nav_{{$navBarNotification->id}}").length > 0) { 
+
+        if ($("#mark_read_nav_{{$navBarNotification->id}}").length > 0) {
             $("#mark_read_nav_{{$navBarNotification->id}}").validate({
-                submitHandler: function(form) { 
+                submitHandler: function(form) {
                     $.ajax({
                         url: "/notifications/{{$navBarNotification->id}}/mark-read",
                         type: "POST",
                         data: $('#mark_read_nav_{{$navBarNotification->id}}').serialize(),
                         success: function( response ) {
-                            
+
                             $('#btn_{{ $navBarNotification->id}}').css('display', 'none');
                             $('#btn_separator_{{ $navBarNotification->id}}').css('display', 'none');
                             $('#close_{{$navBarNotification->id}}').click();
                             numberOfNotifications_int -= 1;
                             numberOfNotifications.innerHTML = numberOfNotifications_int;
 
-                            document.getElementById("mark_read_nav_{{$navBarNotification->id}}").reset(); 
-                            
-                                
+                            document.getElementById("mark_read_nav_{{$navBarNotification->id}}").reset();
+
+
                         }
                     });
                 }
@@ -318,7 +318,7 @@
         }
         if ($("#delete_nav_{{$navBarNotification->id}}").length > 0) {
             $("#delete_nav_{{$navBarNotification->id}}").validate({
-                submitHandler: function(form) { 
+                submitHandler: function(form) {
                     $.ajax({
                         url: "/notifications/{{$navBarNotification->id}}",
                         type: "post",
@@ -333,17 +333,17 @@
                             @isset($not)
                             if( $('#tr_{{$not->id}}') ){
                                 $('#tr_{{$not->id}}').css('display', 'none');
-                            } 
+                            }
                             @endisset
-                            
-                                    
+
+
                         }
                     });
                 }
             })
         }
-    
-    </script> 
+
+    </script>
     @endforeach
     @endif
     <!-- end of navigation -->

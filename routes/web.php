@@ -44,5 +44,6 @@ Route::post('/notifications/{notification}/mark-read', [App\Http\Controllers\Not
 Route::post('/notifications/{notification}/mark-unread', [App\Http\Controllers\NotificationController::class, 'markUnread'])->middleware('auth')->name('markNotificationAsUnread');
 Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
 
+Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, 'create'])->middleware('auth');
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');
