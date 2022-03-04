@@ -58,42 +58,87 @@
                     <table class='table table-striped table-hover table-responsive-sm   '>
                         <thead>
                             <tr>
-                                <th>Company</th>
-                                <th>Contact</th>
-                                <th>Country</th>
+                                <td>#</td>
+                                <td>Title</td>
+                                <td>Ammount</td>
+                                <td>Status</td>
+                                <td>Reference #</td>
+                                <td>Added by</td>
+                                <td>Actions</td>
                             </tr>
                         </thead>
+
                         <tbody>
+                            @if(count($invoices))
+                            @foreach($invoices as $invoice)
+                                <tr>
+                                    <td>{{ $loop->index }}</td>
+                                    <td>{{ $invoice->title }}</td>
+                                    <td>{{ $invoice->total }}</td>
+                                    <td>
+                                        @if($invoice->is_paid) <span class='text-success border border-success p-1'>Paid {{ $invoice->payment_date }}</span>
+                                        @else <span class='text-warning border border-warning p-1'>Not Paid</span> {{ $invoice->due_date }}
+                                        @endif
+                                    </td>
+                                    <td>{{$invoice->reference_number }}</td>
+                                    <td><img src="{{asset(App\Models\User::findOrFail($invoice->created_by )->first()->profile_picture)}}" class="rounded-circle" style='max-width: 30px'>{{ App\Models\User::findOrFail($invoice->created_by )->first()->name }}</td>
+                                    <td>
+                                        <button type="button" class="btn col-md-2" data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
+                                            <i class="fa fa-expand text-primary" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button type="button" class="btn col-md-2" data-target="#editModal-{{ $invoice->id }}" data-toggle="modal">
+                                            <i class="fa fa-edit text-primary"></i>
+                                        </button>
+                                        
+                                        @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')  )
+                                        <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $invoice->id }}" data-toggle="modal">
+                                            <i class='fa fa-trash text-primary'></i>
+                                        </button>
+                                        @endif
+                                        
+                                    </td>
+                                </tr>
+                                <!-- delete modal -->
+                                <div class="modal fade" id="showModal-{{$invoice->id}}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class=" modal-dialog" role="document">
+                                        <div class="modal-content" >
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">{{$invoice->title }} # {{$invoice->reference_number }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" id="output_content">
+                                                <p><b>Total amount:</b> {{$invoice->total }}	</p>
+                                                <p><b>Status:</b> @if($invoice->is_paid) Paid at {{$invoice->payment_date }} @else Not paid	@endif </p>
+                                                <p><b>Due date:</b> {{$invoice->due_date }}	</p>
+                                                <p><b>Notes:</b> {{$invoice->notes }} </p>
+                                                <p><b>Added by:</b> <img src="{{asset(App\Models\User::findOrFail($invoice->created_by )->first()->profile_picture)}}" class="rounded-circle" style='max-width: 30px'>{{ App\Models\User::findOrFail($invoice->created_by )->first()->name }} </p>
+                                                <p><b>Discount:</b> {{$invoice->discount }} </p>
+                                                <p><b>Extra amount:</b> {{$invoice->extra_amount }} </p>
+                                                <p><b>Added on:</b> {{$invoice->created_at }} </p>
+                                                @if($invoice->attachment)
+                                                <p><b>Attachments</b></p>
+                                                    @foreach($invoice->attachment as $attach)
+                                                        <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc{{ $loop->index }} </a>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            @else
                             <tr>
-                                <td>Alfreds Futterkiste</td>
-                                <td>Maria Anders</td>
-                                <td>Germany</td>
-                            </tr>
-                            <tr>
-                                <td>Centro comercial Moctezuma</td>
-                                <td>Francisco Chang</td>
-                                <td>Mexico</td>
-                            </tr>
-                            <tr>
-                                <td>Ernst Handel</td>
-                                <td>Roland Mendel</td>
-                                <td>Austria</td>
-                            </tr>
-                            <tr>
-                                <td>Island Trading</td>
-                                <td>Helen Bennett</td>
-                                <td>UK</td>
-                            </tr>
-                            <tr>
-                                <td>Laughing Bacchus Winecellars</td>
-                                <td>Yoshi Tannamuri</td>
-                                <td>Canada</td>
-                            </tr>
-                            <tr>
-                                <td>Magazzini Alimentari Riuniti</td>
-                                <td>Giovanni Rovelli</td>
-                                <td>Italy</td>
-                            </tr>
+                                <td colspan="6" class="text-danger">No invoices to show!</td> 
+                            </tr> 
+                            @endif
                         </tbody>
                     </table>
 

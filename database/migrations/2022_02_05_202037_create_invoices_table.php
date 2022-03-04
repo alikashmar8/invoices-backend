@@ -15,12 +15,14 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->longText('title')->default('Invoice');
             $table->double('total')->default(0);
             $table->double('extra_amount')->default(0);
             $table->double('discount')->default(0);
-            $table->double('barcode')->nullable()->unique();
-            $table->boolean('is_paid')->default(false);
-            $table->date('due_date')->default(now());
+            $table->longText('reference_number')->nullable()->unique();
+            $table->boolean('is_paid')->default(true);
+            $table->date('due_date')->nullable();
+            $table->date('payment_date')->nullable();
             $table->string('notes')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

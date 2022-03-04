@@ -8,6 +8,8 @@ use App\Models\Notification;
 use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use App\Models\Invitation;
+use App\Models\Invoice;
+use App\Models\InvoiceAttachment;
 use App\Models\User;
 use BenSampo\Enum\Rules\EnumValue;
 use \Illuminate\Support\Facades\Auth;
@@ -123,7 +125,11 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details'));
+            $invoices =  Invoice::where('business_id', $business->id)->get();
+            foreach ($invoices as $invoice) {
+                $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
+            } 
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
