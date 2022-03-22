@@ -49,11 +49,11 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="extra_amount">Extra Amounts:</label>
-                        <input type="number" name="extra_amount" class="form-control" min="0" id="extra_amount">
+                        <input type="number" name="extra_amount" class="form-control" value="0" min="0" id="extra_amount">
                     </div>
                     <div class="form-group">
                         <label for="discount">Discount:</label>
-                        <input type="number" name="discount" class="form-control" min="0" id="discount">
+                        <input type="number" name="discount" class="form-control" value="0" min="0" id="discount">
                     </div>
                     <div class="form-group">
                         <label for="total" class="required">
