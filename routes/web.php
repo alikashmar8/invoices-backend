@@ -29,7 +29,8 @@ Route::post('/edit-business-form/{business}', [App\Http\Controllers\BusinessCont
 
 Route::get('/businesses', [App\Http\Controllers\BusinessController::class, 'index'])->name('businesses')->middleware('auth');
 Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('is_business_member');
-Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessController::class, 'leave'])->middleware('is_business_member');
+Route::post('/businesses/{business}/make-favorite', [App\Http\Controllers\BusinessController::class, 'makeFavorite'])->name('businesses.make-favorite')->middleware('is_business_member');
+Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessController::class, 'leave'])->name('businesses.leave')->middleware('is_business_member');
 Route::get('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/employees', [App\Http\Controllers\BusinessController::class, 'addNewEmployee'])->middleware('auth');
 Route::post('/businesses/{business}/employees/{user}/remove', [App\Http\Controllers\BusinessController::class, 'removeTeamMember'])->middleware('is_business_manager');

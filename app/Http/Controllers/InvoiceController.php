@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
-use App\Models\DefaultBusiness;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
 
@@ -27,20 +27,21 @@ class InvoiceController extends Controller
      */
     public function createDefault()
     {
-        $defaultBusiness = DefaultBusiness::where('user_id' , Auth::user()->id)->get();
-        if(count($defaultBusiness)) $business = $defaultBusiness[0];
-        else $business = Auth::user()->businesses()->first();
+        // $defaultBusiness = DefaultBusiness::where('user_id', Auth::user()->id)->get();
+        // if (count($defaultBusiness)) $business = $defaultBusiness[0];
+        // else $business = Auth::user()->businesses()->first();
 
-        if (request()->is('api/*')) { 
-            return response()->json(['succeed' => true, 'business' => $business]);
-        } else {
-            return view('app.businesses.invoices.create-invoice' , compact('business'));
-        }
+        // if (request()->is('api/*')) {
+        //     return response()->json(['succeed' => true, 'business' => $business]);
+        // } else {
+        //     return view('app.businesses.invoices.create-invoice', compact('business'));
+        // }
     }
 
     public function create()
     {
-        return view('app.businesses.invoices.create-invoice');
+        $businesses = Auth::user()->businesses;
+        return view('app.businesses.invoices.create-invoice', compact('businesses'));
     }
 
     /**
@@ -52,13 +53,13 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $invoice = new Invoice();
-        $invoice->title =	$request->title;
-        $invoice->total	= $request->total;
-        if(isset($request->is_paid)){
+        $invoice->title =    $request->title;
+        $invoice->total    = $request->total;
+        if (isset($request->is_paid)) {
             $invoice->is_paid = 1;
-            if(isset($request->payment_date)){
+            if (isset($request->payment_date)) {
                 $invoice->payment_date = $request->payment_date;
-            }else{
+            } else {
                 $invoice->payment_date = Carbon\Carbon::now();
             }
         }
@@ -71,19 +72,21 @@ class InvoiceController extends Controller
         $invoice->business_id = $request->business_id;
         $invoice->save();
         if ($request->hasFile('attachments')) {
-            foreach ($request->attachments as $attach) { 
-                if ($attach->getClientOriginalExtension() == 'pdf' 
-                || $attach->getClientOriginalExtension() == 'docx'
-                || $attach->getClientOriginalExtension() == 'png'
-                || $attach->getClientOriginalExtension() == 'jpg'
-                || $attach->getClientOriginalExtension() == 'xlsx' ) {
-                    //You have better way for attaching 
+            foreach ($request->attachments as $attach) {
+                if (
+                    $attach->getClientOriginalExtension() == 'pdf'
+                    || $attach->getClientOriginalExtension() == 'docx'
+                    || $attach->getClientOriginalExtension() == 'png'
+                    || $attach->getClientOriginalExtension() == 'jpg'
+                    || $attach->getClientOriginalExtension() == 'xlsx'
+                ) {
+                    //You have better way for attaching
                     $attachment = new InvoiceAttachment();
                     $attachment->url = $this->addImages($attach);
                     $attachment->invoice_id = $invoice->id;
                     $attachment->save();
-                }  else{
-                    //You have better way for attaching 
+                } else {
+                    //You have better way for attaching
                     $attachment = new InvoiceAttachment();
                     $attachment->url = 'img/notSupportedFile.png';
                     $attachment->invoice_id = $invoice->id;
@@ -91,8 +94,7 @@ class InvoiceController extends Controller
                 }
             }
         }
-        return redirect('businesses/'.$request->business_id);
-        
+        return redirect('businesses/' . $request->business_id);
     }
 
     /**
@@ -140,12 +142,11 @@ class InvoiceController extends Controller
         //
     }
     public function addImages($image)
-    {  
-        $imageName =pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME). time() . '.' . $image->getClientOriginalExtension();
+    {
+        $imageName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME) . time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = 'uploads/invoices/'; //public_path('uploads/biz');
         $image->move($destinationPath, $imageName);
         $path = $destinationPath . $imageName;
         return $path;
     }
-
 }

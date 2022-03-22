@@ -83,12 +83,6 @@ class BusinessController extends Controller
         // option1
         Auth::user()->businesses()->attach($business->id, ['role' => UserRole::MANAGER,]);
 
-        // option2
-        // $relation = new UserBusiness();
-        // $relation->role	= UserRole::MANAGER;
-        // $relation->user_id =Auth::user()->id;
-        // $relation->business_id = $business->id;
-        // $relation->save();
 
         if (request()->is('api/*')) {
             //an api call
@@ -128,7 +122,7 @@ class BusinessController extends Controller
             $invoices =  Invoice::where('business_id', $business->id)->get();
             foreach ($invoices as $invoice) {
                 $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
-            } 
+            }
             return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
@@ -154,14 +148,14 @@ class BusinessController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Business $business)
-    { 
-        $business->name = $request->name; 
-        
+    {
+        $business->name = $request->name;
+
         if (isset($request->logo)) {
             $image = $request->file('logo');
             $business->logo = $this->addBizImages($image);
-        }  
-        $business->save(); 
+        }
+        $business->save();
 
         if (request()->is('api/*')) {
             //an api call
@@ -170,7 +164,6 @@ class BusinessController extends Controller
             //a web call
             return back()->with('messageSuc', 'Business profile updated successfully');
         }
-    
     }
 
     /**
@@ -291,6 +284,22 @@ class BusinessController extends Controller
             return response()->json(['success' => true]);
         } else {
             return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', $messageSuc);
+        }
+    }
+
+    public function makeFavorite(Request $request, Business $business)
+    {
+        $user = Auth::user();
+        $businesses_ids = $user->businesses()->allRelatedIds();
+        foreach ($businesses_ids as $id) {
+            $user->businesses()->updateExistingPivot($id, ['is_favorite' => false]);
+        }
+        $user->businesses()->updateExistingPivot($business->id, ['is_favorite' => true]);
+        $user->save();
+        if ($request->is('api/*')) {
+            return response()->json(['success' => true]);
+        } else {
+            return redirect('/businesses/')->with('messageSuc', 'Business is favorite');
         }
     }
 }

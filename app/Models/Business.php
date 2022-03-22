@@ -12,7 +12,7 @@ class Business extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_businesses')->withPivot(['role', 'salary', 'is_active']);;
+        return $this->belongsToMany(User::class, 'user_businesses')->withPivot(['role', 'salary', 'is_active', 'is_favorite']);;
     }
 
     public function invitations()

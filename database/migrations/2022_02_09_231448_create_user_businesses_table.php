@@ -19,6 +19,7 @@ class CreateUserBusinessesTable extends Migration
             $table->id();
             $table->enum('role', UserRole::getValues())->default(UserRole::TEAM_MEMBER);
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_favorite')->default(false);
             $table->boolean('salary')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
