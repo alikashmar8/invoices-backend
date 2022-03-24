@@ -18,7 +18,7 @@
                     <div class="col-md-6">
                         <div class="text-primary">
                             <h5 class="mt-2 mb-0">{{$business->name}} </h5>
-                            <span class="small"><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
+                            <span class=""><small>Since: {{Carbon\Carbon::parse($business->created_at)->format('M Y')}}</small> </span>
                             <ul class="social-list-prof  ">
                                 @foreach($business->users as $member)
                                 <li style='padding: 0px; margin:0px'>
@@ -72,16 +72,16 @@
                             @if(count($invoices))
                             @foreach($invoices as $invoice)
                                 <tr>
-                                    <td>{{ $loop->index }}</td>
+                                    <td>{{ $invoice->id }}</td>
                                     <td>{{ $invoice->title }}</td>
                                     <td>{{ $invoice->total }}</td>
                                     <td>
                                         @if($invoice->is_paid) <span class='text-success border border-success p-1'>Paid {{ $invoice->payment_date }}</span>
-                                        @else <span class='text-warning border border-warning p-1'>Not Paid</span> {{ $invoice->due_date }}
+                                        @else <span class='text-warning border border-warning p-1'>Not Paid - Due: {{ $invoice->due_date }} </span>
                                         @endif
                                     </td>
                                     <td>{{$invoice->reference_number }}</td>
-                                    <td><img src="{{asset(App\Models\User::findOrFail($invoice->created_by )->first()->profile_picture)}}" class="rounded-circle" style='max-width: 30px'>{{ App\Models\User::findOrFail($invoice->created_by )->first()->name }}</td>
+                                    <td><img src="{{asset($invoice->createdBy->profile_picture)}}" class="rounded-circle" style='max-width: 30px'>{{ App\Models\User::findOrFail($invoice->created_by )->first()->name }}</td>
                                     <td>
                                         <button type="button" class="btn col-md-2" data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
                                             <i class="fa fa-expand text-primary" aria-hidden="true"></i>
@@ -90,16 +90,16 @@
                                         <button type="button" class="btn col-md-2" data-target="#editModal-{{ $invoice->id }}" data-toggle="modal">
                                             <i class="fa fa-edit text-primary"></i>
                                         </button>
-                                        
+
                                         @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')  )
                                         <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $invoice->id }}" data-toggle="modal">
                                             <i class='fa fa-trash text-primary'></i>
                                         </button>
                                         @endif
-                                        
+
                                     </td>
                                 </tr>
-                                <!-- delete modal -->
+                                <!-- show invoice modal -->
                                 <div class="modal fade" id="showModal-{{$invoice->id}}" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class=" modal-dialog" role="document">
                                         <div class="modal-content" >
@@ -121,14 +121,14 @@
                                                 @if($invoice->attachment)
                                                 <p><b>Attachments</b></p>
                                                     @foreach($invoice->attachment as $attach)
-                                                        <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc{{ $loop->index }} </a>
+                                                        <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
                                                     @endforeach
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
 
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -136,8 +136,8 @@
                             @endforeach
                             @else
                             <tr>
-                                <td colspan="6" class="text-danger">No invoices to show!</td> 
-                            </tr> 
+                                <td colspan="6" class="text-danger">No invoices to show!</td>
+                            </tr>
                             @endif
                         </tbody>
                     </table>

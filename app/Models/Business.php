@@ -19,4 +19,9 @@ class Business extends Model
     {
         return $this->hasMany(Invitation::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

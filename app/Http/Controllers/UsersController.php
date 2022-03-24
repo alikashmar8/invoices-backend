@@ -16,7 +16,7 @@ class UsersController extends Controller
         if(Auth::user()->id != $user->id){
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
-        $notifications = Notification::where('user_id' ,Auth::user()->id )->latest()->get();
+        $notifications = $user->notifications()->latest()->get();
 
         if( request()->is('api/*')){
             //an api call
@@ -46,7 +46,7 @@ class UsersController extends Controller
         return redirect('/profile/'.Auth::user()->id);
     }
 
-    
+
     public function addImages($image)
     {
         $destinationPath = 'uploads/profile'; //public_path('uploads/profile');
@@ -66,19 +66,19 @@ class UsersController extends Controller
     public function memberCheckerIfExist(Request $request)
     {
         $user = User::where('email', $request->email1)->get();
-        
+
         if(!$user->isEmpty()) {
             $invitations = Invitation::where('user_id' , $user[0]->id)
                                     ->where('business_id', $request->id)
                                     ->where('status' , 'PENDING')->get();
-            
+
             if(!$user[0]->businesses()->where('business_id', $request->id)->get()->isEmpty()
                 || !$invitations->isEmpty()  ){
-                return response()->json(['success' => 'isTeamMember']); 
+                return response()->json(['success' => 'isTeamMember']);
             }
-            return response()->json(['success' => 'exist']); 
+            return response()->json(['success' => 'exist']);
         }
-        else return response()->json(['success' => 'notExist']); 
-        
+        else return response()->json(['success' => 'notExist']);
+
     }
 }

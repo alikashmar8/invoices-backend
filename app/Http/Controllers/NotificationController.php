@@ -82,6 +82,7 @@ class NotificationController extends Controller
      */
     public function destroy(Notification $notification)
     {
+        // TODO:: Refactor this
         if($notification->title == 'Joining a new team'){
             $pendingInvitations = Invitation::where('user_id', Auth::user()->id)
             ->where('status', 'PENDING')
@@ -89,21 +90,21 @@ class NotificationController extends Controller
             ->first()->delete();
         }
         $notification->delete();
-        return response()->json(['success' => true]); 
+        return response()->json(['success' => true]);
         return back();
     }
     public function markRead(Notification $notification)
     {
         $notification->is_read = 1;
         $notification->save();
-        return response()->json(['success' => true]); 
+        return response()->json(['success' => true]);
         return back();
     }
     public function markUnread(Notification $notification)
     {
         $notification->is_read = 0;
         $notification->save();
-        return response()->json(['success' => true]); 
+        return response()->json(['success' => true]);
         return back();
     }
 

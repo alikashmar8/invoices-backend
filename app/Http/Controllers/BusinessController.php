@@ -119,7 +119,7 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoices =  Invoice::where('business_id', $business->id)->get();
+            $invoices =  $business->invoices;
             foreach ($invoices as $invoice) {
                 $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
             }
@@ -272,14 +272,10 @@ class BusinessController extends Controller
                 ->withInput();
         }
 
-        // $user->businesses()->updateExistingPivot($business->id, ['role' => $request['role']]);
-        $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', $user->id)->first();
-        Log::info($current_user_business_details);
-        $current_user_business_details->role = $request['role'];
-        $current_user_business_details->save();
+        $user->businesses()->updateExistingPivot($business->id, ['role' => $request['role']]);
+
         $messageSuc = 'Role updated successfully';
-        $members = $business->users;
-        $invitations = Invitation::where('business_id', $business->id)->where('status', 'PENDING')->with('user')->get();
+
         if ($request->is('api/*')) {
             return response()->json(['success' => true]);
         } else {

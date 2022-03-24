@@ -53,8 +53,8 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $invoice = new Invoice();
-        $invoice->title =    $request->title;
-        $invoice->total    = $request->total;
+        $invoice->title = $request->title;
+        $invoice->total = $request->total;
         if (isset($request->is_paid)) {
             $invoice->is_paid = 1;
             if (isset($request->payment_date)) {
@@ -62,6 +62,8 @@ class InvoiceController extends Controller
             } else {
                 $invoice->payment_date = Carbon\Carbon::now();
             }
+        } else {
+            $invoice->is_paid = 0;
         }
         $invoice->due_date = $request->due_date;
         $invoice->reference_number = $request->reference_number;

@@ -5,12 +5,11 @@
 
 @section('content')
 
-{{ !Auth::user()->businesses()->where('business_id', $business->id)->get()->isEmpty() }}
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
             <div class="card-prof p-3 py-4" style='border: 1px solid #ff556e30;'>
-                
+
                 <form method='post' action="/edit-business-form/{{$business->id}}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
@@ -22,7 +21,7 @@
                                     </div>
                                 </label>
                                 <input type='file'  name='logo' style='display:none' accept="image/*" id='imgFile'  onchange='readImg(this.files[0])'>
-                                
+
                             </div>
                             <!--div class="text-center">
                                 <img src="{{-- asset($business->logo) --}}" width="100" class="rounded-circle">
@@ -40,21 +39,21 @@
                     </form>
                     @if($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
                     <div class="col-md-3">
-                        <button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#addMemberModal">Add a new member</button>
+                        <button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#addMemberModal" type="button" >Add a new member</button>
                     </div>
                     @endif
 
-                    <script> 
-                        var imgId="imgSrc"; 
+                    <script>
+                        var imgId="imgSrc";
                         var fileId = "imgFile";
-                        function readImg(image){ 
-                            document.getElementById(imgId).src = window.URL.createObjectURL(image); 
+                        function readImg(image){
+                            document.getElementById(imgId).src = window.URL.createObjectURL(image);
                             document.getElementById('editFormSubmitBtn').style.display = 'inline';
                             document.getElementById('editFormCancelBtn').style.display = 'inline';
                         }
                         function removeImg(){
                             document.getElementById(imgId).src ="{{asset($business->logo)}}";
-                            document.getElementById(fileId).value =null; 
+                            document.getElementById(fileId).value =null;
                         }
                         function cancelChanges(){
                             document.getElementById('editFormSubmitBtn').style.display = 'none';
@@ -63,9 +62,9 @@
                             document.getElementById('editBusinessName').value = '{{ $business->name }}';
                             document.getElementById(fileId).value =null;
                         }
-                        function nameChanged(){ 
+                        function nameChanged(){
                             document.getElementById('editFormSubmitBtn').style.display = 'inline';
-                            document.getElementById('editFormCancelBtn').style.display = 'inline'; 
+                            document.getElementById('editFormCancelBtn').style.display = 'inline';
                         }
                     </script>
 
@@ -151,7 +150,7 @@
                                         </div>
                                         <div class="modal-body" id="output_content">
                                             <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/update-role" enctype="multipart/form-data">
-                                                @csrf 
+                                                @csrf
                                                 <label for="role" class="col-form-label text-md-end">
                                                     Choose new role:
                                                 </label>
@@ -176,7 +175,7 @@
                                 <td>{{ $invitation->user->name }}</td>
                                 <td>{{ $invitation->role }}</td>
                                 <td>Pending</td>
-                                <td> 
+                                <td>
                                     @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')   )
                                         <button type="button" class="btn col-md-2" data-target="#deletePendingModal-{{ $invitation->user_id }}" data-toggle="modal">
                                             <i class='fa fa-trash text-primary'></i>
