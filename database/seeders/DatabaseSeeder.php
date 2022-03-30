@@ -26,5 +26,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => Hash::make('user123'),
         ]);
+        DB::table('discount_types')->insert(['name' => 'percentage']);
+        DB::table('discount_types')->insert(['name' => 'amount']);
+         
     }
 }

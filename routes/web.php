@@ -47,6 +47,8 @@ Route::delete('/notifications/{notification}', [App\Http\Controllers\Notificatio
 
 Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, 'create'])->middleware('auth');
 Route::get('/invoices/createDefault', [App\Http\Controllers\InvoiceController::class, 'createDefault'])->middleware('auth');
+Route::get('/invoices/edit/{invoice}', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
+Route::post('/editInvoiceForm/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('editInvoiceForm');
 
 Route::post('/createInvoiceForm', [App\Http\Controllers\InvoiceController::class, 'store'])->middleware('auth');
 

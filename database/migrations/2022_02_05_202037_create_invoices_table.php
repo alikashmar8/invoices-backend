@@ -19,6 +19,9 @@ class CreateInvoicesTable extends Migration
             $table->double('total')->default(0);
             $table->double('extra_amount')->default(0)->nullable();
             $table->double('discount')->default(0)->nullable();
+            $table->integer('discount_type')->default(1);
+            //$table->unsignedBigInteger('discount_type')->default(1);
+            //$table->foreign('discount_type')->references('id')->on('discount_type')->onDelete('cascade');
             $table->longText('reference_number')->nullable()->unique();
             $table->boolean('is_paid')->default(true);
             $table->date('due_date')->nullable();

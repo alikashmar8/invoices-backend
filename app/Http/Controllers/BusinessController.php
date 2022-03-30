@@ -119,7 +119,7 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoices =  $business->invoices;
+            $invoices =  $business->invoices->sortByDesc('created_at');;
             foreach ($invoices as $invoice) {
                 $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
             }
