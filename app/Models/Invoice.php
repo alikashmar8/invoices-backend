@@ -38,4 +38,9 @@ class Invoice extends Model
         return $this->hasMany('App\Models\InvoiceItem');
     }
 
+    public function attachments()
+    {
+        return $this->hasMany('App\Models\InvoiceAttachment');
+    }
+
 }

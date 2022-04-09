@@ -5,7 +5,7 @@
 
 @section('content')
 <style>
-    #tableContainer::-webkit-scrollbar {display: none; } 
+    #tableContainer::-webkit-scrollbar {display: none; }
 </style>
 
 <div class="container mt-5">
@@ -58,7 +58,7 @@
         <div class="col-md-12">
             <div class="card px-3 ">
                 <div class="row" style='overflow: scroll;' id='tableContainer'>
-                    <table class='table table-striped table-hover table-responsive-sm   ' id='myDataTable'>
+                    <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                         <thead>
                             <tr>
                                 <td>#</td>
@@ -90,7 +90,7 @@
                                             <i class="fa fa-expand text-primary" aria-hidden="true"></i>
                                         </button>
 
-                                        <a type="button" class="btn col-md-2" href="/invoices/edit/{{ $invoice->id }}" >
+                                        <a type="button" class="btn col-md-2" href="/invoices/{{ $invoice->id }}/edit" >
                                             <i class="fa fa-edit text-primary"></i>
                                         </a>
 
@@ -121,9 +121,9 @@
                                                 <p><b>Discount:</b> {{$invoice->discount }} @if($invoice->discount_type == 1) % @else $ @endif</p>
                                                 <p><b>Extra amount:</b> ${{$invoice->extra_amount }} <small>AUD</small> </p>
                                                 <p><b>Added on:</b> {{$invoice->created_at }} </p>
-                                                @if($invoice->attachment)
+                                                @if($invoice->attachments)
                                                 <p><b>Attachments</b></p>
-                                                    @foreach($invoice->attachment as $attach)
+                                                    @foreach($invoice->attachments as $attach)
                                                         <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
                                                     @endforeach
                                                 @endif
@@ -207,7 +207,7 @@
             {"orderable": false, "targets": 2},
             {"orderable": false, "targets": 3}
         ]
-    }); 
+    });
     /*table.on('click', '.delete', function () {
         $tr = $(this).closest('tr');
         if ($($tr).hasClass('child')) {

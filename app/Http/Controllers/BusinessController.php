@@ -79,10 +79,7 @@ class BusinessController extends Controller
         }
         $business->save();
 
-        // both options work the same choose whatever you are comfortable with
-        // option1
         Auth::user()->businesses()->attach($business->id, ['role' => UserRole::MANAGER,]);
-
 
         if (request()->is('api/*')) {
             //an api call
@@ -101,28 +98,10 @@ class BusinessController extends Controller
      */
     public function show(Business $business)
     {
-        // also here no need to get business id
-        // $business = Business::findOrFail($id);
-
-        //you can check if relation exists using this method
-
-        // you code:
-        // $auth = UserBusiness::where('business_id' ,$id)->where('user_id', Auth::user()->id)->get();
-        // if(count($auth) > 0 ){
-        //     return view('app.businessDetails' , compact('business'));
-        // }else{
-        //     return redirect('/')->with( 'messageDgr' , 'Access Denied.');
-        // }
-
-
-        // alternate way:
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoices =  $business->invoices->sortByDesc('created_at');;
-            foreach ($invoices as $invoice) {
-                $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
-            }
+            $invoices =  $business->invoices->sortByDesc('created_at');
             return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
@@ -158,10 +137,8 @@ class BusinessController extends Controller
         $business->save();
 
         if (request()->is('api/*')) {
-            //an api call
             return response()->json(['succeed' => true, 'business' => $business]);
         } else {
-            //a web call
             return back()->with('messageSuc', 'Business profile updated successfully');
         }
     }

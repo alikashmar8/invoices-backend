@@ -46,10 +46,9 @@ Route::post('/notifications/{notification}/mark-unread', [App\Http\Controllers\N
 Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
 
 Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, 'create'])->middleware('auth');
-Route::get('/invoices/createDefault', [App\Http\Controllers\InvoiceController::class, 'createDefault'])->middleware('auth');
-Route::get('/invoices/edit/{invoice}', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
-Route::post('/editInvoiceForm/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('editInvoiceForm');
+Route::post('/invoices', [App\Http\Controllers\InvoiceController::class, 'store'])->middleware('auth')->name('invoices.store');
+Route::get('/invoices/{invoice}/edit', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
+Route::put('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('invoices.update');
 
-Route::post('/createInvoiceForm', [App\Http\Controllers\InvoiceController::class, 'store'])->middleware('auth');
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');

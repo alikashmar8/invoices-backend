@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Business;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
@@ -21,27 +22,12 @@ class InvoiceController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createDefault()
-    {
-        // $defaultBusiness = DefaultBusiness::where('user_id', Auth::user()->id)->get();
-        // if (count($defaultBusiness)) $business = $defaultBusiness[0];
-        // else $business = Auth::user()->businesses()->first();
-
-        // if (request()->is('api/*')) {
-        //     return response()->json(['succeed' => true, 'business' => $business]);
-        // } else {
-        //     return view('app.businesses.invoices.create-invoice', compact('business'));
-        // }
-    }
-
     public function create()
     {
         $businesses = Auth::user()->businesses;
+        if (count($businesses) < 1) {
+            return redirect('/')->with('messageDgr', 'You must create a business first');
+        }
         return view('app.businesses.invoices.create-invoice', compact('businesses'));
     }
 
@@ -53,6 +39,28 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'total' => 'required|numeric|min:0,max:9999999999',
+            'extra_amount' => 'numeric|min:0,max:9999999999|nullable',
+            'discount' => 'numeric|min:0,max:9999999999|nullable',
+            'reference_number' => 'max:255',
+            'payment_date' => 'required',
+            'notes' => 'max:255',
+            'business_id' => 'required|exists:businesses,id',
+            'attachments.*' => 'mimes:pdf,doc,docx,png,jpg,jpeg,xlsx,xls,csv|max:10000',
+        ], [
+            'attachments.*.mimes' => 'Unsupported attachment file type',
+        ]);
+
+        if ($validator->fails()) {
+            if (request()->is('api/*')) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            } else {
+                return redirect()->back()->withInput()
+                    ->withErrors($validator);
+            }
+        }
         $invoice = new Invoice();
         $invoice->title = $request->title;
         $invoice->total = $request->total;
@@ -61,7 +69,7 @@ class InvoiceController extends Controller
             if (isset($request->payment_date)) {
                 $invoice->payment_date = $request->payment_date;
             } else {
-                $invoice->payment_date = Carbon\Carbon::now();
+                $invoice->payment_date = Carbon::now();
             }
         } else {
             $invoice->is_paid = 0;
@@ -77,25 +85,12 @@ class InvoiceController extends Controller
         $invoice->save();
         if ($request->hasFile('attachments')) {
             foreach ($request->attachments as $attach) {
-                if (
-                    $attach->getClientOriginalExtension() == 'pdf'
-                    || $attach->getClientOriginalExtension() == 'docx'
-                    || $attach->getClientOriginalExtension() == 'png'
-                    || $attach->getClientOriginalExtension() == 'jpg'
-                    || $attach->getClientOriginalExtension() == 'xlsx'
-                ) {
-                    //You have better way for attaching
-                    $attachment = new InvoiceAttachment();
-                    $attachment->url = $this->addImages($attach);
-                    $attachment->invoice_id = $invoice->id;
-                    $attachment->save();
-                } else {
-                    //You have better way for attaching
-                    $attachment = new InvoiceAttachment();
-                    $attachment->url = 'img/notSupportedFile.png';
-                    $attachment->invoice_id = $invoice->id;
-                    $attachment->save();
-                }
+                $attachment = new InvoiceAttachment();
+                $attachment->url = $this->addImages($attach);
+                // $attachment->name = $attach->getClientOriginalName();
+                $attachment->invoice_id = $invoice->id;
+                $attachment->save();
+                // $attachment->url = 'img/notSupportedFile.png';
             }
         }
         return redirect('businesses/' . $request->business_id);
@@ -120,9 +115,12 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $invoice->attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->get();
+        $invoice->attachments();
         $businesses = Auth::user()->businesses;
-        return view('app.businesses.invoices.edit-invoice', compact('invoice','businesses'));
+        if (count($businesses) < 1) {
+            return redirect('/')->with('messageDgr', 'No business created.');
+        }
+        return view('app.businesses.invoices.edit-invoice', compact('invoice', 'businesses'));
     }
 
     /**
@@ -133,7 +131,29 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Invoice $invoice)
-    { 
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'total' => 'required|numeric|min:0,max:9999999999',
+            'extra_amount' => 'numeric|min:0,max:9999999999|nullable',
+            'discount' => 'numeric|min:0,max:9999999999|nullable',
+            'reference_number' => 'max:255',
+            'payment_date' => 'required',
+            'notes' => 'max:255',
+            'business_id' => 'required|exists:businesses,id',
+            'attachments.*' => 'mimes:pdf,doc,docx,png,jpg,jpeg,xlsx,xls,csv|max:10000',
+        ], [
+            'attachments.*.mimes' => 'Unsupported attachment file type',
+        ]);
+
+        if ($validator->fails()) {
+            if (request()->is('api/*')) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            } else {
+                return redirect()->back()->withInput()
+                    ->withErrors($validator);
+            }
+        }
         $invoice->title = $request->title;
         $invoice->total = $request->total;
         if (isset($request->is_paid)) {
@@ -151,39 +171,25 @@ class InvoiceController extends Controller
         $invoice->notes = $request->notes;
         $invoice->discount = $request->discount;
         $invoice->discount_type = $request->discount_type;
-        $invoice->extra_amount = $request->extra_amount; 
-        
+        $invoice->extra_amount = $request->extra_amount;
         $invoice->business_id = $request->business_id;
         $invoice->save();
         if ($request->hasFile('attachments')) {
             foreach ($request->attachments as $attach) {
-                if (
-                    $attach->getClientOriginalExtension() == 'pdf'
-                    || $attach->getClientOriginalExtension() == 'docx'
-                    || $attach->getClientOriginalExtension() == 'png'
-                    || $attach->getClientOriginalExtension() == 'jpg'
-                    || $attach->getClientOriginalExtension() == 'xlsx'
-                ) {
-                    //You have better way for attaching
-                    $attachment = new InvoiceAttachment();
-                    $attachment->url = $this->addImages($attach);
-                    $attachment->invoice_id = $invoice->id;
-                    $attachment->save();
-                } else {
-                    //You have better way for attaching
-                    $attachment = new InvoiceAttachment();
-                    $attachment->url = 'img/notSupportedFile.png';
-                    $attachment->invoice_id = $invoice->id;
-                    $attachment->save();
-                }
+                $attachment = new InvoiceAttachment();
+                $attachment->url = $this->addImages($attach);
+                // $attachment->name = $attach->getClientOriginalName();
+                $attachment->invoice_id = $invoice->id;
+                $attachment->save();
+                // $attachment->url = 'img/notSupportedFile.png';
             }
-        } 
-        
-        if($request->attachmentsToDelete != null ) { 
-            $request->attachmentsToDelete = explode(",",$request->attachmentsToDelete); 
-            foreach($request->attachmentsToDelete as $att){ 
-                $attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->where('url' , $att)->first();
-                File::delete($attachment->url); 
+        }
+
+        if ($request->attachmentsToDelete != null) {
+            $request->attachmentsToDelete = explode(",", $request->attachmentsToDelete);
+            foreach ($request->attachmentsToDelete as $att) {
+                $attachment = InvoiceAttachment::where('invoice_id', $invoice->id)->where('url', $att)->first();
+                File::delete($attachment->url);
                 $attachment->delete();
             }
         }
