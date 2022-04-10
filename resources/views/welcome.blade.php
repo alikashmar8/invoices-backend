@@ -666,7 +666,7 @@
     </div> <!-- end of basic-3 -->
     <!-- end of download -->
 
-
+{{--
     <!-- Footer -->
     <div class="footer">
         <div class="container">
@@ -753,6 +753,6 @@
         </div> <!-- end of container -->
     </div> <!-- end of copyright --> 
     <!-- end of copyright -->
-     
+     --}}
 @endsection
 

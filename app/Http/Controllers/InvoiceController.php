@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InvoicesExport;
 
 class InvoiceController extends Controller
 {
@@ -213,5 +215,10 @@ class InvoiceController extends Controller
         $image->move($destinationPath, $imageName);
         $path = $destinationPath . $imageName;
         return $path;
+    }
+    
+    public function export($id) 
+    {
+        return Excel::download(new InvoicesExport($id), 'Invoices.xlsx');
     }
 }

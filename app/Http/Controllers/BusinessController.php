@@ -102,7 +102,12 @@ class BusinessController extends Controller
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
             $invoices =  $business->invoices->sortByDesc('created_at');
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices'));
+            $totalPaid = $totalPending = 0 ;
+            foreach($invoices as $inv){ 
+                if($inv->is_paid) $totalPaid += $inv->total;
+                else $totalPending += $inv->total;
+            }
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'totalPaid' , 'totalPending'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
@@ -160,14 +165,14 @@ class BusinessController extends Controller
     public function addBizImages($image)
     {
         $destinationPath = 'uploads/biz'; //public_path('uploads/biz');
-
+         
         $img = Image::make($image->getRealPath());
         /*$img->orientate()->resize(1000, 1000, function ($constraint) {
             $constraint->aspectRatio();
         })->save($destinationPath . '/' . time() . $image->getClientOriginalName());*/
-        $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . time() . $image->getClientOriginalName());
-        $path = $destinationPath . '/' . time() . $image->getClientOriginalName();
-
+        $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . time() .  $image->getClientOriginalName());
+        $path = $destinationPath . '/' . time() .  $image->getClientOriginalName();
+        
         /*$imageName =pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME). time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = 'uploads/biz/'; //public_path('uploads/biz');
         $image->move($destinationPath, $imageName);

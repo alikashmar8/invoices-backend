@@ -49,6 +49,7 @@ Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, '
 Route::post('/invoices', [App\Http\Controllers\InvoiceController::class, 'store'])->middleware('auth')->name('invoices.store');
 Route::get('/invoices/{invoice}/edit', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
 Route::put('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('invoices.update');
+Route::get('/invoices/export/{id}', [App\Http\Controllers\InvoiceController::class, 'export'])->middleware('auth');
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');

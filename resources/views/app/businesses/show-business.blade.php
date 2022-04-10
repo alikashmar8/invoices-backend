@@ -48,15 +48,21 @@
                         @endif
                     </div>
                 </div>
+                <div class="row text-center mt-2">
+                    <div class="col-md-4"><h6>Total Paid: ${{$totalPaid}}</h6></div>
+                    <div class="col-md-4"><h6>Total Pending: ${{$totalPending}}</h6></div>
+                    <div class="col-md-4"><a class="btn btn-dark " href="/invoices/export/{{$business->id}}" >Export invoices</a></div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
-            <div class="card px-3 ">
+            <div class="card px-3 "> 
                 <div class="row" style='overflow: scroll;' id='tableContainer'>
                     <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                         <thead>
