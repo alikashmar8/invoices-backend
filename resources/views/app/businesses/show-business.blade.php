@@ -67,13 +67,13 @@
                     <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                         <thead>
                             <tr>
-                                <td>#</td>
-                                <td>Title</td>
-                                <td>Amount</td>
-                                <td>Status</td>
-                                <td>Reference #</td>
-                                <td>Added by</td>
-                                <td>Actions</td>
+                                <td class="filterhead">#</td>
+                                <td class="filterhead">Title</td>
+                                <td class="filterhead">Amount</td>
+                                <td class="filterhead">Status</td>
+                                <td class="filterhead">Reference #</td>
+                                <td class="filterhead">Added by</td>
+                                <td >Actions</td>
                             </tr>
                         </thead>
 
@@ -81,7 +81,7 @@
                             @if(count($invoices))
                             @foreach($invoices as $invoice)
                                 <tr>
-                                    <td>{{ $invoice->id }}</td>
+                                    <td>{{ $loop->index +1 }}</td>
                                     <td>{{ $invoice->title }}</td>
                                     <td>{{ $invoice->total }}</td>
                                     <td>
@@ -214,27 +214,49 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
 <script type="text/JavaScript"
         src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+<style>
+    table.dataTable thead .sorting_desc:after {
+        content: "⇧";
+    }
+    table.dataTable thead .sorting_asc:after {
+        content: "⇩";
+    }
+    table.dataTable thead .sorting:after {
+        opacity: 0.2;
+        content: "⬍";
+    }
+</style>
 <script>
-    // var table = document.getElementById('myDataTable');
-    var table = $('#myDataTable').DataTable({
-        "columnDefs": [
-            {"orderable": false, "targets": 1},
-            {"orderable": false, "targets": 2},
-            {"orderable": false, "targets": 3}
-        ]
-    });
-    /*table.on('click', '.delete', function () {
-        $tr = $(this).closest('tr');
-        if ($($tr).hasClass('child')) {
-            $tr = $tr.prev('.parent');
-        }
-        var data = table.row($tr).data();
-        $('#deleteId').val(data[0]);
-    });
-    function deleteProperty() {
-        event.preventDefault();
-        document.getElementById('delete-form-' + $('#deleteId').val()).submit();
-    }*/
+    var table = $('#myDataTable').DataTable();
+    
+    $(document).ready(function() {
+     var table = $('#myDataTable').DataTable({
+         "bLengthChange": false,
+         "iDisplayLength": 15,
+         
+        "orderCellsTop": true,
+        "ordering": true,
+	   });
+       
+    $(".filterhead").each( function ( i ) {
+        var select = $('<select><option value=""></option></select>')
+            .appendTo( $(this).empty() )
+            .on( 'change', function () {
+               var term = $(this).val();
+                table.column( i ).search(term, false, false ).draw();
+            } );
+ 	      table.column( i ).data().unique().sort().each( function ( d, j ) {
+            	select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+		} );
+    } );
+
+    var filteredData = table
+     .column( 0 )
+     .data()
+     .filter( function ( value, index ) {
+         return value > 20 ? true : false;
+     } );
 </script>
 
 @endsection
