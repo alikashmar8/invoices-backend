@@ -69,7 +69,7 @@
                             <tr>
                                 <td>#</td>
                                 <td>Title</td>
-                                <td>Ammount</td>
+                                <td>Amount</td>
                                 <td>Status</td>
                                 <td>Reference #</td>
                                 <td>Added by</td>
@@ -92,16 +92,16 @@
                                     <td>{{$invoice->reference_number }}</td>
                                     <td><img src="{{asset($invoice->createdBy->profile_picture)}}" class="rounded-circle" style='max-width: 30px' > {{ App\Models\User::findOrFail($invoice->created_by )->first()->name }}</td>
                                     <td>
-                                        <button type="button" class="btn col-md-2" data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
+                                        <button type="button" class="btn col-md-2 p-0 mx-1" data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
                                             <i class="fa fa-expand text-primary" aria-hidden="true"></i>
                                         </button>
 
-                                        <a type="button" class="btn col-md-2" href="/invoices/{{ $invoice->id }}/edit" >
+                                        <a type="button" class="btn col-md-2 p-0 mx-1" href="/invoices/{{ $invoice->id }}/edit" >
                                             <i class="fa fa-edit text-primary"></i>
                                         </a>
 
                                         @if (($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')  )
-                                        <button type="button" class="btn col-md-2" data-target="#deleteModal-{{ $invoice->id }}" data-toggle="modal">
+                                        <button type="button" class="btn col-md-2 p-0 mx-1" data-target="#deleteModal-{{ $invoice->id }}" data-toggle="modal">
                                             <i class='fa fa-trash text-primary'></i>
                                         </button>
                                         @endif
@@ -130,7 +130,16 @@
                                                 @if($invoice->attachments)
                                                 <p><b>Attachments</b></p>
                                                     @foreach($invoice->attachments as $attach)
-                                                        <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
+                                                        <!--a href="{{-- asset($attach->url) --}}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a-->
+                                                        
+                                                        <div style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
+                                                            <embed   src="{{ asset($attach->url) }}" style='object-fit:cover ; width:100%; height:auto'  >
+                                                            <div style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;"> 
+                                                                <a class="btn btn-info " href='{{ asset($attach->url) }}' target="blank"> <small> Open <i class="fa fa-folder-open"></i> </small></a >
+                                                                <a class="btn btn-info " href='{{ asset($attach->url) }}' download> <small> Download <i class="fa fa-file-download" ></i> </small></a>
+                                                            </div>
+                                                        </div>
+
                                                     @endforeach
                                                 @endif
                                             </div>

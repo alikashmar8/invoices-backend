@@ -125,18 +125,25 @@
                             @if (count($invoice->attachments) > 0)
                                 <br>Old Attachments:<br>
                                 @foreach ($invoice->attachments as $attach)
-                                    <div class="btn-group" role="group" aria-label="Basic example"
-                                        id='doc-{{ $loop->index + 1 }}'>
-                                        <a href="{{ asset($attach->url) }}" class='btn btn-info'
-                                            target="_blank">Doc-{{ $loop->index + 1 }} <i class="fa fa-external-link-alt"
-                                                aria-hidden="true"></i></a>
-                                        <a href="{{ asset($attach->url) }}" class='btn btn-warning text-white'
-                                            download="">Download <i class="fa fa-file-download" aria-hidden="true"></i></a>
-                                        <button type="button" class="btn btn-danger"
-                                            onclick="markAttachmentAsDelete('{{ $attach->url }}', 'doc-{{ $loop->index + 1 }}' )">Delete
-                                            <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                <div style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
+                                    <embed   src="{{ asset($attach->url) }}" style='object-fit:cover ; width:100%; height:auto'  >
+                                    
+
+                                    <div style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;"> 
+                                        <div class="btn-group" role="group"   
+                                            id='doc-{{ $loop->index + 1 }}'>
+                                            <a href="{{ asset($attach->url) }}" class='btn btn-info'
+                                                target="_blank">Doc-{{ $loop->index + 1 }} <i class="fa fa-external-link-alt"
+                                                    aria-hidden="true"></i></a>
+                                            <a href="{{ asset($attach->url) }}" class='btn btn-warning text-white'
+                                                download=""> <i class="fa fa-file-download" aria-hidden="true"></i></a>
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="markAttachmentAsDelete('{{ $attach->url }}', 'doc-{{ $loop->index + 1 }}' )">  
+                                                <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        </div>
                                     </div>
-                                    <br>
+                                     
+                                </div>
                                     {{-- <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
                                 <embed style='width:250px; height:350px; max-width:100%; max-height:100%' name="plugin" src="{{ asset($attach->url) }}" type="application/pdf"> --}}
                                 @endforeach
