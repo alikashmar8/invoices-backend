@@ -226,6 +226,10 @@
                                 href="/businesses">Businesses <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
+                                href="/pricing">Plans</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link page-scroll " href="{{ route('logout') }}" onclick="event.preventDefault();
                                                             document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

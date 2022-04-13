@@ -57,3 +57,4 @@ Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::clas
 //plans
 Route::get('/pricing', function () {return view('plan.pricing');});
 Route::get('/plan-{id}', [App\Http\Controllers\UsersController::class, 'registerPlan'])->middleware('auth');
+Route::post('/transfer', [App\Http\Controllers\UsersController::class, 'transfer'])->middleware('auth')->name('transfer');

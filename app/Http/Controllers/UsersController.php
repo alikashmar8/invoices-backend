@@ -19,6 +19,7 @@ class UsersController extends Controller
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
         $notifications = $user->notifications()->latest()->get();
+        $user->planName = Plan::findOrFail($user->plan_id)->name;
 
         if( request()->is('api/*')){
             //an api call
@@ -85,10 +86,13 @@ class UsersController extends Controller
     }
     public function registerPlan($id)
     {
+        $plan = Plan::findOrFail($id);
+        if(Auth::user()->plan_id == $id){
+            return redirect('/profile/'.Auth::user()->id)->with( 'messageWrg' , 'You are currently registered in '. $plan->name.' plan.');
+        }
         // Enter Your Stripe Secret
         \Stripe\Stripe::setApiKey('sk_test_51HywjtC3KTL075dcARHpuSgf8trC3awdHpWBgHYmfInB7nbYTSYNnHBlLRaOPFOffMODwAvpkjZB1kzjuRrFumxv00H2p0JX7t');
-
-        $plan = Plan::findOrFail($id);
+         
         //$amount = $request->amount ;
         //$amount *= 100;(float) 
         $amount = $plan->price * 100;
@@ -100,12 +104,21 @@ class UsersController extends Controller
         ]);
         $intent = $payment_intent->client_secret;
 
+        
+        return view('plan.checkout' ,compact('plan','amount','intent'));
+    }
+    public function transfer(Request $request)
+    {
+
+        $plan = Plan::findOrFail($request->id);
         $payment = new Payment();
         $payment->user_id = Auth::user()->id;
         $payment->price	= $plan->price;
-		$payment->is_paid = 0 ;
-		$payment->plan_id = $id; 
+		$payment->is_paid = 1 ;
+		$payment->plan_id = $request->id; 
         $payment->save();
-        return view('plan.checkout' ,compact('plan','payment','amount','intent'));
+        Auth::user()->plan_id = $request->id;
+        Auth::user()->save();
+        return redirect('/profile/'.Auth::user()->id)->with( 'messageSuc' , 'Registration completed successfully.');
     }
 }

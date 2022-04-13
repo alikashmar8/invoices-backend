@@ -18,7 +18,7 @@
                 <head> 
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                    <!link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -29,13 +29,13 @@
                 @endphp
                 
                             <div class="card" style="overflow:hidden; border:none"> 
-                                <form action="{{--route('donation')--}}"  method="post" id="payment-form">
+                                <form action="{{route('transfer')}}"  method="post" id="payment-form">
                                     @csrf
-                                     
+                                    <input type="hidden" name='id' value="{{$plan->id}}">
                                     <div class="form-group">
                                         <div class="card-header">
                                             <label for="card-element">
-                                                Enter your credit card information  
+                                                Enter your credit card information {{$amount}}  
                                             </label>
                                         </div> 
                                         <div class="card-body">
@@ -139,6 +139,8 @@
                 </body>
                 </html>
         </div>
+
+
         <div class="col-md-6">
             <div class="col-md-10">
                 <div class="card">
