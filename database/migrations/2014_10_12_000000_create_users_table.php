@@ -21,7 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone_number')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->string('profile_picture')->default('img/profile.png');
+            $table->string('profile_picture')->default('img/profile.png'); 
+            $table->unsignedBigInteger('plan_id')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

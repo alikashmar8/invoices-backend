@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Sync is a mobile app ...">
+    <meta name="description" content="Invoice Gem is a mobile app ...">
     <meta name="author" content="WebSide.com.au">
 
     <!-- bootstrap -->
@@ -34,7 +34,7 @@
         <meta property="og:type" content="article" />
 
         <!-- Webpage Title -->
-        <title>@yield('title') | Sync</title>
+        <title>@yield('title') | Invoice Gem</title>
 
         <!-- Styles -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext"
@@ -123,7 +123,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
         <div class="container">
             <!-- Text Logo - Use this if you don't have a graphic logo -->
-            <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Sync</a> -->
+            <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Invoice Gem</a> -->
 
             <!-- Image Logo -->
             <a class="navbar-brand logo-image" href="/"><img src="{{ asset('images/logo.svg') }}"
@@ -153,6 +153,10 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
                                 href="/#screens">SCREENS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
+                                href="/pricing">PRICING</a>
                         </li>
 
                         <li class="nav-item px-2">

@@ -215,25 +215,17 @@
 <script type="text/JavaScript"
         src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
 <style>
-    table.dataTable thead .sorting_desc:after {
-        content: "⇧";
-    }
-    table.dataTable thead .sorting_asc:after {
-        content: "⇩";
-    }
-    table.dataTable thead .sorting:after {
-        opacity: 0.2;
-        content: "⬍";
-    }
+    table.dataTable thead .sorting_desc:after {content: "⇧";}
+    table.dataTable thead .sorting_asc:after {content: "⇩";}
+    table.dataTable thead .sorting:after {opacity: 0.2; content: "⬍";}
 </style>
 <script>
     var table = $('#myDataTable').DataTable();
     
     $(document).ready(function() {
      var table = $('#myDataTable').DataTable({
-         "bLengthChange": false,
-         "iDisplayLength": 15,
-         
+        "bLengthChange": false,
+        "iDisplayLength": 15,
         "orderCellsTop": true,
         "ordering": true,
 	   });

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Invitation;
+use App\Models\Payment;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Notification;
@@ -80,5 +82,30 @@ class UsersController extends Controller
         }
         else return response()->json(['success' => 'notExist']);
 
+    }
+    public function registerPlan($id)
+    {
+        // Enter Your Stripe Secret
+        \Stripe\Stripe::setApiKey('sk_test_51HywjtC3KTL075dcARHpuSgf8trC3awdHpWBgHYmfInB7nbYTSYNnHBlLRaOPFOffMODwAvpkjZB1kzjuRrFumxv00H2p0JX7t');
+
+        $plan = Plan::findOrFail($id);
+        //$amount = $request->amount ;
+        //$amount *= 100;(float) 
+        $amount = $plan->price * 100;
+        $payment_intent = \Stripe\PaymentIntent::create([
+            'amount' => $amount,
+            'currency' => 'AUD',
+            'description' => 'Payment For Invoice Gem, Developed by WebSide.com.au',
+            'payment_method_types' => ['card'],
+        ]);
+        $intent = $payment_intent->client_secret;
+
+        $payment = new Payment();
+        $payment->user_id = Auth::user()->id;
+        $payment->price	= $plan->price;
+		$payment->is_paid = 0 ;
+		$payment->plan_id = $id; 
+        $payment->save();
+        return view('plan.checkout' ,compact('plan','payment','amount','intent'));
     }
 }

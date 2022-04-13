@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('discount_types')->insert(['name' => 'percentage']);
         DB::table('discount_types')->insert(['name' => 'amount']);
+        
+        $this->call([
+            PlansSeeder::class,
+        ]);
          
     }
 }

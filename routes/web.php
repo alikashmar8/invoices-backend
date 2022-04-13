@@ -53,3 +53,7 @@ Route::get('/invoices/export/{id}', [App\Http\Controllers\InvoiceController::cla
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');
+
+//plans
+Route::get('/pricing', function () {return view('plan.pricing');});
+Route::get('/plan-{id}', [App\Http\Controllers\UsersController::class, 'registerPlan'])->middleware('auth');
