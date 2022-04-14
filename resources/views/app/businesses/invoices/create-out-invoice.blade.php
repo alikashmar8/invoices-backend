@@ -5,21 +5,10 @@
 
 @section('content')
     <div class="container">
-        <form class="form" method='post' action="{{ route('invoices.store') }}" enctype="multipart/form-data">
+        <h2> Outgoing Invoice</h2>
+        <form class="form" method='post' action="{{ route('invoicesOut.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <!--div class="card ">
-                                                    <div class="card-header detailsClick">
-                                                        <h5>Details <i id='detailsClickI' class="fa fa-arrow-circle-down text-primary"
-                                                                style='transition: all .4s ease 0s;' aria-hidden="true"></i> </h5>
-                                                    </div>
-                                                    <div class="detailsContent " style='overflow: hidden; height:0px'>
-                                                        <div class="card-body">
-
-
-                                                        </div>
-                                                    </div>
-                                                </div-->
 
             <div class="card">
                 <div class="card-header closed">
@@ -50,10 +39,10 @@
                         <input type="text" name="title" value="{{ old('title') }}" class="form-control"
                             id="invoice-name" required placeholder="Invoice">
                     </div>
-
+                    <i>table of content --> </i>
                     <div class="form-group">
                         <label for="total" class="required">
-                            Total Paid <small>AUD</small>:
+                            Total Amount <small>AUD</small>:
                         </label>
                         <input type="number" name="total" value="{{ old('total') }}" class="form-control"
                             id="invoice-amount" min="0" required>
@@ -88,65 +77,68 @@
                         <input type="date" id="due_date" name="due_date" value="{{ old('due_date') }}"
                             class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="notes">Notes/Payment method:</label>
+                        <textarea name="notes"   class="form-control" id="notes" rows="3"></textarea>
+                    </div>
 
                 </div>
             </div>
             <br>
 
             <div class="card ">
+                <div class="card-header detailsClick closed">
+                    <h5>Client Details <i id='detailsClickI' class="fa fa-arrow-circle-down text-primary"
+                            style='transition: all .4s ease 0s;' aria-hidden="true"></i> </h5>
+                </div>
+                <div class="detailsContent " style='overflow: hidden; height:0px'>
+                    <div class="card-body  ">
+                        <div class="form-group">
+                            <label  class="required">Name:</label>
+                            <input type="text" name="name" required  class="form-control"  >
+                        </div>
+                        <div class="form-group">
+                            <label >Email:</label>
+                            <input type="email" name="email"   class="form-control"  >
+                        </div>
+                        <div class="form-group">
+                            <label >ABN:</label>
+                            <input type="text" name="abn"  class="form-control"  >
+                        </div>
+                        <div class="form-group">
+                            <label >Phone Number:</label>
+                            <input type="phone" name="phone" class="form-control"  >
+                        </div>
+                        <div class="form-group">
+                            <label >Address:</label>
+                            <input type="text" name="address"  class="form-control"  >
+                        </div>
+                         
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <div class="card ">
                 <div class="card-header advancedClick closed">
-                    <h5>Advanced Details <i id='advancedClickI' class="fa fa-arrow-circle-down text-primary"
+                    <h5>Items Details <small>(Optional)</small> <i id='advancedClickI' class="fa fa-arrow-circle-down text-primary"
                             style='transition: all .4s ease 0s;' aria-hidden="true"></i> </h5>
                 </div>
                 <div class="advancedContent " style='overflow: hidden; height:0px'>
                     <div class="card-body  ">
-                        <div class="form-group">
-                            <label for="extra_amount">Extra Amounts <small>AUD</small>:</label>
-                            <input type="number" name="extra_amount" value="{{ old('extra_amount', 0) }}"
-                                class="form-control" min="0" id="extra_amount">
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="discount">Discount:</label>
-                                    <input type="number" name="discount" value="{{ old('discount', 0) }}"
-                                        class="form-control" value="0" min="0" id="discount">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="discountType">Type:</label>
-                                    <select name="discount_type" class="form-control">
-                                        <option value="{{ App\Enums\DiscountType::PERCENTAGE }}" @if (old('discount_type') == App\Enums\DiscountType::PERCENTAGE) selected @endif>
-                                            Percentage (%)
-                                        </option>
-                                        <option value="{{ App\Enums\DiscountType::AMOUNT }}" @if (old('discount_type') == "{{ App\Enums\DiscountType::AMOUNT }}") selected @endif>
-                                            Amount ($)
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="barcode">Barcode:</label>
-                            <input type="text" name="reference_number" value="{{ old('reference_number') }}"
-                                class="form-control" id="invoice-code" placeholder="Enter invoice barcode">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="attachments">Additional Attachments:</label>
-                            <input type="file" class="form-control" id="attachments" name="attachments[]"
-                                multiple="multiple">
-                        </div>
+                         
+ 
 
                         <div class="form-group">
                             <label for="notes">Notes:</label>
                             <textarea name="notes" value="{{ old('notes') }}" class="form-control" id="notes" rows="3"></textarea>
                         </div>
+                         
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="mt-2 btn btn-primary">Submit</button>
+            <button type="submit" class="mt-2 btn btn-primary">Create</button>
         </form>
 
         <script>

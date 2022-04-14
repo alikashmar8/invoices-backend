@@ -46,10 +46,13 @@ Route::post('/notifications/{notification}/mark-unread', [App\Http\Controllers\N
 Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
 
 Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, 'create'])->middleware('auth');
-Route::post('/invoices', [App\Http\Controllers\InvoiceController::class, 'store'])->middleware('auth')->name('invoices.store');
+Route::get('/invoices/createOut', [App\Http\Controllers\InvoiceController::class, 'createOut'])->middleware('auth');
+Route::post('/invoicesIn', [App\Http\Controllers\InvoiceController::class, 'storeIn'])->middleware('auth')->name('invoicesIn.store');
+Route::post('/invoicesOut', [App\Http\Controllers\InvoiceController::class, 'storeOut'])->middleware('auth')->name('invoicesOut.store');
 Route::get('/invoices/{invoice}/edit', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
 Route::put('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('invoices.update');
-Route::get('/invoices/export/{id}', [App\Http\Controllers\InvoiceController::class, 'export'])->middleware('auth');
+Route::get('/invoices/exportIn/{id}', [App\Http\Controllers\InvoiceController::class, 'exportIn'])->middleware('auth');
+Route::get('/invoices/exportOut/{id}', [App\Http\Controllers\InvoiceController::class, 'exportOut'])->middleware('auth');
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');
@@ -58,3 +61,6 @@ Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::clas
 Route::get('/pricing', function () {return view('plan.pricing');});
 Route::get('/plan-{id}', [App\Http\Controllers\UsersController::class, 'registerPlan'])->middleware('auth');
 Route::post('/transfer', [App\Http\Controllers\UsersController::class, 'transfer'])->middleware('auth')->name('transfer');
+
+//pdf
+Route::get('generate-pdf', [App\Http\Controllers\InvoiceController::class, 'generatePDF']);

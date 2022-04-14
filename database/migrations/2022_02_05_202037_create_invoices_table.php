@@ -26,6 +26,7 @@ class CreateInvoicesTable extends Migration
             $table->enum('currency', CurrencyEnum::getValues())->default(CurrencyEnum::AUD);
             $table->longText('reference_number')->nullable()->unique();
             $table->boolean('is_paid')->default(true);
+            $table->boolean('incoming')->default(true);
             $table->date('due_date')->nullable();
             $table->date('payment_date')->nullable();
             $table->string('notes')->nullable();

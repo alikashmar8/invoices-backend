@@ -101,13 +101,20 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoices =  $business->invoices->sortByDesc('created_at');
+            $invoicesIn =  $business->invoices->where('incoming', 1)->sortByDesc('created_at');
             $totalPaid = $totalPending = 0 ;
-            foreach($invoices as $inv){
+            foreach($invoicesIn as $inv){
                 if($inv->is_paid) $totalPaid += $inv->total;
                 else $totalPending += $inv->total;
             }
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'totalPaid' , 'totalPending'));
+            $invoicesOut =  $business->invoices->where('incoming', 0)->sortByDesc('created_at');
+            $totalEarning = $totalPendingEarn = 0 ;
+            foreach($invoicesOut as $inv){
+                if($inv->is_paid) $totalEarning += $inv->total;
+                else $totalPendingEarn += $inv->total;
+            }
+            
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoicesIn' ,'invoicesOut', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }

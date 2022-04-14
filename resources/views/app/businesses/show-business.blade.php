@@ -3,13 +3,7 @@
 @section('title', $business->name)
 
 
-@section('content')
-    <style>
-        #tableContainer::-webkit-scrollbar {
-            display: none;
-        }
-
-    </style>
+@section('content') 
 
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
@@ -55,16 +49,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="row text-center mt-2">
-                        <div class="col-md-4">
-                            <h6>Total Paid: ${{ $totalPaid }}</h6>
-                        </div>
-                        <div class="col-md-4">
-                            <h6>Total Pending: ${{ $totalPending }}</h6>
-                        </div>
-                        <div class="col-md-4"><a class="btn btn-dark "
-                                href="/invoices/export/{{ $business->id }}">Export invoices</a></div>
-                    </div>
+                    
 
                 </div>
             </div>
@@ -73,9 +58,25 @@
 
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
+            <div class="col-md-3 m-auto">
+                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Incoming Invoices</button>
+            </div>
+
+            <div class="col-md-3 m-auto">
+                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Outgoing Invoices</button>
+            </div>
+
+            <div class="col-md-3 m-auto">
+                <button class="btn btn-link w-100 m-auto" id='dashboardLink' onclick="getDashboard()">Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-md-12">
                 <div class="card px-3 ">
-                    <div class="row" style='overflow: scroll;' id='tableContainer'>
+                    <div class="row noScrollBar" style='overflow: scroll;' id='incomingConten'>
                         <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                             <thead>
                                 <tr>
@@ -90,8 +91,8 @@
                             </thead>
 
                             <tbody>
-                                @if (count($invoices))
-                                    @foreach ($invoices as $invoice)
+                                @if (count($invoicesIn))
+                                    @foreach ($invoicesIn as $invoice)
                                         <tr>
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
@@ -221,18 +222,233 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="6" class="text-danger">No invoices to show!</td>
+                                        <td colspan="7" class="text-danger">No invoices to show!</td>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
 
                     </div>
+
+                    <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
+                        <a href='/invoices/createOut' class="btn btn-success"> Create new </a>
+                        <table class='table table-striped table-hover table-responsive-sm w-100'  id='myDataTable1'>
+                            <thead>
+                                <tr>
+                                    <td class="filterhead1">#</td>
+                                    <td class="filterhead1">Title</td>
+                                    <td class="filterhead1">Amount</td>
+                                    <td class="filterhead1">Status</td> 
+                                    <td class="filterhead1">Added by</td>
+                                    <td>Actions</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (count($invoicesOut))
+                                    @foreach ($invoicesOut as $invoice)
+                                        <tr>
+                                            <td>{{ $invoice->id }}</td>
+                                            <td>{{ $invoice->title }}</td>
+                                            <td>{{ $invoice->total }}</td>
+                                            <td>
+                                                @if ($invoice->is_paid)
+                                                    <a class='text-success border border-success btn-outline-sm '
+                                                        style='white-space: nowrap;'>Paid
+                                                        {{ $invoice->payment_date }}</a>
+                                                @else
+                                                    <a class='text-warning border border-warning btn-outline-sm'
+                                                        style='white-space: nowrap;'>Not Paid - Due:
+                                                        {{ $invoice->due_date }} </a>
+                                                @endif
+                                            </td> 
+                                            <td><img src="{{ asset($invoice->createdBy->profile_picture) }}"
+                                                    class="rounded-circle" style='max-width: 30px'>
+                                                {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn col-md-2 p-0 mx-1"
+                                                    data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
+                                                    <i class="fa fa-expand text-primary" aria-hidden="true"></i>
+                                                </button>
+
+                                                <a type="button" class="btn col-md-2 p-0 mx-1"
+                                                    href="/invoices/{{ $invoice->id }}/edit">
+                                                    <i class="fa fa-edit text-primary"></i>
+                                                </a>
+
+                                                @if ($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
+                                                    <button type="button" class="btn col-md-2 p-0 mx-1"
+                                                        data-target="#deleteModal-{{ $invoice->id }}"
+                                                        data-toggle="modal">
+                                                        <i class='fa fa-trash text-primary'></i>
+                                                    </button>
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                        <!-- show invoice modal -->
+                                        <div class="modal fade" id="showModal-{{ $invoice->id }}" tabindex="1"
+                                            role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class=" modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            {{ $invoice->title }} # {{ $invoice->reference_number }}
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" id="output_content">
+                                                        <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
+                                                        </p>
+                                                        <p><b>Status:</b>
+                                                            @if ($invoice->is_paid)
+                                                                Paid at {{ $invoice->payment_date }}
+                                                            @else
+                                                                Not paid
+                                                            @endif
+                                                        </p>
+                                                        <p><b>Due date:</b>
+                                                            @if ($invoice->due_date)
+                                                                {{ $invoice->due_date }}
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        </p>
+                                                        <p><b>Notes:</b>
+                                                        <p style='white-space: pre-line;'>{{ $invoice->notes }}</p>
+                                                        </p>
+                                                        <p><b>Added by:</b> <img
+                                                                src="{{ asset(App\Models\User::findOrFail($invoice->created_by)->first()->profile_picture) }}"
+                                                                class="rounded-circle" style='max-width: 30px'>
+                                                            {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
+                                                        </p>
+                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
+                                                                %
+                                                            @else
+                                                                $
+                                                            @endif
+                                                        </p>
+                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
+                                                            <small>AUD</small> </p>
+                                                        <p><b>Added on:</b> {{ $invoice->created_at }} </p>
+                                                        @if ($invoice->attachments)
+                                                            <p><b>Attachments</b></p>
+                                                            @foreach ($invoice->attachments as $attach)
+                                                                <!--a href="{{-- asset($attach->url) --}}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a-->
+                                                                {{-- TODO:  design --}}
+                                                                <div
+                                                                    style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
+                                                                    <embed src="{{ asset($attach->url) }}"
+                                                                        style='object-fit:cover ; width:100%; height:auto'>
+                                                                    <div
+                                                                        style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;">
+                                                                        {{-- Remove name if you want --}}
+                                                                        <small>{{ $attach->name }}</small>
+                                                                        <a class="btn btn-info "
+                                                                            href='{{ asset($attach->url) }}'
+                                                                            target="blank"> <small> Open <i
+                                                                                    class="fa fa-folder-open"></i>
+                                                                            </small></a>
+                                                                        <a class="btn btn-info "
+                                                                            href='{{ asset($attach->url) }}' download>
+                                                                            <small> Download <i
+                                                                                    class="fa fa-file-download"></i>
+                                                                            </small></a>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="7" class="text-danger">No invoices to show!</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="row noScrollBar p-3" style='overflow: scroll; display:none;' id='dashboardConten'>
+                        <h4>Incoming:</h4>
+                        <div class="row text-center my-2">
+                            <div class="col-md-4">
+                                <h6>Total Paid: ${{ $totalPaid }}</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Total Pending: ${{ $totalPending }}</h6>
+                            </div>
+                            <div class="col-md-4"><a class="btn btn-dark "
+                                    href="/invoices/exportIn/{{ $business->id }}">Export invoices</a></div>
+                        </div>
+                        <h4>Outgoing:</h4>
+                        <div class="row text-center my-2">
+                            <div class="col-md-4">
+                                <h6>Total Earnings: ${{ $totalEarning }}</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Total Pending: ${{ $totalPendingEarn }}</h6>
+                            </div>
+                            <div class="col-md-4"><a class="btn btn-dark "
+                                    href="/invoices/exportOut/{{ $business->id }}">Export invoices</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+<script> 
+    function getIncoming(){
+        document.getElementById('incomingLink').classList.add("btn-primary");
+        document.getElementById('incomingLink').classList.remove("btn-link");
+        document.getElementById('outgoingLink').classList.remove("btn-primary");
+        document.getElementById('outgoingLink').classList.add("btn-link");
+        document.getElementById('dashboardLink').classList.remove("btn-primary");
+        document.getElementById('dashboardLink').classList.add("btn-link"); 
 
+        document.getElementById('incomingConten').style.display = 'block'; 
+        document.getElementById('outgoingConten').style.display = 'none'; 
+        document.getElementById('dashboardConten').style.display = 'none'; 
+    }
+    function getOutgoing(){
+        document.getElementById('outgoingLink').classList.add("btn-primary");
+        document.getElementById('outgoingLink').classList.remove("btn-link");
+        document.getElementById('incomingLink').classList.remove("btn-primary");
+        document.getElementById('incomingLink').classList.add("btn-link");
+        document.getElementById('dashboardLink').classList.remove("btn-primary");
+        document.getElementById('dashboardLink').classList.add("btn-link");
+
+        document.getElementById('incomingConten').style.display = 'none'; 
+        document.getElementById('outgoingConten').style.display = 'block'; 
+        document.getElementById('dashboardConten').style.display = 'none'; 
+    }
+    function getDashboard(){
+        document.getElementById('dashboardLink').classList.add("btn-primary");
+        document.getElementById('dashboardLink').classList.remove("btn-link");
+        document.getElementById('incomingLink').classList.remove("btn-primary");
+        document.getElementById('incomingLink').classList.add("btn-link");
+        document.getElementById('outgoingLink').classList.remove("btn-primary");
+        document.getElementById('outgoingLink').classList.add("btn-link");
+
+        document.getElementById('incomingConten').style.display = 'none'; 
+        document.getElementById('outgoingConten').style.display = 'none'; 
+        document.getElementById('dashboardConten').style.display = 'block'; 
+    }
+</script>
     <!-- Leave business modal -->
     <div class="modal fade" id="leave_business_modal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -298,11 +514,17 @@
         }
 
     </style>
-    <script>
+    <script> 
         var table = $('#myDataTable').DataTable();
-
+        var table1 = $('#myDataTable1').DataTable();
         $(document).ready(function() {
             var table = $('#myDataTable').DataTable({
+                "bLengthChange": false,
+                "iDisplayLength": 15,
+                "orderCellsTop": true,
+                "ordering": true,
+            });
+            var table1 = $('#myDataTable1').DataTable({
                 "bLengthChange": false,
                 "iDisplayLength": 15,
                 "orderCellsTop": true,
@@ -319,15 +541,23 @@
                 table.column(i).data().unique().sort().each(function(d, j) {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
-            });
-        });
+            });   
 
+            
+        });
         var filteredData = table
             .column(0)
             .data()
             .filter(function(value, index) {
                 return value > 20 ? true : false;
-            });
+        }); 
+        
+        var filteredData = table1
+            .column(0)
+            .data()
+            .filter(function(value, index) {
+                return value > 20 ? true : false;
+        }); 
     </script>
 
 @endsection

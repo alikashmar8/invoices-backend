@@ -17,6 +17,7 @@ class CreateBusinessesTable extends Migration
             $table->id();
             $table->string('name');
             $table->double('balance')->default(0);
+            $table->string('abn')->nullable();
             $table->string('address')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('logo')->nullable();
