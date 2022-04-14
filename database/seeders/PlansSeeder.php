@@ -21,11 +21,11 @@ class PlansSeeder extends Seeder
             'price' => 0, 
         ]);
         DB::table('plans')->insert([
-            'name' => 'Pro',
+            'name' => 'Gold',
             'price' => 49, 
         ]);
         DB::table('plans')->insert([
-            'name' => 'Advanced',
+            'name' => 'Gem',
             'price' => 99, 
         ]);
     }

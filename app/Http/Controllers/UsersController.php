@@ -87,8 +87,8 @@ class UsersController extends Controller
     public function registerPlan($id)
     {
         $plan = Plan::findOrFail($id);
-        if(Auth::user()->plan_id == $id){
-            return redirect('/profile/'.Auth::user()->id)->with( 'messageWrg' , 'You are currently registered in '. $plan->name.' plan.');
+        if(Auth::user()->plan_id >= $id){
+            return redirect('/profile/'.Auth::user()->id)->with( 'messageWrg' , 'You are currently registered in '. Plan::findOrFail(Auth::user()->plan_id)->name.' plan.');
         }
         // Enter Your Stripe Secret
         \Stripe\Stripe::setApiKey('sk_test_51HywjtC3KTL075dcARHpuSgf8trC3awdHpWBgHYmfInB7nbYTSYNnHBlLRaOPFOffMODwAvpkjZB1kzjuRrFumxv00H2p0JX7t');

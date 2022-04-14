@@ -155,7 +155,7 @@
                                 href="/#screens">SCREENS</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
+                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/pricing')) active @endif"
                                 href="/pricing">PRICING</a>
                         </li>
 
@@ -226,7 +226,7 @@
                                 href="/businesses">Businesses <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
+                            <a class="nav-link page-scroll @if (str_contains($currentURL, '/pricing')) active @endif"
                                 href="/pricing">Plans</a>
                         </li>
                         <li class="nav-item">
@@ -396,7 +396,12 @@
         @endforeach
         @yield('content')
     </main>
-
+    <script>
+        var collection = document.getElementsByClassName("goGem");
+        for(var goGem =0 ; goGem < collection.length ; goGem++){
+            collection[goGem].href= '/plan-3';
+        }
+    </script>
     @include('layouts.footer')
 
     <!-- Scripts -->

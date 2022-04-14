@@ -2208,3 +2208,113 @@ a:hover.back-to-top {
     content: " *" !important;
     color: red !important;
 }
+
+.GemText{
+	/*font-size: 72px;*/
+  	background: -webkit-linear-gradient(#9b4292, #d94298, #9b4292);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+}
+.GoldText{
+	background: -webkit-linear-gradient(#deaf24, #f9f06d, #deaf24);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+}
+.BasicText{
+	background: -webkit-linear-gradient(#189748, #83ed65, #189748);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+}
+.GemBack { 
+	background-color: #9b4292;  /*For browsers that do not support gradients */
+	background-image: linear-gradient(to bottom right, #9b4292, #d94298, #9b4292);
+}
+.GoldBack { 
+	background-color: #deaf24;  /*For browsers that do not support gradients */
+	background-image: linear-gradient(to bottom right, #deaf24, #f9f06d, #deaf24);
+}
+.BasicBack { 
+	background-color: #189748;  /*For browsers that do not support gradients */
+	background-image: linear-gradient(to bottom right, #189748, #83ed65, #189748);
+}
+
+
+.Gem-btn-outline {
+	display: inline-block;
+	padding: 1rem 1.5rem 1rem 1.5rem;
+	border: 0.125rem solid #9b4292;
+	border-radius: 2rem;
+	background-color: transparent;
+	color: #9b4292;
+	font: 700 0.875rem/0 "Open Sans", sans-serif;
+	text-decoration: none;
+	transition: all 0.2s;
+}
+.Gem-btn-outline:hover {
+	border: 0.125rem solid #9b4292;
+	background-color: #d94298;
+	color: #fff;
+	text-decoration: none;
+}
+
+.Gold-btn-outline {
+	display: inline-block;
+	padding: 1rem 1.5rem 1rem 1.5rem;
+	border: 0.125rem solid #deaf24;
+	border-radius: 2rem;
+	background-color: transparent;
+	color: #deaf24;
+	font: 700 0.875rem/0 "Open Sans", sans-serif;
+	text-decoration: none;
+	transition: all 0.2s;
+}
+.Gold-btn-outline:hover {
+	border: 0.125rem solid #deaf24;
+	background-color: #f9f06d;
+	color: #fff;
+	text-decoration: none;
+}
+
+.Dis-btn-outline {
+	display: inline-block;
+	padding: 1rem 1.5rem 1rem 1.5rem;
+	border: 0.125rem solid #333;
+	border-radius: 2rem;
+	background-color: transparent;
+	color: #333;
+	font: 700 0.875rem/0 "Open Sans", sans-serif;
+	text-decoration: none;
+	transition: all 0.2s;
+}
+.Dis-btn-outline:hover {
+	border: 0.125rem solid #333;
+	background-color: #333;
+	color: #fff !important;
+	text-decoration: none;
+}
+
+.goGem { 
+  position: relative;
+}
+
+.goGem::after {
+  content : 'Go Gem ✦' ;  
+  background-color: #9b4292;
+  transform: translateY(7px);
+  background-image: linear-gradient(to bottom right, #9b4292, #d94298, #9b4292);
+  border-radius: 25px;
+  padding:1px; 
+  padding-right:3px;  
+  padding-left:3px; 
+  margin-right: 2px;
+  font-size: 9px;
+  color: white;
+  position: absolute;
+  bottom: 0px ;
+  right: 0px;
+  
+}
+
+.noScrollBar::-webkit-scrollbar {
+    width: 0px;
+}

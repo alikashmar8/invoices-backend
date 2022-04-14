@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', 'Profile')
 
 
 @section('content')
@@ -14,8 +14,8 @@
                 <div class="text-center mt-3">
                     <span class="bg-secondary p-1 px-4 rounded text-white">{{$user->name}}</span>
                     <h5 class="mt-2 mb-0">{{$user->email}}</h5>
-                    <span>{{$user->phone_number}}</span> 
-                    <span>{{$user->planName}} Plan</span>
+                    <span>{{$user->phone_number}}</span> <br>
+                    <span class="{{$user->planName}}Text">{{$user->planName}} Plan</span>
                     <div class="px-4 mt-1">
                         <p class="fonts-prof">
                             @if(count(Auth::user()->businesses) > 0)

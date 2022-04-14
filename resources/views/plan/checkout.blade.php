@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="mb-5">Registration in {{$plan->name}} Plan</h1>
+            <h1 class="mb-5 {{$plan->name}}Text">Registration in {{$plan->name}} Plan</h1>
 
         </div>
     </div>
@@ -141,10 +141,10 @@
         </div>
 
 
-        <div class="col-md-6">
-            <div class="col-md-10">
+        <div class="col-md-6"> 
+            <div class="col-md-10 m-auto">
                 <div class="card">
-                    <div class="card-header">Details</div>
+                    <div class="card-header {{$plan->name}}Back"> <h4 class="m-0 text-white">Details</h4></div>
                     <div class="card-body">
                         <p>Name: {{Auth::user()->name}}</p>
                         <p>Email: {{Auth::user()->email}}</p>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', 'Businesses')
 
 
 @section('content')
@@ -16,7 +16,7 @@
                             <p class='title h4 text-center'>
                                 You don't have any business profile yet!
                                 <br>
-                                <button class="btn btn-success mt-4 " data-toggle="modal" data-target="#CreateForm">
+                                <button class="btn btn-success mt-4" data-toggle="modal" data-target="#CreateForm">
                                     Get started
                                 </button>
                                 <Br>
@@ -62,9 +62,9 @@
                             </div>
                             <p class='title h4 text-center'>
                                 <br>
-                                <button class="btn btn-success mt-4 " data-toggle="modal" data-target="#CreateForm">
+                                <a class="btn btn-success mt-4 text-white" data-toggle="modal" data-target="#CreateForm">
                                     Add new business profile
-                                </button>
+                                </a>
                             </p>
 
                         @endif
