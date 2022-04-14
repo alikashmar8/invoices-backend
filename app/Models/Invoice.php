@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 class Invoice extends Model
 {
     use HasFactory;
+
+    public $incrementing = false;
 
     protected $fillable = [
         'title',
@@ -22,6 +24,15 @@ class Invoice extends Model
         'created_by',
         'business_id',
     ];
+
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = IdGenerator::generate(['table' => 'invoices', 'length' => 13, 'prefix' => 'INV-' . date('ym')]);
+        });
+    }
 
     public function createdBy()
     {
@@ -42,5 +53,4 @@ class Invoice extends Model
     {
         return $this->hasMany('App\Models\InvoiceAttachment');
     }
-
 }

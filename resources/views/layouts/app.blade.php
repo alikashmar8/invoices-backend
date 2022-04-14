@@ -284,7 +284,6 @@
         </div> <!-- end of container -->
     </nav> <!-- end of navbar -->
     <!--create modals-->
-    <!-- Done: refactor this, incase of guest it will cause error -->
     @if (!Auth::guest() && count($navBarNotifications) > 0)
 
         @foreach ($navBarNotifications as $navBarNotification)

@@ -89,10 +89,9 @@ class InvoiceController extends Controller
             foreach ($request->attachments as $attach) {
                 $attachment = new InvoiceAttachment();
                 $attachment->url = $this->addImages($attach);
-                // $attachment->name = $attach->getClientOriginalName();
+                $attachment->name = $attach->getClientOriginalName();
                 $attachment->invoice_id = $invoice->id;
                 $attachment->save();
-                // $attachment->url = 'img/notSupportedFile.png';
             }
         }
         return redirect('businesses/' . $request->business_id);
@@ -180,10 +179,9 @@ class InvoiceController extends Controller
             foreach ($request->attachments as $attach) {
                 $attachment = new InvoiceAttachment();
                 $attachment->url = $this->addImages($attach);
-                // $attachment->name = $attach->getClientOriginalName();
+                $attachment->name = $attach->getClientOriginalName();
                 $attachment->invoice_id = $invoice->id;
                 $attachment->save();
-                // $attachment->url = 'img/notSupportedFile.png';
             }
         }
 
@@ -216,8 +214,8 @@ class InvoiceController extends Controller
         $path = $destinationPath . $imageName;
         return $path;
     }
-    
-    public function export($id) 
+
+    public function export($id)
     {
         return Excel::download(new InvoicesExport($id), 'Invoices.xlsx');
     }

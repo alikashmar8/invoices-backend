@@ -115,10 +115,10 @@
                                 <div class="col-md-6">
                                     <label for="discountType">Type:</label>
                                     <select name="discount_type" class="form-control">
-                                        <option value="1" @if (old('discount_type') == 1) selected @endif>
+                                        <option value="{{ App\Enums\DiscountType::PERCENTAGE }}" @if (old('discount_type') == App\Enums\DiscountType::PERCENTAGE) selected @endif>
                                             Percentage (%)
                                         </option>
-                                        <option value="2" @if (old('discount_type') == 2) selected @endif>
+                                        <option value="{{ App\Enums\DiscountType::AMOUNT }}" @if (old('discount_type') == "{{ App\Enums\DiscountType::AMOUNT }}") selected @endif>
                                             Amount ($)
                                         </option>
                                     </select>

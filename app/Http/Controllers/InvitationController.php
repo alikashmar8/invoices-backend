@@ -67,7 +67,7 @@ class InvitationController extends Controller
             'business_id' => $request->business_id,
             'user_id' => $user->id,
             'role' => $request->role,
-            'message' => 'Hello, I would like you to join my team.',  
+            'message' => 'Hello, I would like you to join my team.',
         ]);
 
         $notify = new Notification();
@@ -79,26 +79,26 @@ class InvitationController extends Controller
         <div  style=" display:block">
         <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/accept">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
-            
+
             <button type="submit" class="btn btn-link text-success">Accept</a>
         </form>
          <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/reject">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
-         
+
             <button type="submit" class="btn btn-link text-danger">Reject</a>
          </form>
          </div>';
         $notify->save();
         $invitation->notification_id = $notify->id;
         $invitation->save();
-        
+
 
         if (request()->is('api/*')) {
             //an api call
             return response()->json(['invitation' => $invitation]);
         } else {
             //a web call
-            return redirect('/businesses/' . $business->id . '/employees');
+            return redirect('/businesses/' . $business->id . '/members');
         }
         return custom_response($request->is('api/*'), ['invitation' => $invitation], compact('invitation', 'business'), 'app.businesses.members.list-members', 200);
     }
@@ -145,7 +145,7 @@ class InvitationController extends Controller
      */
     public function destroy(Invitation $invitation)
     {
-        
+
         $invitation->status = InvitationStatus::EXPIRED;
         $invitation->save();
 

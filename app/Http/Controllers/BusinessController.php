@@ -103,7 +103,7 @@ class BusinessController extends Controller
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
             $invoices =  $business->invoices->sortByDesc('created_at');
             $totalPaid = $totalPending = 0 ;
-            foreach($invoices as $inv){ 
+            foreach($invoices as $inv){
                 if($inv->is_paid) $totalPaid += $inv->total;
                 else $totalPending += $inv->total;
             }
@@ -165,14 +165,14 @@ class BusinessController extends Controller
     public function addBizImages($image)
     {
         $destinationPath = 'uploads/biz'; //public_path('uploads/biz');
-         
+
         $img = Image::make($image->getRealPath());
         /*$img->orientate()->resize(1000, 1000, function ($constraint) {
             $constraint->aspectRatio();
         })->save($destinationPath . '/' . time() . $image->getClientOriginalName());*/
         $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . time() .  $image->getClientOriginalName());
         $path = $destinationPath . '/' . time() .  $image->getClientOriginalName();
-        
+
         /*$imageName =pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME). time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = 'uploads/biz/'; //public_path('uploads/biz');
         $image->move($destinationPath, $imageName);
@@ -188,7 +188,7 @@ class BusinessController extends Controller
         return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details'));
     }
 
-    public function addNewEmployee(Request $request, Business $business)
+    public function addNewTeamMember(Request $request, Business $business)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -200,7 +200,7 @@ class BusinessController extends Controller
         if ($validator->fails()) {
             //TODO: add error message for api
             Log::error($validator->errors());
-            return redirect('/businesses/' . $business->id . '/employees')
+            return redirect('/businesses/' . $business->id . '/members')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -216,8 +216,7 @@ class BusinessController extends Controller
             return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);
         } else {
             //a web call
-            return redirect('/businesses/' . $business->id . '/employees');
-            return view('app.businesses.employees.list-employees', compact('business'));
+            return redirect('/businesses/' . $business->id . '/members');
         }
     }
 
@@ -236,7 +235,7 @@ class BusinessController extends Controller
         if ($request->is('api/*')) {
             return response()->json(['success' => true]);
         } else {
-            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', 'Team member removed successfully');
+            return redirect('/businesses/' . $business->id . '/members')->with('messageSuc', 'Team member removed successfully');
         }
     }
 
@@ -249,7 +248,7 @@ class BusinessController extends Controller
         if ($validator->fails()) {
             //TODO: add error message for api
             Log::error($validator->errors());
-            return redirect('/businesses/' . $business->id . '/employees')
+            return redirect('/businesses/' . $business->id . '/members')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -261,7 +260,7 @@ class BusinessController extends Controller
         if ($request->is('api/*')) {
             return response()->json(['success' => true]);
         } else {
-            return redirect('/businesses/' . $business->id . '/employees')->with('messageSuc', $messageSuc);
+            return redirect('/businesses/' . $business->id . '/members')->with('messageSuc', $messageSuc);
         }
     }
 

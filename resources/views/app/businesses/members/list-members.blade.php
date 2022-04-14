@@ -130,7 +130,7 @@
                                         <div class="modal-footer">
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/remove" enctype="multipart/form-data">
+                                            <form method="POST" action="/businesses/{{$business->id}}/members/{{$member->id}}/remove" enctype="multipart/form-data">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger">Remove</button>
                                             </form>
@@ -149,7 +149,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body" id="output_content">
-                                            <form method="POST" action="/businesses/{{$business->id}}/employees/{{$member->id}}/update-role" enctype="multipart/form-data">
+                                            <form method="POST" action="/businesses/{{$business->id}}/members/{{$member->id}}/update-role" enctype="multipart/form-data">
                                                 @csrf
                                                 <label for="role" class="col-form-label text-md-end">
                                                     Choose new role:
@@ -250,7 +250,7 @@
                     <button class='btn btn-link w-auto' onclick='back()'><i class='fa fa-arrow-left  fa-xs'></i>
                         Back</button>
                     <p class='text-success w-auto'> This email is not registered yet, create a new account: </p>
-                    <form method="POST" action="/businesses/{{ $business->id }}/employees" enctype="multipart/form-data">
+                    <form method="POST" action="/businesses/{{ $business->id }}/members" enctype="multipart/form-data">
                         @csrf
                         <div class="col-md-12">
                             <label for="name" class="col-form-label text-md-end">
