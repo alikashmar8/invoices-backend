@@ -70,4 +70,4 @@ Route::get('/plan-{id}', [App\Http\Controllers\UsersController::class, 'register
 Route::post('/transfer', [App\Http\Controllers\UsersController::class, 'transfer'])->middleware('auth')->name('transfer');
 
 //pdf
-Route::get('generate-pdf', [App\Http\Controllers\InvoiceController::class, 'generatePDF']);
+Route::get('/generate/{id}', [App\Http\Controllers\InvoiceController::class, 'generatePDF']);

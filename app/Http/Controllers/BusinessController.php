@@ -101,7 +101,7 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoices =  $business->invoices->where('incoming', 1)->sortByDesc('created_at');
+            $invoices =  $business->invoices->sortByDesc('created_at');
             // TODO: query Still under testing (better than loops)
             $totalPaid = $invoices->where('isPaid', true)->sum('total');
             $totalPending = $invoices->where('isPaid', false)->sum('total');
@@ -114,7 +114,7 @@ class BusinessController extends Controller
             }
             Log::info('totalPaid using foreach: ' . $totalPaid);
 
-            $bills =  $business->invoices->where('incoming', 0)->sortByDesc('created_at');
+            $bills =  $business->bills->sortByDesc('created_at');
             $totalEarning = $bills->where('isPaid', true)->sum('total');
             $totalPendingEarn = $bills->where('isPaid', false)->sum('total');
             Log::info('totalEarning using query: ' . $totalEarning);

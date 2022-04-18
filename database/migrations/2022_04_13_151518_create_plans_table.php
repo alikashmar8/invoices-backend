@@ -17,6 +17,9 @@ class CreatePlansTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->float('price')->nullable();
+            $table->integer('businesses_profiles')->nullable();
+            $table->integer('storage')->nullable();
+            $table->integer('team_members')->nullable();
             $table->float('discount')->default(0);
             $table->timestamps();
         });

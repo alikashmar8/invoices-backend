@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
+use App\Models\Business;
+use App\Models\Contact;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
@@ -228,15 +230,32 @@ class InvoiceController extends Controller
         return Excel::download(new InvoicesOutExport($id), 'Invoices.xlsx');
     }
 
-    public function generatePDF()
+    public function generatePDF($id)
     {
+        $bill = Invoice::findOrFail($id);
+        $contact = InvoiceContact::where("invoice_id" , $id)->first();
+        $business = Business::findOrFail($bill->business_id);
         $data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
+            'clientName' => $contact->name,
+            'clientEmail' => $contact->email,
+            'clientPhone' => $contact->phone_number,
+            'clientABN' => $contact->abn,
+            'clientAddess' => $contact->address,
+            'businessName' => $business->name,
+            'businessLogo' => $business->logo,
+            'businessABN' => $business->abn,
+            'title' => $bill->title,
+            'id' => $bill->id,
+            'total' => $bill->total ,
+            'currency' => $bill->currency,
+            'is_paid' => $bill->is_paid,
+            'due_date' => $bill->due_date,
+            'payment_date' => $bill->payment_date,
+            'notes' => $bill->notes,
+            'updated_at' => Carbon::parse($bill->updated_at)->format('l jS \\of F Y')
         ];
+        $pdf = PDF::loadView('app.businesses.invoices.pdfView' , $data);
 
-        $pdf = PDF::loadView('app.businesses.invoices.pdfView', $data);
-
-        return $pdf->download('itsolutionstuff.pdf');
+        return $pdf->download($id.'.pdf');
     }
 }
