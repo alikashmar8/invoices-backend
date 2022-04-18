@@ -74,11 +74,32 @@
         </div>
     </div>
 
-    <div class="container mt-5">
-        <div class="row d-flex justify-content-center">
+    <div class="container mt-5"> 
+        <div class="row d-flex justify-content-center"> 
             <div class="col-md-12">
                 <div class="card px-3 ">
                     <div class="row noScrollBar" style='overflow: scroll;' id='incomingConten'>
+                        <div class=" bg-light bg-gradient">
+                            <a href='/invoices/create' class="btn btn-success w-25"> Create new </a>
+                        
+                            <a class="btn btn-info w-25 float-right text-white" onclick="showFilterInvoices()"> Filter </a>
+                            <div class="row p-2" id="filterInvoices">
+                                <div class="col-md-4">
+                                    <label>Starting date:</label>
+                                    <input type="date" id='startingDate' class="form-control" > 
+                                </div> 
+                                <div class="col-md-4 ">
+                                    <label>Ending date:</label>
+                                    <input type="date" id='endingDate' class="form-control">
+                                </div>
+                                <div class="col-md-4 ">
+                                    <a class='btn btn-success text-white form-control ' onclick="setFilterInvoices()" >Set </a>
+                                
+                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterInvoices()" >Clear </a>
+                                </div>
+                            </div>
+                            <script > var invoicesList = []; </script>
+                        </div>  
                         <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                             <thead>
                                 <tr>
@@ -95,7 +116,7 @@
                             <tbody>
                                 @if (count($invoicesIn))
                                     @foreach ($invoicesIn as $invoice)
-                                        <tr>
+                                        <tr id='{{ $invoice->id }}'>
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
                                             <td>{{ $invoice->total }}</td>
@@ -233,6 +254,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <script> invoicesList.push(['{{$invoice->id}}','{{$invoice->created_at}}']); </script>
                                     @endforeach
                                 @else
                                     <tr>
@@ -245,7 +267,27 @@
                     </div>
 
                     <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
-                        <a href='/invoices/createOut' class="btn btn-success"> Create new </a>
+                        <div class=" bg-light bg-gradient">
+                            <a href='/invoices/createOut' class="btn btn-success w-25"> Create new </a>
+                        
+                            <a class="btn btn-info w-25 float-right text-white" onclick="showFilterBills()"> Filter </a>
+                            <div class="row p-2" id="filterBills">
+                                <div class="col-md-4">
+                                    <label>Starting date:</label>
+                                    <input type="date" id='startingDateB' class="form-control" > 
+                                </div> 
+                                <div class="col-md-4 ">
+                                    <label>Ending date:</label>
+                                    <input type="date" id='endingDateB' class="form-control">
+                                </div>
+                                <div class="col-md-4 ">
+                                    <a class='btn btn-success text-white form-control ' onclick="setFilterBills()" >Set </a>
+                                
+                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterBills()" >Clear </a>
+                                </div>
+                            </div>
+                            <script > var billsList = []; </script>
+                        </div>  
                         <table class='table table-striped table-hover table-responsive-sm w-100' id='myDataTable1'>
                             <thead>
                                 <tr>
@@ -261,7 +303,7 @@
                             <tbody>
                                 @if (count($invoicesOut))
                                     @foreach ($invoicesOut as $invoice)
-                                        <tr>
+                                        <tr id="{{ $invoice->id }}">
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
                                             <td>{{ $invoice->total }}</td>
@@ -387,7 +429,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <script> billsList.push(['{{$invoice->id}}','{{$invoice->created_at}}']); </script>
                                     @endforeach
+                                    
                                 @else
                                     <tr>
                                         <td colspan="7" class="text-danger">No invoices to show!</td>
@@ -426,6 +470,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function getIncoming() {
             document.getElementById('incomingLink').classList.add("btn-primary");
@@ -464,6 +509,55 @@
             document.getElementById('incomingConten').style.display = 'none';
             document.getElementById('outgoingConten').style.display = 'none';
             document.getElementById('dashboardConten').style.display = 'block';
+        }
+         
+        
+        var filterInvoice = false;
+        document.getElementById('filterInvoices').style.display = 'none';
+        function showFilterInvoices(){
+            if(!filterInvoice) {document.getElementById('filterInvoices').style.display = 'flex'; filterInvoice = true;}
+            else {document.getElementById('filterInvoices').style.display = 'none';filterInvoice = false;}
+        } 
+        function setFilterInvoices(){
+            invoicesList.forEach(setFunction);
+        }
+        function setFunction(item, index) { 
+            clearFilterInvoices();
+            var filterDate = new Date(item[1]);
+            var endingDate = new Date(document.getElementById('endingDate').value);
+            var startingDate = new Date(document.getElementById('startingDate').value); 
+            if(filterDate.getTime() < startingDate.getTime() ) document.getElementById(item[0]).style.display = 'none';
+            if(filterDate.getTime() > endingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
+        }
+        function clearFilterInvoices(){
+            invoicesList.forEach(clearFunction);
+        }
+        function clearFunction(item, index) { 
+            document.getElementById(item[0]).style.display = 'table-row';
+        }
+
+        var filterBill = false;
+        document.getElementById('filterBills').style.display = 'none';
+        function showFilterBills(){
+            if(!filterBill) {document.getElementById('filterBills').style.display = 'flex'; filterBill = true;}
+            else {document.getElementById('filterBills').style.display = 'none';filterBill = false;}
+        } 
+        function setFilterBills(){
+            billsList.forEach(setFunctionB);
+        }
+        function setFunctionB(itemB, index) { 
+            clearFilterBills();
+            var filterDateB = new Date(itemB[1]);
+            var endingDateB = new Date(document.getElementById('endingDateB').value);
+            var startingDateB = new Date(document.getElementById('startingDateB').value); 
+            if(filterDateB.getTime() < startingDateB.getTime() ) document.getElementById(itemB[0]).style.display = 'none';
+            if(filterDateB.getTime() > endingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
+        }
+        function clearFilterBills(){
+            billsList.forEach(clearFunctionB);
+        }
+        function clearFunctionB(itemB, index) {  
+            document.getElementById(itemB[0]).style.display = 'table-row';
         }
     </script>
     <!-- Leave business modal -->
