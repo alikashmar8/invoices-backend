@@ -28,7 +28,7 @@ class InvoicesExport implements FromCollection, WithHeadings
     }
     public function collection()
     {
-        $invoices = Invoice::where('incoming',1)->select('title', 'total', 'extra_amount', 'discount', 'discount_type', 'reference_number',
+        $invoices = Invoice::select('title', 'total', 'extra_amount', 'discount', 'discount_type', 'reference_number',
         'is_paid' ,  'due_date' , 'payment_date' , 'notes' , 'created_by'  , 'created_at')
         ->where('business_id' , $this->id)->get();
         foreach($invoices as $inv){

@@ -6,9 +6,8 @@
 @section('content')
     <div class="container">
         <h2> Outgoing Invoice</h2>
-        <form class="form" method='post' action="{{ route('invoicesOut.store') }}" enctype="multipart/form-data">
+        <form class="form" method='post' action="{{ route('bills.store') }}" enctype="multipart/form-data">
             @csrf
-
 
             <div class="card">
                 <div class="card-header closed">
@@ -18,7 +17,8 @@
                     @if (count($businesses) > 1)
                         <div class="form-group">
                             <label for="business_id" class="required">Choose Business:</label>
-                            <select class="form-control" name="business_id" id="business_id" required>
+                            <select id="business_select" class="form-control" name="business_id" id="business_id" required>
+                                <option value hidden disabled selected>Choose Business</option>
                                 @foreach ($businesses as $business)
                                     <option value="{{ $business->id }}"
                                         @if (old('business_id')) @if (old('business_id') == $business->id)
@@ -29,7 +29,7 @@
                             </select>
                         </div>
                     @else
-                        <input type="hidden" name="business_id" value="{{ $businesses[0]->id }}">
+                        <input type="hidden" id="business_id" name="business_id" value="{{ $businesses[0]->id }}">
                     @endif
 
                     <div class="form-group">
@@ -79,9 +79,14 @@
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes/Payment method:</label>
-                        <textarea name="notes"   class="form-control" id="notes" rows="3"></textarea>
+                        <textarea name="notes" class="form-control" id="notes" rows="3"></textarea>
                     </div>
 
+                    <div class="form-group">
+                        <label for="contact_id">Select Contact:</label>
+                        <select name="contact_id" id="contact_id" class="form-control">
+                        </select>
+                    </div>
                 </div>
             </div>
             <br>
@@ -91,7 +96,7 @@
                     <h5>Client Details <i id='detailsClickI' class="fa fa-arrow-circle-down text-primary"
                             style='transition: all .4s ease 0s;' aria-hidden="true"></i> </h5>
                 </div>
-                <div class="detailsContent " style='overflow: hidden; height:0px'>
+                {{-- <div class="detailsContent " style='overflow: hidden; height:0px'>
                     <div class="card-body  ">
                         <div class="form-group">
                             <label  class="required">Name:</label>
@@ -113,27 +118,28 @@
                             <label >Address:</label>
                             <input type="text" name="address"  class="form-control"  >
                         </div>
-                         
+
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <br>
             <div class="card ">
                 <div class="card-header advancedClick closed">
-                    <h5>Items Details <small>(Optional)</small> <i id='advancedClickI' class="fa fa-arrow-circle-down text-primary"
-                            style='transition: all .4s ease 0s;' aria-hidden="true"></i> </h5>
+                    <h5>Items Details <small>(Optional)</small> <i id='advancedClickI'
+                            class="fa fa-arrow-circle-down text-primary" style='transition: all .4s ease 0s;'
+                            aria-hidden="true"></i> </h5>
                 </div>
                 <div class="advancedContent " style='overflow: hidden; height:0px'>
                     <div class="card-body  ">
-                         
- 
+
+
 
                         <div class="form-group">
                             <label for="notes">Notes:</label>
                             <textarea name="notes" value="{{ old('notes') }}" class="form-control" id="notes" rows="3"></textarea>
                         </div>
-                         
+
                     </div>
                 </div>
             </div>
@@ -209,6 +215,53 @@
                     document.getElementById("detailsClickI").style.transform = "rotate(180deg)";
                 }
             })
+            $(document).ready(function() {
+
+                var business_id_input = document.getElementById('business_id')
+                var business_id = null
+                if(business_id_input)
+                {
+                    business_id = business_id_input.value
+                }
+                if(!business_id)    business_id = document.getElementById('business_select').value;
+                if(business_id) fillContacts(business_id)
+
+                $('#business_select').on('change', function() {
+                    var business_id = $(this).val();
+                    if (business_id) {
+                        fillContacts(business_id)
+                    } else {
+                        $('#major_track_id').empty();
+                    }
+                });
+
+                function fillContacts(business_id){
+                    $.ajax({
+                            url: '/businesses/' + business_id + '/contacts',
+                            type: "GET",
+                            data: {
+                                "_token": "{{ csrf_token() }}"
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data) {
+                                    $('#contact_id').empty();
+                                    $('#contact_id').append(
+                                        '<option hidden disabled value selected>-- Choose Contact --</option>'
+                                    );
+                                    $.each(data, function(key, contact) {
+                                        $('select[name="contact_id"]').append(
+                                            '<option value="' + contact.id + '">' +
+                                            contact
+                                            .name + '</option>');
+                                    });
+                                } else {
+                                    $('#contact_id').empty();
+                                }
+                            }
+                        });
+                }
+            });
         </script>
 
     </div>

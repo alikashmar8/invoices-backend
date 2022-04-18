@@ -24,4 +24,9 @@ class Business extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

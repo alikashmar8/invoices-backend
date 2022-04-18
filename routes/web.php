@@ -31,6 +31,7 @@ Route::get('/businesses', [App\Http\Controllers\BusinessController::class, 'inde
 Route::get('/businesses/{business}', [App\Http\Controllers\BusinessController::class, 'show'])->middleware('is_business_member');
 Route::post('/businesses/{business}/make-favorite', [App\Http\Controllers\BusinessController::class, 'makeFavorite'])->name('businesses.make-favorite')->middleware('is_business_member');
 Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessController::class, 'leave'])->name('businesses.leave')->middleware('is_business_member');
+Route::get('/businesses/{business}/contacts', [App\Http\Controllers\BusinessController::class, 'getContacts'])->middleware('auth');
 Route::get('/businesses/{business}/members', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
 Route::post('/businesses/{business}/members', [App\Http\Controllers\BusinessController::class, 'addNewTeamMember'])->middleware('auth');
 Route::post('/businesses/{business}/members/{user}/remove', [App\Http\Controllers\BusinessController::class, 'removeTeamMember'])->middleware('is_business_manager');
@@ -46,13 +47,19 @@ Route::post('/notifications/{notification}/mark-unread', [App\Http\Controllers\N
 Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy'])->middleware('auth')->name('deleteNotification');
 
 Route::get('/invoices/create', [App\Http\Controllers\InvoiceController::class, 'create'])->middleware('auth');
-Route::get('/invoices/createOut', [App\Http\Controllers\InvoiceController::class, 'createOut'])->middleware('auth');
-Route::post('/invoicesIn', [App\Http\Controllers\InvoiceController::class, 'storeIn'])->middleware('auth')->name('invoicesIn.store');
-Route::post('/invoicesOut', [App\Http\Controllers\InvoiceController::class, 'storeOut'])->middleware('auth')->name('invoicesOut.store');
+Route::post('/invoices', [App\Http\Controllers\InvoiceController::class, 'storeIn'])->middleware('auth')->name('invoices.store');
 Route::get('/invoices/{invoice}/edit', [App\Http\Controllers\InvoiceController::class, 'edit'])->middleware('auth');
 Route::put('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'update'])->middleware('auth')->name('invoices.update');
 Route::get('/invoices/exportIn/{id}', [App\Http\Controllers\InvoiceController::class, 'exportIn'])->middleware('auth');
 Route::get('/invoices/exportOut/{id}', [App\Http\Controllers\InvoiceController::class, 'exportOut'])->middleware('auth');
+
+Route::get('/bills/create', [App\Http\Controllers\BillsController::class, 'create'])->middleware('auth');
+Route::post('/bills', [App\Http\Controllers\BillsController::class, 'store'])->middleware('auth')->name('bills.store');
+
+Route::get('/contacts/business/{business}', [App\Http\Controllers\ContactsController::class, 'index'])->name('contacts.index')->middleware('auth');
+Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'store'])->name('contacts.store')->middleware('auth');
+Route::delete('/contacts/{contact}', [App\Http\Controllers\ContactsController::class, 'destroy'])->name('contacts.destroy')->middleware('auth');
+Route::get('/contacts/create', [App\Http\Controllers\ContactsController::class, 'create'])->name('contacts.create')->middleware('auth');
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');

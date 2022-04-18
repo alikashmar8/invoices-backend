@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Bill;
 use App\Models\Invoice;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -19,14 +20,14 @@ class InvoicesOutExport implements FromCollection,   WithHeadings
     public function headings(): array
     {
         return [
-            
+
             'Title', 'Total', 'Extra_amount', 'Discount', 'Discount_type', 'Reference_number',
             'Paid' ,  'Due_date' , 'Payment_date' , 'Notes' , 'Created_by' ,   'Created_at'
         ];
     }
     public function collection()
     {
-        $invoices = Invoice::where('incoming',0)->select('title', 'total', 'extra_amount', 'discount', 'discount_type', 'reference_number',
+        $invoices = Bill::select('title', 'total', 'extra_amount', 'discount', 'discount_type', 'reference_number',
         'is_paid' ,  'due_date' , 'payment_date' , 'notes' , 'created_by'  , 'created_at')
         ->where('business_id' , $this->id)->get();
         foreach($invoices as $inv){

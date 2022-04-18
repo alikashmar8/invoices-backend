@@ -101,31 +101,31 @@ class BusinessController extends Controller
         $exists = $business->users->contains(Auth::user());
         if ($exists) {
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-            $invoicesIn =  $business->invoices->where('incoming', 1)->sortByDesc('created_at');
+            $invoices =  $business->invoices->where('incoming', 1)->sortByDesc('created_at');
             // TODO: query Still under testing (better than loops)
-            $totalPaid = $invoicesIn->where('isPaid', true)->sum('total');
-            $totalPending = $invoicesIn->where('isPaid', false)->sum('total');
+            $totalPaid = $invoices->where('isPaid', true)->sum('total');
+            $totalPending = $invoices->where('isPaid', false)->sum('total');
             Log::info('totalPaid using query: ' . $totalPaid);
             Log::info('totalPending using query: ' . $totalPending);
             $totalPaid = $totalPending = 0 ;
-            foreach($invoicesIn as $inv){
+            foreach($invoices as $inv){
                 if($inv->is_paid) $totalPaid += $inv->total;
                 else $totalPending += $inv->total;
             }
             Log::info('totalPaid using foreach: ' . $totalPaid);
 
-            $invoicesOut =  $business->invoices->where('incoming', 0)->sortByDesc('created_at');
-            $totalEarning = $invoicesOut->where('isPaid', true)->sum('total');
-            $totalPendingEarn = $invoicesOut->where('isPaid', false)->sum('total');
+            $bills =  $business->invoices->where('incoming', 0)->sortByDesc('created_at');
+            $totalEarning = $bills->where('isPaid', true)->sum('total');
+            $totalPendingEarn = $bills->where('isPaid', false)->sum('total');
             Log::info('totalEarning using query: ' . $totalEarning);
             $totalEarning = $totalPendingEarn = 0 ;
-            foreach($invoicesOut as $inv){
+            foreach($bills as $inv){
                 if($inv->is_paid) $totalEarning += $inv->total;
                 else $totalPendingEarn += $inv->total;
             }
             Log::info('totalEarning using foreach: ' . $totalEarning);
 
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoicesIn' ,'invoicesOut', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn'));
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'bills', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn'));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
@@ -296,5 +296,11 @@ class BusinessController extends Controller
         } else {
             return redirect('/businesses/')->with('messageSuc', 'Business is favorite');
         }
+    }
+
+    public function getContacts(Business $business)
+    {
+        $contacts = $business->contacts;
+        return response()->json($contacts);
     }
 }
