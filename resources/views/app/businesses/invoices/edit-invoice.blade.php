@@ -6,7 +6,8 @@
 @section('content')
     <div class="container">
         <form class="form" method='post' action="
-                            {{ route('invoices.update', ['invoice' => $invoice->id]) }}" enctype="multipart/form-data">
+                                    {{ route('invoices.update', ['invoice' => $invoice->id]) }}"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card">
@@ -14,19 +15,7 @@
                     <h5>Payment Details</h5>
                 </div>
                 <div class="card-body">
-                    @if (count($businesses) > 1)
-                        <div class="form-group">
-                            <label for="business_id" class="required">Choose Business:</label>
-                            <select class="form-control" name="business_id" id="business_id" required>
-                                @foreach ($businesses as $business)
-                                    <option value="{{ $business->id }}" @if ($business->id == $invoice->business_id) selected @endif>
-                                        {{ $business->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @else
-                        <input type="hidden" name="business_id" value="{{ $businesses[0]->id }}">
-                    @endif
+                    <input type="hidden" name="business_id" value="{{ $invoice->business_id }}">
 
                     <div class="form-group">
                         <label for="title" class="required">
@@ -124,29 +113,46 @@
 
                             @if (count($invoice->attachments) > 0)
                                 <br>Old Attachments:<br>
-                                @foreach ($invoice->attachments as $attach)
-                                <div style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
-                                    <embed   src="{{ asset($attach->url) }}" style='object-fit:cover ; width:100%; height:auto'  >
-                                    
+                                <div class="row mx-5">
+                                    @foreach ($invoice->attachments as $attach)
+                                        <div class="col-md-3 m-2"
+                                            style='position:relative; display: inline-block;  height:150px; border:1px solid #ff556e;border-radius: 7px; padding:1px;'>
+                                            <embed src="{{ asset($attach->url) }}"
+                                                style='object-fit:cover ; width:100%; height:100%; border-radius: 7px;'>
 
-                                    <div style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;"> 
-                                        <div class="btn-group" role="group"   
-                                            id='doc-{{ $loop->index + 1 }}'>
-                                            <a href="{{ asset($attach->url) }}" class='btn btn-info'
-                                                target="_blank">Doc-{{ $loop->index + 1 }} <i class="fa fa-external-link-alt"
-                                                    aria-hidden="true"></i></a>
-                                            <a href="{{ asset($attach->url) }}" class='btn btn-warning text-white'
-                                                download=""> <i class="fa fa-file-download" aria-hidden="true"></i></a>
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="markAttachmentAsDelete('{{ $attach->url }}', 'doc-{{ $loop->index + 1 }}' )">  
-                                                <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                            <div
+                                                style="position:absolute; width:100%; bottom:0; background:transparent; border-radius: 0 0 7px 7px;">
+                                                <div class="row w-100 m-0" style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        overflow: hidden;
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        height: 24px;
+                                                        font-size: smaller;
+                                                        background-color: #a6a6a6a6;">
+                                                    {{ $attach->name }}
+                                                </div>
+                                                <div id='doc-{{ $loop->index + 1 }}' class="row w-100 m-0">
+                                                    <a href="{{ asset($attach->url) }}" class='col btn btn-info'
+                                                        target="_blank" style="border-radius: 0 0 0 7px">
+                                                        {{-- Doc-{{ $loop->index + 1 }} --}}
+                                                        <i class="fa fa-external-link-alt" aria-hidden="true"></i></a>
+                                                    <a href="{{ asset($attach->url) }}"
+                                                        class='col btn btn-warning text-white' download=""
+                                                        style="border-radius: 0"> <i class="fa fa-file-download"
+                                                            aria-hidden="true"></i></a>
+                                                    <button type="button" class="col btn btn-danger"
+                                                        style="border-radius: 0 0 7px 0"
+                                                        onclick="markAttachmentAsDelete('{{ $attach->url }}', 'doc-{{ $loop->index + 1 }}' )">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                     
-                                </div>
-                                    {{-- <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
+                                        {{-- <a href="{{ asset($attach->url) }}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a>
                                 <embed style='width:250px; height:350px; max-width:100%; max-height:100%' name="plugin" src="{{ asset($attach->url) }}" type="application/pdf"> --}}
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                             @endif
                             <input type="text" class="form-control" id="attachmentsToDelete" name="attachmentsToDelete">

@@ -118,10 +118,6 @@
                 "laravel",
                 "pdf"
             ],
-            "support": {
-                "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
-                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v1.0.0"
-            },
             "funding": [
                 {
                     "url": "https://fruitcake.nl",
@@ -560,10 +556,6 @@
             ],
             "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
             "homepage": "https://github.com/dompdf/dompdf",
-            "support": {
-                "issues": "https://github.com/dompdf/dompdf/issues",
-                "source": "https://github.com/dompdf/dompdf/tree/v1.2.1"
-            },
             "time": "2022-03-24T12:57:42+00:00"
         },
         {
@@ -2143,16 +2135,16 @@
         },
         {
             "name": "league/mime-type-detection",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/mime-type-detection.git",
-                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7"
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/3e4a35d756eedc67096f30240a68a3149120dae7",
-                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
                 "shasum": ""
             },
             "require": {
@@ -2191,7 +2183,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-11T12:49:04+00:00"
+            "time": "2022-04-17T13:12:02+00:00"
         },
         {
             "name": "maatwebsite/excel",
@@ -3028,10 +3020,6 @@
             ],
             "description": "A library to read, parse, export and make subsets of different types of font files.",
             "homepage": "https://github.com/PhenX/php-font-lib",
-            "support": {
-                "issues": "https://github.com/dompdf/php-font-lib/issues",
-                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.4"
-            },
             "time": "2021-12-17T19:44:54+00:00"
         },
         {
@@ -3074,10 +3062,6 @@
             ],
             "description": "A library to read, parse and export to PDF SVG files.",
             "homepage": "https://github.com/PhenX/php-svg-lib",
-            "support": {
-                "issues": "https://github.com/dompdf/php-svg-lib/issues",
-                "source": "https://github.com/dompdf/php-svg-lib/tree/0.4.1"
-            },
             "time": "2022-03-07T12:52:04+00:00"
         },
         {
@@ -3913,24 +3897,20 @@
                 "parser",
                 "stylesheet"
             ],
-            "support": {
-                "issues": "https://github.com/sabberworm/PHP-CSS-Parser/issues",
-                "source": "https://github.com/sabberworm/PHP-CSS-Parser/tree/8.4.0"
-            },
             "time": "2021-12-11T13:40:54+00:00"
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.122.0",
+            "version": "v7.123.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "c58179aa4cad16240a6e65dbf29c2bfd4ae0c033"
+                "reference": "4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c58179aa4cad16240a6e65dbf29c2bfd4ae0c033",
-                "reference": "c58179aa4cad16240a6e65dbf29c2bfd4ae0c033",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9",
+                "reference": "4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9",
                 "shasum": ""
             },
             "require": {
@@ -3973,7 +3953,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2022-04-08T16:57:33+00:00"
+            "time": "2022-04-13T23:12:59+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -8918,5 +8898,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }

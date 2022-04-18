@@ -3,7 +3,7 @@
 @section('title', $business->name)
 
 
-@section('content') 
+@section('content')
 
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
@@ -49,7 +49,7 @@
                             @endif
                         </div>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -59,11 +59,13 @@
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-3 m-auto">
-                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Incoming Invoices</button>
+                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Incoming
+                    Invoices</button>
             </div>
 
             <div class="col-md-3 m-auto">
-                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Outgoing Invoices</button>
+                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Outgoing
+                    Invoices</button>
             </div>
 
             <div class="col-md-3 m-auto">
@@ -180,41 +182,53 @@
                                                             @endif
                                                         </p>
                                                         <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small> </p>
+                                                            <small>AUD</small>
+                                                        </p>
                                                         <p><b>Added on:</b> {{ $invoice->created_at }} </p>
                                                         @if ($invoice->attachments)
                                                             <p><b>Attachments</b></p>
                                                             @foreach ($invoice->attachments as $attach)
                                                                 <!--a href="{{-- asset($attach->url) --}}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a-->
                                                                 {{-- TODO:  design --}}
-                                                                <div
-                                                                    style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
+                                                                <div class="col-md-3 m-2"
+                                                                    style='position:relative; display: inline-block;  height:150px; border:1px solid #ff556e;border-radius: 7px; padding:1px;'>
                                                                     <embed src="{{ asset($attach->url) }}"
-                                                                        style='object-fit:cover ; width:100%; height:auto'>
+                                                                        style='object-fit:cover ; width:100%; height:100%; border-radius: 7px;'>
+
                                                                     <div
-                                                                        style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;">
-                                                                        {{-- Remove name if you want --}}
-                                                                        <small>{{ $attach->name }}</small>
-                                                                        <a class="btn btn-info "
-                                                                            href='{{ asset($attach->url) }}'
-                                                                            target="blank"> <small> Open <i
-                                                                                    class="fa fa-folder-open"></i>
-                                                                            </small></a>
-                                                                        <a class="btn btn-info "
-                                                                            href='{{ asset($attach->url) }}' download>
-                                                                            <small> Download <i
-                                                                                    class="fa fa-file-download"></i>
-                                                                            </small></a>
+                                                                        style="position:absolute; width:100%; bottom:0; background:transparent; border-radius: 0 0 7px 7px;">
+                                                                        <div class="row w-100 m-0" style="
+                                                                                display: block;
+                                                                                width: 100%;
+                                                                                overflow: hidden;
+                                                                                white-space: nowrap;
+                                                                                text-overflow: ellipsis;
+                                                                                height: 24px;
+                                                                                font-size: smaller;
+                                                                                background-color: #a6a6a6a6;">
+                                                                            {{ $attach->name }}
+                                                                        </div>
+                                                                        <div id='doc-{{ $loop->index + 1 }}'
+                                                                            class="row w-100 m-0">
+                                                                            <a href="{{ asset($attach->url) }}"
+                                                                                class='col btn btn-info' target="_blank"
+                                                                                style="border-radius: 0 0 0 7px">
+                                                                                <i class="fa fa-external-link-alt"
+                                                                                    aria-hidden="true"></i></a>
+                                                                            <a href="{{ asset($attach->url) }}"
+                                                                                class='col btn btn-warning text-white'
+                                                                                download="" style="border-radius: 0"> <i
+                                                                                    class="fa fa-file-download"
+                                                                                    aria-hidden="true"></i></a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             @endforeach
                                                         @endif
                                                     </div>
                                                     <div class="modal-footer">
-
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close</button>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,13 +246,13 @@
 
                     <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
                         <a href='/invoices/createOut' class="btn btn-success"> Create new </a>
-                        <table class='table table-striped table-hover table-responsive-sm w-100'  id='myDataTable1'>
+                        <table class='table table-striped table-hover table-responsive-sm w-100' id='myDataTable1'>
                             <thead>
                                 <tr>
                                     <td class="filterhead1">#</td>
                                     <td class="filterhead1">Title</td>
                                     <td class="filterhead1">Amount</td>
-                                    <td class="filterhead1">Status</td> 
+                                    <td class="filterhead1">Status</td>
                                     <td class="filterhead1">Added by</td>
                                     <td>Actions</td>
                                 </tr>
@@ -261,7 +275,7 @@
                                                         style='white-space: nowrap;'>Not Paid - Due:
                                                         {{ $invoice->due_date }} </a>
                                                 @endif
-                                            </td> 
+                                            </td>
                                             <td><img src="{{ asset($invoice->createdBy->profile_picture) }}"
                                                     class="rounded-circle" style='max-width: 30px'>
                                                 {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
@@ -333,7 +347,8 @@
                                                             @endif
                                                         </p>
                                                         <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small> </p>
+                                                            <small>AUD</small>
+                                                        </p>
                                                         <p><b>Added on:</b> {{ $invoice->created_at }} </p>
                                                         @if ($invoice->attachments)
                                                             <p><b>Attachments</b></p>
@@ -411,44 +426,46 @@
             </div>
         </div>
     </div>
-<script> 
-    function getIncoming(){
-        document.getElementById('incomingLink').classList.add("btn-primary");
-        document.getElementById('incomingLink').classList.remove("btn-link");
-        document.getElementById('outgoingLink').classList.remove("btn-primary");
-        document.getElementById('outgoingLink').classList.add("btn-link");
-        document.getElementById('dashboardLink').classList.remove("btn-primary");
-        document.getElementById('dashboardLink').classList.add("btn-link"); 
+    <script>
+        function getIncoming() {
+            document.getElementById('incomingLink').classList.add("btn-primary");
+            document.getElementById('incomingLink').classList.remove("btn-link");
+            document.getElementById('outgoingLink').classList.remove("btn-primary");
+            document.getElementById('outgoingLink').classList.add("btn-link");
+            document.getElementById('dashboardLink').classList.remove("btn-primary");
+            document.getElementById('dashboardLink').classList.add("btn-link");
 
-        document.getElementById('incomingConten').style.display = 'block'; 
-        document.getElementById('outgoingConten').style.display = 'none'; 
-        document.getElementById('dashboardConten').style.display = 'none'; 
-    }
-    function getOutgoing(){
-        document.getElementById('outgoingLink').classList.add("btn-primary");
-        document.getElementById('outgoingLink').classList.remove("btn-link");
-        document.getElementById('incomingLink').classList.remove("btn-primary");
-        document.getElementById('incomingLink').classList.add("btn-link");
-        document.getElementById('dashboardLink').classList.remove("btn-primary");
-        document.getElementById('dashboardLink').classList.add("btn-link");
+            document.getElementById('incomingConten').style.display = 'block';
+            document.getElementById('outgoingConten').style.display = 'none';
+            document.getElementById('dashboardConten').style.display = 'none';
+        }
 
-        document.getElementById('incomingConten').style.display = 'none'; 
-        document.getElementById('outgoingConten').style.display = 'block'; 
-        document.getElementById('dashboardConten').style.display = 'none'; 
-    }
-    function getDashboard(){
-        document.getElementById('dashboardLink').classList.add("btn-primary");
-        document.getElementById('dashboardLink').classList.remove("btn-link");
-        document.getElementById('incomingLink').classList.remove("btn-primary");
-        document.getElementById('incomingLink').classList.add("btn-link");
-        document.getElementById('outgoingLink').classList.remove("btn-primary");
-        document.getElementById('outgoingLink').classList.add("btn-link");
+        function getOutgoing() {
+            document.getElementById('outgoingLink').classList.add("btn-primary");
+            document.getElementById('outgoingLink').classList.remove("btn-link");
+            document.getElementById('incomingLink').classList.remove("btn-primary");
+            document.getElementById('incomingLink').classList.add("btn-link");
+            document.getElementById('dashboardLink').classList.remove("btn-primary");
+            document.getElementById('dashboardLink').classList.add("btn-link");
 
-        document.getElementById('incomingConten').style.display = 'none'; 
-        document.getElementById('outgoingConten').style.display = 'none'; 
-        document.getElementById('dashboardConten').style.display = 'block'; 
-    }
-</script>
+            document.getElementById('incomingConten').style.display = 'none';
+            document.getElementById('outgoingConten').style.display = 'block';
+            document.getElementById('dashboardConten').style.display = 'none';
+        }
+
+        function getDashboard() {
+            document.getElementById('dashboardLink').classList.add("btn-primary");
+            document.getElementById('dashboardLink').classList.remove("btn-link");
+            document.getElementById('incomingLink').classList.remove("btn-primary");
+            document.getElementById('incomingLink').classList.add("btn-link");
+            document.getElementById('outgoingLink').classList.remove("btn-primary");
+            document.getElementById('outgoingLink').classList.add("btn-link");
+
+            document.getElementById('incomingConten').style.display = 'none';
+            document.getElementById('outgoingConten').style.display = 'none';
+            document.getElementById('dashboardConten').style.display = 'block';
+        }
+    </script>
     <!-- Leave business modal -->
     <div class="modal fade" id="leave_business_modal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -479,7 +496,7 @@
 
                     <a type="submit" class="btn btn-danger text-white"
                         onclick="event.preventDefault();
-                                                        document.getElementById('leave_business_form').submit();">Confirm</a>
+                                                                document.getElementById('leave_business_form').submit();">Confirm</a>
 
                 </div>
 
@@ -514,7 +531,7 @@
         }
 
     </style>
-    <script> 
+    <script>
         var table = $('#myDataTable').DataTable();
         var table1 = $('#myDataTable1').DataTable();
         $(document).ready(function() {
@@ -541,23 +558,23 @@
                 table.column(i).data().unique().sort().each(function(d, j) {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
-            });   
+            });
 
-            
+
         });
         var filteredData = table
             .column(0)
             .data()
             .filter(function(value, index) {
                 return value > 20 ? true : false;
-        }); 
-        
+            });
+
         var filteredData = table1
             .column(0)
             .data()
             .filter(function(value, index) {
                 return value > 20 ? true : false;
-        }); 
+            });
     </script>
 
 @endsection
