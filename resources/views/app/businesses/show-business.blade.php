@@ -341,6 +341,10 @@
                                                     </button>
                                                 @endif
 
+                                                <a type="button" class="btn col-md-2 p-0 mx-1"
+                                                    href="/generate/{{ $invoice->id }}">
+                                                    <i class="fa fa-file-export text-primary"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         <!-- show invoice modal -->
