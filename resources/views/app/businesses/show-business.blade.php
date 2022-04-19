@@ -43,6 +43,11 @@
                                 <span class="bg-danger float-right p-1 px-4 rounded text-white">Stopped</span>
                             @endif
                             <br><br>
+                            <a href="/contacts/business/{{ $business->id }}"
+                                class="btn btn-primary float-right p-1 px-4 rounded text-white">
+                                Contacts
+                            </a>
+                            <br><br>
                             @if ($current_user_business_details->role != App\Enums\UserRole::MANAGER)
                                 <span class="bg-danger float-right p-1 px-4 rounded text-white" style='cursor: pointer;'
                                     data-toggle="modal" data-target="#leave_business_modal">Leave business</span>
@@ -64,8 +69,7 @@
             </div>
 
             <div class="col-md-3 m-auto">
-                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Outgoing
-                    Invoices</button>
+                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Bills</button>
             </div>
 
             <div class="col-md-3 m-auto">
@@ -74,32 +78,32 @@
         </div>
     </div>
 
-    <div class="container mt-5"> 
-        <div class="row d-flex justify-content-center"> 
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-md-12">
                 <div class="card px-3 ">
                     <div class="row noScrollBar" style='overflow: scroll;' id='incomingConten'>
                         <div class=" bg-light bg-gradient">
                             <a href='/invoices/create' class="btn btn-success w-25"> Create new </a>
-                        
+
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterInvoices()"> Filter </a>
                             <div class="row p-2" id="filterInvoices">
                                 <div class="col-md-4">
                                     <label>Starting date:</label>
-                                    <input type="date" id='startingDate' class="form-control" > 
-                                </div> 
+                                    <input type="date" id='startingDate' class="form-control" >
+                                </div>
                                 <div class="col-md-4 ">
                                     <label>Ending date:</label>
                                     <input type="date" id='endingDate' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
                                     <a class='btn btn-success text-white form-control ' onclick="setFilterInvoices()" >Set </a>
-                                
+
                                     <a class='btn btn-danger text-white form-control' onclick="clearFilterInvoices()" >Clear </a>
                                 </div>
                             </div>
                             <script > var invoicesList = []; </script>
-                        </div>  
+                        </div>
                         <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                             <thead>
                                 <tr>
@@ -114,8 +118,8 @@
                             </thead>
 
                             <tbody>
-                                @if (count($invoicesIn))
-                                    @foreach ($invoicesIn as $invoice)
+                                @if (count($invoices))
+                                    @foreach ($invoices as $invoice)
                                         <tr id='{{ $invoice->id }}'>
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
@@ -219,14 +223,14 @@
                                                                     <div
                                                                         style="position:absolute; width:100%; bottom:0; background:transparent; border-radius: 0 0 7px 7px;">
                                                                         <div class="row w-100 m-0" style="
-                                                                                display: block;
-                                                                                width: 100%;
-                                                                                overflow: hidden;
-                                                                                white-space: nowrap;
-                                                                                text-overflow: ellipsis;
-                                                                                height: 24px;
-                                                                                font-size: smaller;
-                                                                                background-color: #a6a6a6a6;">
+                                                                                            display: block;
+                                                                                            width: 100%;
+                                                                                            overflow: hidden;
+                                                                                            white-space: nowrap;
+                                                                                            text-overflow: ellipsis;
+                                                                                            height: 24px;
+                                                                                            font-size: smaller;
+                                                                                            background-color: #a6a6a6a6;">
                                                                             {{ $attach->name }}
                                                                         </div>
                                                                         <div id='doc-{{ $loop->index + 1 }}'
@@ -268,26 +272,26 @@
 
                     <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
                         <div class=" bg-light bg-gradient">
-                            <a href='/invoices/createOut' class="btn btn-success w-25"> Create new </a>
-                        
+                            <a href='/bills/create' class="btn btn-success w-25"> Create new </a>
+
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterBills()"> Filter </a>
                             <div class="row p-2" id="filterBills">
                                 <div class="col-md-4">
                                     <label>Starting date:</label>
-                                    <input type="date" id='startingDateB' class="form-control" > 
-                                </div> 
+                                    <input type="date" id='startingDateB' class="form-control" >
+                                </div>
                                 <div class="col-md-4 ">
                                     <label>Ending date:</label>
                                     <input type="date" id='endingDateB' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
                                     <a class='btn btn-success text-white form-control ' onclick="setFilterBills()" >Set </a>
-                                
+
                                     <a class='btn btn-danger text-white form-control' onclick="clearFilterBills()" >Clear </a>
                                 </div>
                             </div>
                             <script > var billsList = []; </script>
-                        </div>  
+                        </div>
                         <table class='table table-striped table-hover table-responsive-sm w-100' id='myDataTable1'>
                             <thead>
                                 <tr>
@@ -301,8 +305,8 @@
                             </thead>
 
                             <tbody>
-                                @if (count($invoicesOut))
-                                    @foreach ($invoicesOut as $invoice)
+                                @if (count($bills))
+                                    @foreach ($bills as $invoice)
                                         <tr id="{{ $invoice->id }}">
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
@@ -435,10 +439,10 @@
                                         </div>
                                         <script> billsList.push(['{{$invoice->id}}','{{$invoice->created_at}}']); </script>
                                     @endforeach
-                                    
+
                                 @else
                                     <tr>
-                                        <td colspan="7" class="text-danger">No invoices to show!</td>
+                                        <td colspan="7" class="text-danger">No bills to show!</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -514,29 +518,29 @@
             document.getElementById('outgoingConten').style.display = 'none';
             document.getElementById('dashboardConten').style.display = 'block';
         }
-         
-        
+
+
         var filterInvoice = false;
         document.getElementById('filterInvoices').style.display = 'none';
         function showFilterInvoices(){
             if(!filterInvoice) {document.getElementById('filterInvoices').style.display = 'flex'; filterInvoice = true;}
             else {document.getElementById('filterInvoices').style.display = 'none';filterInvoice = false;}
-        } 
+        }
         function setFilterInvoices(){
             invoicesList.forEach(setFunction);
         }
-        function setFunction(item, index) { 
+        function setFunction(item, index) {
             clearFilterInvoices();
             var filterDate = new Date(item[1]);
             var endingDate = new Date(document.getElementById('endingDate').value);
-            var startingDate = new Date(document.getElementById('startingDate').value); 
+            var startingDate = new Date(document.getElementById('startingDate').value);
             if(filterDate.getTime() < startingDate.getTime() ) document.getElementById(item[0]).style.display = 'none';
             if(filterDate.getTime() > endingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
         }
         function clearFilterInvoices(){
             invoicesList.forEach(clearFunction);
         }
-        function clearFunction(item, index) { 
+        function clearFunction(item, index) {
             document.getElementById(item[0]).style.display = 'table-row';
         }
 
@@ -545,22 +549,22 @@
         function showFilterBills(){
             if(!filterBill) {document.getElementById('filterBills').style.display = 'flex'; filterBill = true;}
             else {document.getElementById('filterBills').style.display = 'none';filterBill = false;}
-        } 
+        }
         function setFilterBills(){
             billsList.forEach(setFunctionB);
         }
-        function setFunctionB(itemB, index) { 
+        function setFunctionB(itemB, index) {
             clearFilterBills();
             var filterDateB = new Date(itemB[1]);
             var endingDateB = new Date(document.getElementById('endingDateB').value);
-            var startingDateB = new Date(document.getElementById('startingDateB').value); 
+            var startingDateB = new Date(document.getElementById('startingDateB').value);
             if(filterDateB.getTime() < startingDateB.getTime() ) document.getElementById(itemB[0]).style.display = 'none';
             if(filterDateB.getTime() > endingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
         }
         function clearFilterBills(){
             billsList.forEach(clearFunctionB);
         }
-        function clearFunctionB(itemB, index) {  
+        function clearFunctionB(itemB, index) {
             document.getElementById(itemB[0]).style.display = 'table-row';
         }
     </script>
@@ -594,7 +598,7 @@
 
                     <a type="submit" class="btn btn-danger text-white"
                         onclick="event.preventDefault();
-                                                                document.getElementById('leave_business_form').submit();">Confirm</a>
+                                                                            document.getElementById('leave_business_form').submit();">Confirm</a>
 
                 </div>
 

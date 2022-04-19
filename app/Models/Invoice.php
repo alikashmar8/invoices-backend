@@ -25,7 +25,6 @@ class Invoice extends Model
         'business_id',
     ];
 
-
     public static function boot()
     {
         parent::boot();

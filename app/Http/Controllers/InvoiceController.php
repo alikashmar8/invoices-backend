@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
 use App\Models\Business;
-use App\Models\InvoiceContact;
+use App\Models\Contact;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
@@ -36,14 +36,7 @@ class InvoiceController extends Controller
         }
         return view('app.businesses.invoices.create-in-invoice', compact('businesses'));
     }
-    public function createOut()
-    {
-        $businesses = Auth::user()->businesses;
-        if (count($businesses) < 1) {
-            return redirect('/')->with('messageDgr', 'You must create a business first');
-        }
-        return view('app.businesses.invoices.create-out-invoice', compact('businesses'));
-    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -105,57 +98,6 @@ class InvoiceController extends Controller
                 $attachment->save();
             }
         }
-        return redirect('businesses/' . $request->business_id);
-    }
-
-    
-    public function storeOut(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'total' => 'required|numeric|min:0,max:9999999999',  
-            'payment_date' => 'required',
-            'notes' => 'max:255',
-            'business_id' => 'required|exists:businesses,id', 
-        ] );
-
-        if ($validator->fails()) {
-            if (request()->is('api/*')) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            } else {
-                return redirect()->back()->withInput()
-                    ->withErrors($validator);
-            }
-        }
-        $invoice = new Invoice();
-        $invoice->title = $request->title;
-        $invoice->total = $request->total;
-        if (isset($request->is_paid)) {
-            $invoice->is_paid = 1;
-            if (isset($request->payment_date)) {
-                $invoice->payment_date = $request->payment_date;
-            } else {
-                $invoice->payment_date = Carbon::now();
-            }
-        } else {
-            $invoice->is_paid = 0;
-        }
-        $invoice->due_date = $request->due_date; 
-        $invoice->notes = $request->notes;   
-        $invoice->incoming = 0;   
-        $invoice->created_by = Auth::user()->id;
-        $invoice->business_id = $request->business_id;
-        $invoice->save(); 
-
-        $contacts = new InvoiceContact(); 
-        $contacts->name	= $request->name;
-        $contacts->email = $request->email;
-        $contacts->phone_number	= $request->phone;
-        $contacts->abn	= $request->abn;
-        $contacts->address = $request->address;
-        $contacts->invoice_id = $invoice->id;
-        $contacts->save();
-
         return redirect('businesses/' . $request->business_id);
     }
 
@@ -281,8 +223,8 @@ class InvoiceController extends Controller
     {
         return Excel::download(new InvoicesExport($id), 'Invoices.xlsx');
     }
-    
-    
+
+
     public function exportOut($id)
     {
         return Excel::download(new InvoicesOutExport($id), 'Invoices.xlsx');
@@ -291,8 +233,8 @@ class InvoiceController extends Controller
     public function generatePDF($id)
     {
         $bill = Invoice::findOrFail($id);
-        $contact = InvoiceContact::where("invoice_id" , $id)->first(); 
-        $business = Business::findOrFail($bill->business_id); 
+        $contact = InvoiceContact::where("invoice_id" , $id)->first();
+        $business = Business::findOrFail($bill->business_id);
         $data = [
             'clientName' => $contact->name,
             'clientEmail' => $contact->email,
@@ -309,11 +251,11 @@ class InvoiceController extends Controller
             'is_paid' => $bill->is_paid,
             'due_date' => $bill->due_date,
             'payment_date' => $bill->payment_date,
-            'notes' => $bill->notes, 
-            'updated_at' => Carbon::parse($bill->updated_at)->format('l jS \\of F Y') 
-        ]; 
+            'notes' => $bill->notes,
+            'updated_at' => Carbon::parse($bill->updated_at)->format('l jS \\of F Y')
+        ];
         $pdf = PDF::loadView('app.businesses.invoices.pdfView' , $data);
-    
+
         return $pdf->download($id.'.pdf');
     }
 }
