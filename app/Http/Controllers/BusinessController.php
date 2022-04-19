@@ -14,6 +14,7 @@ use App\Models\User;
 use BenSampo\Enum\Rules\EnumValue;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Validator;
 use Image;
 
@@ -66,6 +67,7 @@ class BusinessController extends Controller
      */
     public function store(Request $request)
     {
+        if(Auth::user()->plan_id < 3) return redirect('/plan/3');
         $business = new Business();
         $business->name = $request->name;
         $business->is_active = 1;
@@ -203,7 +205,19 @@ class BusinessController extends Controller
         $members = $business->users;
         $invitations = Invitation::where('business_id', $business->id)->where('status', 'PENDING')->with('user')->get();
         $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
-        return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details'));
+        if(Auth::user()->plan_id == 3) $teamMembers = false;
+        else{
+            $allowedTeamMembers = Plan::findOrFail(Auth::user()->plan_id)->team_members;
+            $businesses = Auth::user()->businesses()->allRelatedIds(); 
+            $teamMembers = 1;
+            foreach ($businesses as $bus) {
+                $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
+                $teamMembers += count(Invitation::where('business_id' , $bus)
+                                ->where('status', 'PENDING')->get()) ;
+            } if($teamMembers >= $allowedTeamMembers) $teamMembers = true; else $teamMembers = false;
+        }
+        
+        return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details','teamMembers'));
     }
 
     public function addNewTeamMember(Request $request, Business $business)

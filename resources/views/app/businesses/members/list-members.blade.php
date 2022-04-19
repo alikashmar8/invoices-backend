@@ -39,7 +39,7 @@
                     </form>
                     @if($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
                     <div class="col-md-3">
-                        <button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#addMemberModal" type="button" >Add a new member</button>
+                        <a class="btn btn-primary btn-sm btn-block text-white @if(Auth::user()->plan_id < 3 && $teamMembers) goGem  " @else " data-toggle="modal" data-target="#addMemberModal" type="button" @endif >Add a new member</a>
                     </div>
                     @endif
 

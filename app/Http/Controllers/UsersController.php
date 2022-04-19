@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\InvoiceAttachment;
 use Illuminate\Http\Request;
 use App\Models\Invitation;
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\UserBusiness;
+use App\Models\Invoice; 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Notification;
 use Image;
@@ -19,14 +24,33 @@ class UsersController extends Controller
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
         $notifications = $user->notifications()->latest()->get();
-        $user->planName = Plan::findOrFail($user->plan_id)->name;
+        $user->plan = Plan::findOrFail($user->plan_id);
+
+        $userStorage = 0;
+        $teamMembers = 1;
+        $businesses =  $user->businesses()->allRelatedIds();
+        $businessesProfiles = count($businesses);
+        foreach ($businesses as $bus) {
+            $invoices = Invoice::where('business_id' , $bus)->get();
+            foreach($invoices as $inv){ 
+                $attachments = InvoiceAttachment::where('invoice_id' , $inv->id)->get();
+                foreach($attachments as $att){ 
+                    $userStorage += File::size(public_path($att->url));
+                }
+            }
+            $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
+            $teamMembers += count(Invitation::where('business_id' , $bus)
+                            ->where('status', 'PENDING')->get()) ;
+
+        }$userStorage = number_format((float) $userStorage / (1024*1024), 4, '.', ''); 
+
 
         if( request()->is('api/*')){
             //an api call
             return response()->json(['user' => $user , 'notifications' => $notifications] );
         }else{
             //a web call
-            return view('app.profile' , compact('user', 'notifications'));
+            return view('app.profile' , compact('user', 'notifications', 'userStorage', 'teamMembers', 'businessesProfiles'));
         }
     }
     public function edit(Request $request)

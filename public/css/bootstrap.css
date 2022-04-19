@@ -182,6 +182,124 @@ body {
   height: 40px
 }
 
+/*prof for plans*/
+
+.card-prof-basic {
+  border: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  /*cursor: pointer*/
+}
+
+.card-prof-basic:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #83ed65;
+  transform: scaleY(1);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-basic:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #189748;
+  transform: scaleY(0);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-basic:hover::after {
+  transform: scaleY(1)
+}
+
+
+.card-prof-gold {
+  border: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  /*cursor: pointer*/
+}
+
+.card-prof-gold:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #f9f06d;
+  transform: scaleY(1);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-gold:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #deaf24;
+  transform: scaleY(0);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-gold:hover::after {
+  transform: scaleY(1)
+}
+
+
+.card-prof-gem {
+  border: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  /*cursor: pointer*/
+}
+
+.card-prof-gem:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #d94298;
+  transform: scaleY(1);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-gem:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #9b4292;
+  transform: scaleY(0);
+  transition: all 0.5s;
+  transform-origin: bottom
+}
+
+.card-prof-gem:hover::after {
+  transform: scaleY(1)
+}
+
 /*notification in nav bar*/
 .widget-header {
   display: inline-block;

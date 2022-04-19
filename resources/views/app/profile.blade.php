@@ -15,7 +15,6 @@
                     <span class="bg-secondary p-1 px-4 rounded text-white">{{$user->name}}</span>
                     <h5 class="mt-2 mb-0">{{$user->email}}</h5>
                     <span>{{$user->phone_number}}</span> <br>
-                    <span class="{{$user->planName}}Text">{{$user->planName}} Plan</span>
                     <div class="px-4 mt-1">
                         <p class="fonts-prof">
                             @if(count(Auth::user()->businesses) > 0)
@@ -47,6 +46,40 @@
                             </form>
                         </button>
                         <button class="btn btn-primary px-4 ms-3" data-toggle="modal" data-target="#EditProfileForm">Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10">
+            <div class="card-prof-{{$user->plan->name}} p-3 py-4">
+                <div class="row text-center">
+                    
+                    <h2 class="{{$user->plan->name}}Text">{{$user->plan->name}} Plan</h2>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <h4> Storage </h4>
+                            <p>{{$userStorage}} MB / @if($user->plan->storage == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->storage}} GB <input type="range" class="form-range" min='0' max='1024' value='{{$userStorage}}' disabled> @endif </p>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card"> 
+                            <h4> Team Members </h4>
+                            <p>{{$teamMembers}} / @if($user->plan->team_members == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->team_members}} @endif</p>
+                        
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card"> 
+                            <h4> Businesses profiles </h4>
+                            <p>{{$businessesProfiles}} / @if($user->plan->businesses_profiles == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->businesses_profiles}} @endif</p>
+                             
+                        </div>
                     </div>
                 </div>
             </div>
