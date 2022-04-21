@@ -90,19 +90,23 @@
                             <div class="row p-2" id="filterInvoices">
                                 <div class="col-md-4">
                                     <label>Starting date:</label>
-                                    <input type="date" id='startingDate' class="form-control" >
+                                    <input type="date" id='startingDate' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
                                     <label>Ending date:</label>
                                     <input type="date" id='endingDate' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
-                                    <a class='btn btn-success text-white form-control ' onclick="setFilterInvoices()" >Set </a>
+                                    <a class='btn btn-success text-white form-control ' onclick="setFilterInvoices()">Set
+                                    </a>
 
-                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterInvoices()" >Clear </a>
+                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterInvoices()">Clear
+                                    </a>
                                 </div>
                             </div>
-                            <script > var invoicesList = []; </script>
+                            <script>
+                                var invoicesList = [];
+                            </script>
                         </div>
                         <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                             <thead>
@@ -168,7 +172,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{ $invoice->title }} # {{ $invoice->reference_number }}
+                                                            {{ $invoice->id }} # {{ $invoice->reference_number }}
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -176,7 +180,17 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body" id="output_content">
+                                                        <p><b>Title:</b> {{ $invoice->title }} </p>
                                                         <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
+                                                        </p>
+                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
+                                                                %
+                                                            @else
+                                                                $
+                                                            @endif
+                                                        </p>
+                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
+                                                            <small>AUD</small>
                                                         </p>
                                                         <p><b>Status:</b>
                                                             @if ($invoice->is_paid)
@@ -198,17 +212,9 @@
                                                         <p><b>Added by:</b> <img
                                                                 src="{{ asset(App\Models\User::findOrFail($invoice->created_by)->first()->profile_picture) }}"
                                                                 class="rounded-circle" style='max-width: 30px'>
-                                                            {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
+                                                              {{ $invoice->createdBy->name }}
                                                         </p>
-                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
-                                                                %
-                                                            @else
-                                                                $
-                                                            @endif
-                                                        </p>
-                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small>
-                                                        </p>
+
                                                         <p><b>Added on:</b> {{ $invoice->created_at }} </p>
                                                         @if ($invoice->attachments)
                                                             <p><b>Attachments</b></p>
@@ -222,15 +228,16 @@
 
                                                                     <div
                                                                         style="position:absolute; width:100%; bottom:0; background:transparent; border-radius: 0 0 7px 7px;">
-                                                                        <div class="row w-100 m-0" style="
-                                                                                            display: block;
-                                                                                            width: 100%;
-                                                                                            overflow: hidden;
-                                                                                            white-space: nowrap;
-                                                                                            text-overflow: ellipsis;
-                                                                                            height: 24px;
-                                                                                            font-size: smaller;
-                                                                                            background-color: #a6a6a6a6;">
+                                                                        <div class="row w-100 m-0"
+                                                                            style="
+                                                                                                                display: block;
+                                                                                                                width: 100%;
+                                                                                                                overflow: hidden;
+                                                                                                                white-space: nowrap;
+                                                                                                                text-overflow: ellipsis;
+                                                                                                                height: 24px;
+                                                                                                                font-size: smaller;
+                                                                                                                background-color: #a6a6a6a6;">
                                                                             {{ $attach->name }}
                                                                         </div>
                                                                         <div id='doc-{{ $loop->index + 1 }}'
@@ -258,7 +265,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <script> invoicesList.push(['{{$invoice->id}}','{{$invoice->created_at}}']); </script>
+                                        <script>
+                                            invoicesList.push(['{{ $invoice->id }}', '{{ $invoice->created_at }}']);
+                                        </script>
                                     @endforeach
                                 @else
                                     <tr>
@@ -278,19 +287,22 @@
                             <div class="row p-2" id="filterBills">
                                 <div class="col-md-4">
                                     <label>Starting date:</label>
-                                    <input type="date" id='startingDateB' class="form-control" >
+                                    <input type="date" id='startingDateB' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
                                     <label>Ending date:</label>
                                     <input type="date" id='endingDateB' class="form-control">
                                 </div>
                                 <div class="col-md-4 ">
-                                    <a class='btn btn-success text-white form-control ' onclick="setFilterBills()" >Set </a>
+                                    <a class='btn btn-success text-white form-control ' onclick="setFilterBills()">Set </a>
 
-                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterBills()" >Clear </a>
+                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterBills()">Clear
+                                    </a>
                                 </div>
                             </div>
-                            <script > var billsList = []; </script>
+                            <script>
+                                var billsList = [];
+                            </script>
                         </div>
                         <table class='table table-striped table-hover table-responsive-sm w-100' id='myDataTable1'>
                             <thead>
@@ -346,7 +358,7 @@
                                                 @endif
 
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
-                                                    href="/generate/{{ $invoice->id }}">
+                                                    href="/bills/{{ $invoice->id }}/generate/pdf">
                                                     <i class="fa fa-file-export text-primary"></i>
                                                 </a>
                                             </td>
@@ -358,7 +370,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{ $invoice->title }} # {{ $invoice->reference_number }}
+                                                            {{ $invoice->id }} # {{ $invoice->reference_number }}
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -366,7 +378,18 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body" id="output_content">
+
+                                                        <p><b>Title:</b> {{ $invoice->title }}</p>
                                                         <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
+                                                        </p>
+                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
+                                                                %
+                                                            @else
+                                                                $
+                                                            @endif
+                                                        </p>
+                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
+                                                            <small>AUD</small>
                                                         </p>
                                                         <p><b>Status:</b>
                                                             @if ($invoice->is_paid)
@@ -388,16 +411,7 @@
                                                         <p><b>Added by:</b> <img
                                                                 src="{{ asset(App\Models\User::findOrFail($invoice->created_by)->first()->profile_picture) }}"
                                                                 class="rounded-circle" style='max-width: 30px'>
-                                                            {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
-                                                        </p>
-                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
-                                                                %
-                                                            @else
-                                                                $
-                                                            @endif
-                                                        </p>
-                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small>
+                                                            {{ $invoice->createdBy->name }}
                                                         </p>
                                                         <p><b>Added on:</b> {{ $invoice->created_at }} </p>
                                                         @if ($invoice->attachments)
@@ -429,17 +443,16 @@
                                                         @endif
                                                     </div>
                                                     <div class="modal-footer">
-
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close</button>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <script> billsList.push(['{{$invoice->id}}','{{$invoice->created_at}}']); </script>
+                                        <script>
+                                            billsList.push(['{{ $invoice->id }}', '{{ $invoice->created_at }}']);
+                                        </script>
                                     @endforeach
-
                                 @else
                                     <tr>
                                         <td colspan="7" class="text-danger">No bills to show!</td>
@@ -522,48 +535,68 @@
 
         var filterInvoice = false;
         document.getElementById('filterInvoices').style.display = 'none';
-        function showFilterInvoices(){
-            if(!filterInvoice) {document.getElementById('filterInvoices').style.display = 'flex'; filterInvoice = true;}
-            else {document.getElementById('filterInvoices').style.display = 'none';filterInvoice = false;}
+
+        function showFilterInvoices() {
+            if (!filterInvoice) {
+                document.getElementById('filterInvoices').style.display = 'flex';
+                filterInvoice = true;
+            } else {
+                document.getElementById('filterInvoices').style.display = 'none';
+                filterInvoice = false;
+            }
         }
-        function setFilterInvoices(){
+
+        function setFilterInvoices() {
             invoicesList.forEach(setFunction);
         }
+
         function setFunction(item, index) {
             clearFilterInvoices();
             var filterDate = new Date(item[1]);
             var endingDate = new Date(document.getElementById('endingDate').value);
             var startingDate = new Date(document.getElementById('startingDate').value);
-            if(filterDate.getTime() < startingDate.getTime() ) document.getElementById(item[0]).style.display = 'none';
-            if(filterDate.getTime() > endingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
+            if (filterDate.getTime() < startingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
+            if (filterDate.getTime() > endingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
         }
-        function clearFilterInvoices(){
+
+        function clearFilterInvoices() {
             invoicesList.forEach(clearFunction);
         }
+
         function clearFunction(item, index) {
             document.getElementById(item[0]).style.display = 'table-row';
         }
 
         var filterBill = false;
         document.getElementById('filterBills').style.display = 'none';
-        function showFilterBills(){
-            if(!filterBill) {document.getElementById('filterBills').style.display = 'flex'; filterBill = true;}
-            else {document.getElementById('filterBills').style.display = 'none';filterBill = false;}
+
+        function showFilterBills() {
+            if (!filterBill) {
+                document.getElementById('filterBills').style.display = 'flex';
+                filterBill = true;
+            } else {
+                document.getElementById('filterBills').style.display = 'none';
+                filterBill = false;
+            }
         }
-        function setFilterBills(){
+
+        function setFilterBills() {
             billsList.forEach(setFunctionB);
         }
+
         function setFunctionB(itemB, index) {
             clearFilterBills();
             var filterDateB = new Date(itemB[1]);
             var endingDateB = new Date(document.getElementById('endingDateB').value);
             var startingDateB = new Date(document.getElementById('startingDateB').value);
-            if(filterDateB.getTime() < startingDateB.getTime() ) document.getElementById(itemB[0]).style.display = 'none';
-            if(filterDateB.getTime() > endingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
+            if (filterDateB.getTime() < startingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
+            if (filterDateB.getTime() > endingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
         }
-        function clearFilterBills(){
+
+        function clearFilterBills() {
             billsList.forEach(clearFunctionB);
         }
+
         function clearFunctionB(itemB, index) {
             document.getElementById(itemB[0]).style.display = 'table-row';
         }
@@ -598,7 +631,7 @@
 
                     <a type="submit" class="btn btn-danger text-white"
                         onclick="event.preventDefault();
-                                                                            document.getElementById('leave_business_form').submit();">Confirm</a>
+                                                                                                document.getElementById('leave_business_form').submit();">Confirm</a>
 
                 </div>
 

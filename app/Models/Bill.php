@@ -37,4 +37,14 @@ class Bill extends Model
         return $this->belongsTo(Contact::class);
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo('App\Models\User', 'created_by');
+    }
+
+    public function business()
+    {
+        return $this->belongsTo('App\Models\Business');
+    }
+
 }

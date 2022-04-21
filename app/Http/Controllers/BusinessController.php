@@ -67,6 +67,11 @@ class BusinessController extends Controller
      */
     public function store(Request $request)
     {
+        $businesses = Auth::user()->businesses->count();
+        // TODO: we will do it this way after we agree on structure
+        // if ($businesses >= Auth::user()->plan->max_businesses_number) {
+        //     return response()->json(['error' => 'You have reached the maximum number of businesses for your plan.']);
+        // }
         if(Auth::user()->plan_id < 3) return redirect('/plan/3');
         $business = new Business();
         $business->name = $request->name;
@@ -208,7 +213,7 @@ class BusinessController extends Controller
         if(Auth::user()->plan_id == 3) $teamMembers = false;
         else{
             $allowedTeamMembers = Plan::findOrFail(Auth::user()->plan_id)->team_members;
-            $businesses = Auth::user()->businesses()->allRelatedIds(); 
+            $businesses = Auth::user()->businesses()->allRelatedIds();
             $teamMembers = 1;
             foreach ($businesses as $bus) {
                 $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
@@ -216,7 +221,7 @@ class BusinessController extends Controller
                                 ->where('status', 'PENDING')->get()) ;
             } if($teamMembers >= $allowedTeamMembers) $teamMembers = true; else $teamMembers = false;
         }
-        
+
         return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details','teamMembers'));
     }
 

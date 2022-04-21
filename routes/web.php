@@ -55,6 +55,7 @@ Route::get('/invoices/exportOut/{id}', [App\Http\Controllers\InvoiceController::
 
 Route::get('/bills/create', [App\Http\Controllers\BillsController::class, 'create'])->middleware('auth');
 Route::post('/bills', [App\Http\Controllers\BillsController::class, 'store'])->middleware('auth')->name('bills.store');
+Route::get('/bills/{bill}/generate/pdf', [App\Http\Controllers\BillsController::class, 'generatePDF']);
 
 Route::get('/contacts/business/{business}', [App\Http\Controllers\ContactsController::class, 'index'])->name('contacts.index')->middleware('auth');
 Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'store'])->name('contacts.store')->middleware('auth');
@@ -70,4 +71,3 @@ Route::get('/plan-{id}', [App\Http\Controllers\UsersController::class, 'register
 Route::post('/transfer', [App\Http\Controllers\UsersController::class, 'transfer'])->middleware('auth')->name('transfer');
 
 //pdf
-Route::get('/generate/{id}', [App\Http\Controllers\InvoiceController::class, 'generatePDF']);
