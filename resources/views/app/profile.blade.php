@@ -63,21 +63,21 @@
                     <div class="col-md-4">
                         <div class="card">
                             <h4> Storage </h4>
-                            <p>{{$userStorage}} MB / @if($user->plan->storage == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->storage}} GB <input type="range" class="form-range" min='0' max='1024' value='{{$userStorage}}' disabled> @endif </p>
+                            <p>{{$userStorage}} / @if($user->plan->number_docs == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->number_docs}}  <input type="range" class="form-range" min='0' max='{{$user->plan->number_docs}}' value='{{$userStorage}}' disabled> @endif </p>
                             
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card"> 
                             <h4> Team Members </h4>
-                            <p>{{$teamMembers}} / @if($user->plan->team_members == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->team_members}} @endif</p>
+                            <p>{{$teamMembers}} / @if($user->plan->team_members == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->team_members}} <input type="range" class="form-range" min='0' max='{{$user->plan->team_members}}' value='{{$teamMembers}}' disabled> @endif</p>
                         
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card"> 
                             <h4> Businesses profiles </h4>
-                            <p>{{$businessesProfiles}} / @if($user->plan->businesses_profiles == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->businesses_profiles}} @endif</p>
+                            <p>{{$businessesProfiles}} / @if($user->plan->businesses_profiles == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->businesses_profiles}} <input type="range" class="form-range" min='0' max='{{$user->plan->businesses_profiles}}' value='{{$businessesProfiles}}' disabled> @endif</p>
                              
                         </div>
                     </div>

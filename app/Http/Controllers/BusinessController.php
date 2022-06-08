@@ -72,7 +72,7 @@ class BusinessController extends Controller
         // if ($businesses >= Auth::user()->plan->max_businesses_number) {
         //     return response()->json(['error' => 'You have reached the maximum number of businesses for your plan.']);
         // }
-        if(Auth::user()->plan_id < 3) return redirect('/plan/3');
+        if(Auth::user()->plan_id < 3 && $businesses >= 1) return redirect('/plan/3');
         $business = new Business();
         $business->name = $request->name;
         $business->is_active = 1;

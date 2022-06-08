@@ -35,14 +35,15 @@ class UsersController extends Controller
             foreach($invoices as $inv){ 
                 $attachments = InvoiceAttachment::where('invoice_id' , $inv->id)->get();
                 foreach($attachments as $att){ 
-                    $userStorage += File::size(public_path($att->url));
+                    $userStorage += 1;
                 }
             }
+            if( $businesses->last() != $bus) $teamMembers -=1;
             $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
             $teamMembers += count(Invitation::where('business_id' , $bus)
                             ->where('status', 'PENDING')->get()) ;
 
-        }$userStorage = number_format((float) $userStorage / (1024*1024), 4, '.', ''); 
+        }
 
 
         if( request()->is('api/*')){

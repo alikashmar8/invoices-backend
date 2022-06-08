@@ -18,9 +18,9 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->longText('title')->default('Invoice');
-            $table->double('total')->default(0);
-            $table->double('extra_amount')->default(0)->nullable();
-            $table->double('discount')->default(0)->nullable();
+            $table->float('total')->default(0);
+            $table->float('gst')->default(0)->nullable(); 
+            $table->float('discount')->default(0)->nullable(); 
             $table->enum('discount_type', DiscountType::getValues())->default(DiscountType::AMOUNT);
             $table->enum('currency', CurrencyEnum::getValues())->default(CurrencyEnum::AUD);
             $table->longText('reference_number')->nullable()->unique();

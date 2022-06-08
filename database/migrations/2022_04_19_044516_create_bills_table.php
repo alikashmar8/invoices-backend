@@ -18,9 +18,9 @@ class CreateBillsTable extends Migration
             $table->string('id')->primary();
             $table->string('title');
             $table->longText('description')->nullable();
-            $table->integer('total')->default(0);
-            $table->integer('extra_amount')->default(0);
-            $table->integer('discount')->default(0);
+            $table->float('total')->default(0);
+            $table->float('gst')->default(0); 
+            $table->float('discount')->default(0);
             $table->enum('discount_type', DiscountType::getValues())->default(DiscountType::AMOUNT);
             $table->string('reference_number')->nullable();
             $table->boolean('is_paid')->default(false);
