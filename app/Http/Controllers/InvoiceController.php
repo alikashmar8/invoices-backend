@@ -34,7 +34,7 @@ class InvoiceController extends Controller
         if (count($businesses) < 1) {
             return redirect('/')->with('messageDgr', 'You must create a business first');
         }
-        return view('app.businesses.invoices.create-in-invoice', compact('businesses'));
+        return view('app.businesses.invoices.create-invoice', compact('businesses'));
     }
 
     /**
@@ -48,7 +48,7 @@ class InvoiceController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
             'total' => 'required|numeric|min:0,max:9999999999',
-            'extra_amount' => 'numeric|min:0,max:9999999999|nullable',
+            'gst' => 'required|numeric|min:0,max:9999999999', 
             'discount' => 'numeric|min:0,max:9999999999|nullable',
             'reference_number' => 'max:255',
             'payment_date' => 'required',
@@ -70,6 +70,7 @@ class InvoiceController extends Controller
         $invoice = new Invoice();
         $invoice->title = $request->title;
         $invoice->total = $request->total;
+        $invoice->gst = $request->gst;
         if (isset($request->is_paid)) {
             $invoice->is_paid = 1;
             if (isset($request->payment_date)) {
@@ -84,8 +85,7 @@ class InvoiceController extends Controller
         $invoice->reference_number = $request->reference_number;
         $invoice->notes = $request->notes;
         $invoice->discount = $request->discount;
-        $invoice->discount_type = $request->discount_type;
-        $invoice->extra_amount = $request->extra_amount;
+        $invoice->discount_type = $request->discount_type; 
         $invoice->created_by = Auth::user()->id;
         $invoice->business_id = $request->business_id;
         $invoice->save();
@@ -140,7 +140,7 @@ class InvoiceController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
             'total' => 'required|numeric|min:0,max:9999999999',
-            'extra_amount' => 'numeric|min:0,max:9999999999|nullable',
+            'gst' => 'required|numeric|min:0,max:9999999999', 
             'discount' => 'numeric|min:0,max:9999999999|nullable',
             'reference_number' => 'max:255',
             'payment_date' => 'required',
@@ -161,6 +161,7 @@ class InvoiceController extends Controller
         }
         $invoice->title = $request->title;
         $invoice->total = $request->total;
+        $invoice->gst = $request->gst;
         if (isset($request->is_paid)) {
             $invoice->is_paid = 1;
             if (isset($request->payment_date)) {
@@ -175,8 +176,7 @@ class InvoiceController extends Controller
         $invoice->reference_number = $request->reference_number;
         $invoice->notes = $request->notes;
         $invoice->discount = $request->discount;
-        $invoice->discount_type = $request->discount_type;
-        $invoice->extra_amount = $request->extra_amount;
+        $invoice->discount_type = $request->discount_type; 
         $invoice->business_id = $request->business_id;
         $invoice->save();
         if ($request->hasFile('attachments')) {

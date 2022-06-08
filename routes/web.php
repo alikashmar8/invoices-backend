@@ -60,7 +60,9 @@ Route::get('/bills/{bill}/generate/pdf', [App\Http\Controllers\BillsController::
 Route::get('/contacts/business/{business}', [App\Http\Controllers\ContactsController::class, 'index'])->name('contacts.index')->middleware('auth');
 Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'store'])->name('contacts.store')->middleware('auth');
 Route::delete('/contacts/{contact}', [App\Http\Controllers\ContactsController::class, 'destroy'])->name('contacts.destroy')->middleware('auth');
-Route::get('/contacts/create', [App\Http\Controllers\ContactsController::class, 'create'])->name('contacts.create')->middleware('auth');
+Route::get('/contacts/create/{business}', [App\Http\Controllers\ContactsController::class, 'create'])->name('contacts.create')->middleware('auth');
+Route::get('/contacts/edit/{id}', [App\Http\Controllers\ContactsController::class, 'edit'])->name('contacts.edit')->middleware('auth');
+Route::post('/contacts/update', [App\Http\Controllers\ContactsController::class, 'update'])->name('contacts.update')->middleware('auth');
 
 
 Route::post('/memberCheckerIfExist', [App\Http\Controllers\UsersController::class, 'memberCheckerIfExist'])->middleware('auth')->name('memberCheckerIfExist');

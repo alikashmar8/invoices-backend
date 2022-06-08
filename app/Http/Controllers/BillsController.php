@@ -18,7 +18,8 @@ class BillsController extends Controller
         if (count($businesses) < 1) {
             return redirect('/')->with('messageDgr', 'You must create a business first');
         }
-        return view('app.bills.create', compact('businesses'));
+        $contacts = Contact::where('user_id',Auth::user()->id);
+        return view('app.businesses.bills.create-bill', compact('businesses', 'contacts'));
     }
 
     public function store(Request $request)
@@ -26,6 +27,7 @@ class BillsController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
             'total' => 'required|numeric|min:0,max:9999999999',
+            'gst' => 'required|numeric|min:0,max:9999999999',
             'payment_date' => 'required',
             'notes' => 'max:255',
             'business_id' => 'required|exists:businesses,id',
@@ -42,6 +44,7 @@ class BillsController extends Controller
         $bill = new Bill();
         $bill->title = $request->title;
         $bill->total = $request->total;
+        $bill->gst = $request->gst; 
         if (isset($request->is_paid)) {
             $bill->is_paid = 1;
             if (isset($request->payment_date)) {
@@ -56,18 +59,22 @@ class BillsController extends Controller
         $bill->notes = $request->notes;
         $bill->created_by = Auth::user()->id;
         $bill->business_id = $request->business_id;
-        $bill->contact_id = $request->contact_id;
+        //$bill->save();
+
+        if($request->contact_id)    $bill->contact_id = $request->contact_id;
+        else {
+            $contacts = new Contact();
+            $contacts->name	= $request->contact_name;
+            $contacts->email = $request->contact_email;
+            $contacts->phone_number	= $request->contact_phone;
+            $contacts->abn	= $request->contact_abn;
+            $contacts->address = $request->contact_address;
+            $contacts->user_id = Auth::user()->id;
+            $contacts->save();
+            $bill->contact_id = $contacts->id;
+        }
         $bill->save();
-
-
-        // $contacts = new Contact();
-        // $contacts->name	= $request->name;
-        // $contacts->email = $request->email;
-        // $contacts->phone_number	= $request->phone;
-        // $contacts->abn	= $request->abn;
-        // $contacts->address = $request->address;
-        // $contacts->bill_id = $bill->id;
-        // $contacts->save();
+        
 
         return redirect('businesses/' . $request->business_id);
     }

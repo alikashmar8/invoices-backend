@@ -14,18 +14,18 @@ class ContactsController extends Controller
 
     public function index(Business $business)
     {
-        $contacts = $business->contacts()->get();
-        return view('app.contacts.index', compact('contacts'));
+        $contacts = Contact::where('user_id' , Auth::user()->id)->get();
+        return view('app.businesses.bills.contacts.index', compact('contacts','business'));
     }
 
-    public function create()
+    public function create(Business $business)
     {
         Log::info(Contact::all()->count() . ' created a new contact');
         $businesses = Auth::user()->businesses;
         if (count($businesses) < 1) {
             return redirect('/')->with('messageDgr', 'You must create a business first');
         }
-        return view('app.contacts.create', compact('businesses'));
+        return view('app.businesses.bills.contacts.create', compact('business'));
     }
 
     public function store(Request $request)
@@ -33,12 +33,11 @@ class ContactsController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
-            'email' => 'email|max:255',
+            /*'email' => 'email|max:255',
             'phone_number' => 'max:255',
             'abn' => 'max:255',
             'address' => 'max:255',
-            'notes' => 'max:255',
-            'business_id' => 'required|exists:businesses,id',
+            'notes' => 'max:255', */
         ]);
 
         if ($validator->fails()) {
@@ -58,10 +57,35 @@ class ContactsController extends Controller
         $contact->abn = $request->abn;
         $contact->address = $request->address;
         $contact->notes = $request->notes;
-        $contact->business_id = $request->business_id;
+        $contact->user_id =  Auth::user()->id;
         $contact->save();
 
-        return redirect()->back()->with('messageScc', 'Contact created successfully');
+        return redirect('/contacts/business/'.$request->business_id)->with('messageSuc', 'Contact created successfully');
+    }
+    
+    public function edit($id){
+        $businesses = Auth::user()->businesses;
+        if (count($businesses) < 1) {
+            return redirect('/')->with('messageDgr', 'You must create a business first');
+        }
+        
+        $contact = Contact::findOrFail($id);
+        return view('app.businesses.bills.contacts.edit', compact('contact'));
+         
+    }
+    public function update(Request $request){
+        $contact = Contact::findOrFail($request->id);
+        $contact->name = $request->name;
+        $contact->email = $request->email;
+        $contact->phone_number = $request->phone;
+        $contact->abn = $request->abn;
+        $contact->address = $request->address;
+        $contact->notes = $request->notes; 
+        $contact->save();
+
+
+        return redirect('/contacts/business/1')->with('messageScc', 'Contact edited successfully');
+
     }
 
     public function destroy(Contact $contact)

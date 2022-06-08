@@ -21,8 +21,8 @@ class CreateContactsTable extends Migration
             $table->string('abn')->nullable();
             $table->longText('address')->nullable();
             $table->longText('notes')->nullable();
-            $table->unsignedBigInteger('business_id');
-            $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

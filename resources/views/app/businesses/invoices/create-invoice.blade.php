@@ -59,6 +59,14 @@
                             id="invoice-amount" min="0" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="total" class="required">
+                            Total GST <small>AUD</small>:
+                        </label>
+                        <input type="number" name="gst" value="{{ old('gst') }}" class="form-control"
+                            id="invoice-gst" min="0" required>
+                    </div>
+
                     <div class="form-check form-switch">
                         <style>
                             .form-check-input:checked {
@@ -100,11 +108,7 @@
                 </div>
                 <div class="advancedContent " style='overflow: hidden; height:0px'>
                     <div class="card-body  ">
-                        <div class="form-group">
-                            <label for="extra_amount">Extra Amounts <small>AUD</small>:</label>
-                            <input type="number" name="extra_amount" value="{{ old('extra_amount', 0) }}"
-                                class="form-control" min="0" id="extra_amount">
-                        </div>
+                        
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">

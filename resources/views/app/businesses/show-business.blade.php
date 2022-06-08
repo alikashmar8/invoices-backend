@@ -183,14 +183,15 @@
                                                         <p><b>Title:</b> {{ $invoice->title }} </p>
                                                         <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
                                                         </p>
+                                                        
+                                                        <p><b>GST:</b> ${{ $invoice->gst }}
+                                                            <small>AUD</small>
+                                                        </p>
                                                         <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
                                                                 %
                                                             @else
                                                                 $
                                                             @endif
-                                                        </p>
-                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small>
                                                         </p>
                                                         <p><b>Status:</b>
                                                             @if ($invoice->is_paid)
