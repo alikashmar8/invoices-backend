@@ -34,6 +34,6 @@ class CreateContactsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_contacts');
+        Schema::dropIfExists('contacts');
     }
 }
