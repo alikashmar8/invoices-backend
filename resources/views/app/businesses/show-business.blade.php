@@ -319,59 +319,59 @@
 
                             <tbody>
                                 @if (count($bills))
-                                    @foreach ($bills as $invoice)
-                                        <tr id="{{ $invoice->id }}">
-                                            <td>{{ $invoice->id }}</td>
-                                            <td>{{ $invoice->title }}</td>
-                                            <td>{{ $invoice->total }}</td>
+                                    @foreach ($bills as $bill)
+                                        <tr id="{{ $bill->id }}">
+                                            <td>{{ $bill->id }}</td>
+                                            <td>{{ $bill->title }}</td>
+                                            <td>{{ $bill->total }}</td>
                                             <td>
-                                                @if ($invoice->is_paid)
+                                                @if ($bill->is_paid)
                                                     <a class='text-success border border-success btn-outline-sm '
                                                         style='white-space: nowrap;'>Paid
-                                                        {{ $invoice->payment_date }}</a>
+                                                        {{ $bill->payment_date }}</a>
                                                 @else
                                                     <a class='text-warning border border-warning btn-outline-sm'
                                                         style='white-space: nowrap;'>Not Paid - Due:
-                                                        {{ $invoice->due_date }} </a>
+                                                        {{ $bill->due_date }} </a>
                                                 @endif
                                             </td>
-                                            <td><img src="{{ asset($invoice->createdBy->profile_picture) }}"
+                                            <td><img src="{{ asset($bill->createdBy->profile_picture) }}"
                                                     class="rounded-circle" style='max-width: 30px'>
-                                                {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
+                                                {{ App\Models\User::findOrFail($bill->created_by)->first()->name }}
                                             </td>
                                             <td>
                                                 <button type="button" class="btn col-md-2 p-0 mx-1"
-                                                    data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
+                                                    data-target="#showModal-{{ $bill->id }}" data-toggle="modal">
                                                     <i class="fa fa-expand text-primary" aria-hidden="true"></i>
                                                 </button>
 
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
-                                                    href="/invoices/{{ $invoice->id }}/edit">
+                                                    href="/bills/{{ $bill->id }}/edit">
                                                     <i class="fa fa-edit text-primary"></i>
                                                 </a>
 
                                                 @if ($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
                                                     <button type="button" class="btn col-md-2 p-0 mx-1"
-                                                        data-target="#deleteModal-{{ $invoice->id }}"
+                                                        data-target="#deleteModal-{{ $bill->id }}"
                                                         data-toggle="modal">
                                                         <i class='fa fa-trash text-primary'></i>
                                                     </button>
                                                 @endif
 
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
-                                                    href="/bills/{{ $invoice->id }}/generate/pdf">
+                                                    href="/bills/{{ $bill->id }}/generate/pdf">
                                                     <i class="fa fa-file-export text-primary"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        <!-- show invoice modal -->
-                                        <div class="modal fade" id="showModal-{{ $invoice->id }}" tabindex="1"
+                                        <!-- show bill modal -->
+                                        <div class="modal fade" id="showModal-{{ $bill->id }}" tabindex="1"
                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class=" modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{ $invoice->id }} # {{ $invoice->reference_number }}
+                                                            {{ $bill->id }} 
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -380,68 +380,42 @@
                                                     </div>
                                                     <div class="modal-body" id="output_content">
 
-                                                        <p><b>Title:</b> {{ $invoice->title }}</p>
-                                                        <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
+                                                        <p><b>Title:</b> {{ $bill->title }}</p>
+                                                        <p><b>Total amount:</b> ${{ $bill->total }} <small>AUD</small>
                                                         </p>
-                                                        <p><b>Discount:</b> {{ $invoice->discount }} @if ($invoice->discount_type == App\Enums\DiscountType::PERCENTAGE)
+                                                        <p><b>GST:</b> ${{ $bill->gst }}
+                                                            <small>AUD</small>
+                                                        </p>
+                                                        <p><b>Discount:</b> {{ $bill->discount }} @if ($bill->discount_type == App\Enums\DiscountType::PERCENTAGE)
                                                                 %
                                                             @else
                                                                 $
                                                             @endif
                                                         </p>
-                                                        <p><b>Extra amount:</b> ${{ $invoice->extra_amount }}
-                                                            <small>AUD</small>
-                                                        </p>
                                                         <p><b>Status:</b>
-                                                            @if ($invoice->is_paid)
-                                                                Paid at {{ $invoice->payment_date }}
+                                                            @if ($bill->is_paid)
+                                                                Paid at {{ $bill->payment_date }}
                                                             @else
                                                                 Not paid
                                                             @endif
                                                         </p>
                                                         <p><b>Due date:</b>
-                                                            @if ($invoice->due_date)
-                                                                {{ $invoice->due_date }}
+                                                            @if ($bill->due_date)
+                                                                {{ $bill->due_date }}
                                                             @else
                                                                 N/A
                                                             @endif
                                                         </p>
                                                         <p><b>Notes:</b>
-                                                        <p style='white-space: pre-line;'>{{ $invoice->notes }}</p>
+                                                        <p style='white-space: pre-line;'>{{ $bill->notes }}</p>
                                                         </p>
                                                         <p><b>Added by:</b> <img
-                                                                src="{{ asset(App\Models\User::findOrFail($invoice->created_by)->first()->profile_picture) }}"
+                                                                src="{{ asset(App\Models\User::findOrFail($bill->created_by)->first()->profile_picture) }}"
                                                                 class="rounded-circle" style='max-width: 30px'>
-                                                            {{ $invoice->createdBy->name }}
+                                                            {{ $bill->createdBy->name }}
                                                         </p>
-                                                        <p><b>Added on:</b> {{ $invoice->created_at }} </p>
-                                                        @if ($invoice->attachments)
-                                                            <p><b>Attachments</b></p>
-                                                            @foreach ($invoice->attachments as $attach)
-                                                                <!--a href="{{-- asset($attach->url) --}}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a-->
-                                                                {{-- TODO:  design --}}
-                                                                <div
-                                                                    style='position:relative; display: inline-block; width:200px; height:150px; border:1px solid #ff556e;border-radius: 7px;'>
-                                                                    <embed src="{{ asset($attach->url) }}"
-                                                                        style='object-fit:cover ; width:100%; height:auto'>
-                                                                    <div
-                                                                        style="position:absolute; width:100%; bottom:0; background:transparent ;border-radius: 7px;">
-                                                                        {{-- Remove name if you want --}}
-                                                                        <small>{{ $attach->name }}</small>
-                                                                        <a class="btn btn-info "
-                                                                            href='{{ asset($attach->url) }}'
-                                                                            target="blank"> <small> Open <i
-                                                                                    class="fa fa-folder-open"></i>
-                                                                            </small></a>
-                                                                        <a class="btn btn-info "
-                                                                            href='{{ asset($attach->url) }}' download>
-                                                                            <small> Download <i
-                                                                                    class="fa fa-file-download"></i>
-                                                                            </small></a>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
+                                                        <p><b>Added on:</b> {{ $bill->created_at }} </p>
+                                                         
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -451,7 +425,7 @@
                                             </div>
                                         </div>
                                         <script>
-                                            billsList.push(['{{ $invoice->id }}', '{{ $invoice->created_at }}']);
+                                            billsList.push(['{{ $bill->id }}', '{{ $bill->created_at }}']);
                                         </script>
                                     @endforeach
                                 @else
@@ -601,6 +575,10 @@
         function clearFunctionB(itemB, index) {
             document.getElementById(itemB[0]).style.display = 'table-row';
         }
+        @if(session()->has('msg')) 
+
+        getOutgoing();
+        @endif
     </script>
     <!-- Leave business modal -->
     <div class="modal fade" id="leave_business_modal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"

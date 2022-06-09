@@ -159,6 +159,9 @@ class BusinessController extends Controller
     public function update(Request $request, Business $business)
     {
         $business->name = $request->name;
+        $business->abn = $request->abn;
+        $business->address = $request->address;
+        $business->payment_method = $request->payment_method;
 
         if (isset($request->logo)) {
             $image = $request->file('logo');

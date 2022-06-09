@@ -106,7 +106,7 @@
                             <label for="contact_id">Select Contact:</label>
                             <select name="contact_id" id="contact_id" onchange="hello(this)" class="form-control">
                                 <option value=0 >Create new </option> 
-                                @forEach($contacts as $contact)
+                                @foreach($contacts as $contact)
                                     <option value={{$contact->id}}>{{$contact->name}} </option>
                                 @endforeach 
                             </select>

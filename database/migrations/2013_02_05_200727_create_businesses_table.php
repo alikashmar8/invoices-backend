@@ -21,6 +21,7 @@ class CreateBusinessesTable extends Migration
             $table->string('address')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('logo')->nullable();
+            $table->longText('payment_method')->nullable();
             $table->timestamps();
         });
     }

@@ -13,10 +13,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/pdf', function () {
+    $bill = App\Models\Bill::where('business_id' , 1 )->first();
+    $data = [
+        'mainLogo' => 'images/logo.png',
+        'clientName' => $bill->contact->name,
+        'clientEmail' => $bill->contact->email,
+        'clientPhone' => $bill->contact->phone_number,
+        'clientABN' => $bill->contact->abn,
+        'clientAddress' => $bill->contact->address,
+        'businessLogo' => $bill->business->logo,
+        'businessName' => $bill->business->name,
+        'businessABN' => $bill->business->abn,
+        'businessAddress' => $bill->business->address,
+        'payment_method' => $bill->business->payment_method,
+        'id' => $bill->id,
+        'title' => $bill->title,
+        'total' => $bill->total,
+        'GST' => $bill->gst,
+        'amount' =>  $bill->total + $bill->gst,
+        'is_paid' => $bill->is_paid,
+        'due_date' => $bill->due_date,
+        'payment_date' => $bill->payment_date,
+        'notes' => $bill->notes,
+        'created_at' => Carbon\Carbon::parse($bill->created_at)->format('l jS \\of F Y')
+    ];
+    $pdf = Barryvdh\DomPDF\Facade\Pdf::loadView('app.businesses.bills.pdfs.bill-pdf-view', $data);
+    Storage::put('public/pdf/'. $bill->id . '.pdf', $pdf->output());
+    return $pdf->download($bill->id . '.pdf');
     return view('welcome');
 });
 
+Route::get('/', function () {
+    return view('welcome');
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -55,6 +85,8 @@ Route::get('/invoices/exportOut/{id}', [App\Http\Controllers\InvoiceController::
 
 Route::get('/bills/create', [App\Http\Controllers\BillsController::class, 'create'])->middleware('auth');
 Route::post('/bills', [App\Http\Controllers\BillsController::class, 'store'])->middleware('auth')->name('bills.store');
+Route::get('/bills/{bill}/edit', [App\Http\Controllers\BillsController::class, 'edit'])->middleware('auth');
+Route::post('/bills/update', [App\Http\Controllers\BillsController::class, 'update'])->name('bills.update')->middleware('auth');
 Route::get('/bills/{bill}/generate/pdf', [App\Http\Controllers\BillsController::class, 'generatePDF']);
 
 Route::get('/contacts/business/{business}', [App\Http\Controllers\ContactsController::class, 'index'])->name('contacts.index')->middleware('auth');
