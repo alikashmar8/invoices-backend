@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\InvoiceAttachment;
 use Illuminate\Http\Request;
+use App\Models\Bill;
 use App\Models\Invitation;
 use App\Models\Payment;
 use App\Models\Plan;
@@ -38,14 +39,14 @@ class UsersController extends Controller
                     $userStorage += 1;
                 }
             }
+            $userStorage += count(Bill::where('business_id' , $bus )->get());
             if( $businesses->last() != $bus) $teamMembers -=1;
             $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
             $teamMembers += count(Invitation::where('business_id' , $bus)
                             ->where('status', 'PENDING')->get()) ;
 
         }
-
-
+ 
         if( request()->is('api/*')){
             //an api call
             return response()->json(['user' => $user , 'notifications' => $notifications] );

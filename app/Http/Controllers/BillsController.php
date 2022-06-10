@@ -145,7 +145,7 @@ class BillsController extends Controller
 
     public function generatePDF(Bill $bill)
     { 
-        $bill = Bill::where('business_id' , 1 )->first();
+        //$bill = Bill::where('business_id' , 1 )->first();
         $data = [
             'mainLogo' => 'images/logo.png',
             'clientName' => $bill->contact->name,

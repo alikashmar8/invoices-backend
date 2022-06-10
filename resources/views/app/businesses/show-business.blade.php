@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-md-3">
                             @if ($business->is_active)
-                                <span class="bg-primary float-right p-1 px-4 rounded text-white">Active</span>
+                                <span class="bg-primary2 float-right p-1 px-4 rounded text-white">Active</span>
                             @else
                                 <span class="bg-danger float-right p-1 px-4 rounded text-white">Stopped</span>
                             @endif

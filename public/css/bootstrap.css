@@ -3236,7 +3236,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-link:hover {
-  color: #0056b3;
+  color: #9b4292;
   text-decoration: underline;
 }
 
@@ -6791,6 +6791,11 @@ a.close.disabled {
 
 .bg-primary {
   background-color: #ff556e !important;
+}
+
+
+.bg-primary2 {
+  background-color: #9b4292 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,

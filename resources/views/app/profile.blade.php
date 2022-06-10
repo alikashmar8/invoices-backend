@@ -63,22 +63,40 @@
                     <div class="col-md-4">
                         <div class="card">
                             <h4> Storage </h4>
-                            <p>{{$userStorage}} / @if($user->plan->number_docs == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->number_docs}}  <input type="range" class="form-range" min='0' max='{{$user->plan->number_docs}}' value='{{$userStorage}}' disabled> @endif </p>
-                            
+                            <p>{{$userStorage}} /   @if($user->plan->number_docs == -1) <i class="fa fa-infinity text-success" ></i> </p>
+                                                    @else {{$user->plan->number_docs}}  {{--<input type="range" class="form-range" min='0' max='{{$user->plan->number_docs}}' value='{{$userStorage}}' disabled>--}}  </p>
+                            <div class='w-100 bg-secondary my-1' style="height: 10px;border-radius: 10px;">
+                                <div class='bg-primary' id='storage-range' style="height: 10px;border-radius: 10px; max-width:100%">
+                                </div>
+                            </div>
+                            <script> document.getElementById('storage-range').style.width = ({{$userStorage}}/{{$user->plan->number_docs}})*100 +'%'; </script>  @endif
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card"> 
                             <h4> Team Members </h4>
-                            <p>{{$teamMembers}} / @if($user->plan->team_members == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->team_members}} <input type="range" class="form-range" min='0' max='{{$user->plan->team_members}}' value='{{$teamMembers}}' disabled> @endif</p>
-                        
+                            <p>{{$teamMembers}} /   @if($user->plan->team_members == -1) <i class="fa fa-infinity text-success" ></i> </p>
+                                                    @else {{$user->plan->team_members}} {{--<input type="range" class="form-range" min='0' max='{{$user->plan->team_members}}' value='{{$teamMembers}}' disabled> --}}</p>
+
+                            <div class='w-100 bg-secondary my-1' style="height: 10px;border-radius: 10px;">
+                                <div class='bg-primary' id='team-range' style="height: 10px;border-radius: 10px; max-width:100%">
+                                </div>
+                            </div>
+                            <script> document.getElementById('team-range').style.width = ({{$teamMembers}}/{{$user->plan->team_members}})*100 +'%'; </script>  @endif
+                    
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card"> 
                             <h4> Businesses profiles </h4>
-                            <p>{{$businessesProfiles}} / @if($user->plan->businesses_profiles == -1) <i class="fa fa-infinity text-success" ></i> @else {{$user->plan->businesses_profiles}} <input type="range" class="form-range" min='0' max='{{$user->plan->businesses_profiles}}' value='{{$businessesProfiles}}' disabled> @endif</p>
-                             
+                            <p>{{$businessesProfiles}} /    @if($user->plan->businesses_profiles == -1) <i class="fa fa-infinity text-success" ></i> </p>
+                                                            @else {{$user->plan->businesses_profiles}} {{--<input type="range" class="form-range" min='0' max='{{$user->plan->businesses_profiles}}' value='{{$businessesProfiles}}' disabled> @endif --}}</p>
+                            <div class='w-100 bg-secondary my-1' style="height: 10px;border-radius: 10px;">
+                                <div class='bg-primary' id='biz-range' style="height: 10px;border-radius: 10px; max-width:100%">
+                                </div>
+                            </div>
+                            <script> document.getElementById('biz-range').style.width = ({{$businessesProfiles}}/{{$user->plan->businesses_profiles}})*100 +'%'; </script>  @endif
+                                                    
                         </div>
                     </div>
                 </div>
