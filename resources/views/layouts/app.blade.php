@@ -223,8 +223,27 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/businesses')) active @endif"
-                                href="/businesses">Businesses <span class="sr-only">(current)</span></a>
+                            style="padding-right: 0 !important" href="/businesses">Businesses <span class="sr-only">(current)</span></a>
                         </li>
+                        @if (count(Auth::user()->businesses) > 0)
+                        <li class="nav-item dropdown px-2" style="padding-left: 4px !important">
+                            <a class="nav-link  p-1  widget-header" style="padding-left: 0 !important" aria-haspopup="true" aria-expanded="false">
+                                <div class="icon "><i class="fa fa-arrow-alt-circle-down"></i></div>
+                                <span class="badge badge-pill  notify" id='numberOfNotifications'></span>
+                            </a>
+                            <div class="dropdown-menu " aria-labelledby="navbarDropdown" style="max-width: 250px; overflow: hidden;">
+                                
+                                    @foreach (Auth::user()->businesses as $business)
+                                        <a class="dropdown-item " href="/businesses/{{$business->id}}">
+                                            <img class="rounded-circle" style="max-width: 20px" src="{{ asset($business->logo)}}">
+                                            <span class="item-text">{{ $business->name }}</span>
+                                        </a>
+                                        <div  class="dropdown-divider"> </div>
+                                    @endforeach
+                                
+                            </div>
+                        </li>
+                        @endif 
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/pricing')) active @endif"
                                 href="/pricing">Plans</a>
@@ -340,6 +359,8 @@
                                     $('#btn_separator_{{ $navBarNotification->id }}').css('display',
                                         'none');
                                     $('#close_{{ $navBarNotification->id }}').click();
+                                    $('.modal-backdrop').css('display', 'none');
+
                                     numberOfNotifications_int -= 1;
                                     numberOfNotifications.innerHTML = numberOfNotifications_int;
 
@@ -365,6 +386,7 @@
                                     $('#btn_separator_{{ $navBarNotification->id }}').css('display',
                                         'none');
                                     $('#close_{{ $navBarNotification->id }}').click();
+                                    $('.modal-backdrop').css('display', 'none');
 
                                     numberOfNotifications_int -= 1;
                                     numberOfNotifications.innerHTML = numberOfNotifications_int;

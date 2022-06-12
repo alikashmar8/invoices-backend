@@ -142,7 +142,7 @@
                                             <td>{{ $invoice->reference_number }}</td>
                                             <td><img src="{{ asset($invoice->createdBy->profile_picture) }}"
                                                     class="rounded-circle" style='max-width: 30px'>
-                                                {{ App\Models\User::findOrFail($invoice->created_by)->first()->name }}
+                                                {{ $invoice->createdBy->name }}
                                             </td>
                                             <td>
                                                 <button type="button" class="btn col-md-2 p-0 mx-1"

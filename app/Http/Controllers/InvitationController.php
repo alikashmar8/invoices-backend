@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Models\UserBusiness;
 use App\Enums\InvitationStatus;
 use App\Models\Business;
 use \Illuminate\Support\Facades\Auth;
@@ -195,6 +196,12 @@ class InvitationController extends Controller
         $notify->title = 'Welcome to ' . $invitation->business->name . ' team';
         $notify->message = 'Now you are a ' . $invitation['role'] . ' in <a href="/businesses/' . $invitation->business->id . '" style="font-weight:bold" class="p-0 btn-link text-primary">' . $invitation->business->name . '</a> team.';
         $notify->user_id = Auth::user()->id;
+        $notify->save();
+
+        $notify = new Notification();
+        $notify->title = 'Invitation accepted';
+        $notify->message = Auth::user()->name . ' is now ' . $invitation->role . ' in your ' . $invitation->business->name . ' team';;
+        $notify->user_id = UserBusiness::where('business_id', $invitation->business->id)->where('role', 'MANAGER')->first()->user_id;
         $notify->save();
 
         if (request()->is('api/*')) {
