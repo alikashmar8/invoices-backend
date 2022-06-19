@@ -6,6 +6,9 @@
 @section('content')
 
 <div class="container mt-5">
+    <div class="p-2"> 
+        <a class="btn btn-link" href="/businesses/{{$business->id}}"><i class="fas fa-arrow-left"></i> Back </a>
+    </div>
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
             <div class="card-prof p-3 py-4" style='border: 1px solid #ff556e30;'>

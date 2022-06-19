@@ -62,7 +62,7 @@
                     <h2 class="{{$user->plan->name}}Text">{{$user->plan->name}} Plan</h2>
                     <div class="col-md-4">
                         <div class="card">
-                            <h4> Storage </h4>
+                            <h4> Uplaoded Documents </h4>
                             <p>{{$userStorage}} /   @if($user->plan->number_docs == -1) <i class="fa fa-infinity text-success" ></i> </p>
                                                     @else {{$user->plan->number_docs}}  {{--<input type="range" class="form-range" min='0' max='{{$user->plan->number_docs}}' value='{{$userStorage}}' disabled>--}}  </p>
                             <div class='w-100 bg-secondary my-1' style="height: 10px;border-radius: 10px;">

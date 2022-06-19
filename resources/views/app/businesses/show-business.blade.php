@@ -64,12 +64,12 @@
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-3 m-auto">
-                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Incoming
+                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Outgoing
                     Invoices</button>
             </div>
 
             <div class="col-md-3 m-auto">
-                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Bills</button>
+                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Incoming Invoices</button>
             </div>
 
             <div class="col-md-3 m-auto">
@@ -337,7 +337,7 @@
                                             </td>
                                             <td><img src="{{ asset($bill->createdBy->profile_picture) }}"
                                                     class="rounded-circle" style='max-width: 30px'>
-                                                {{ App\Models\User::findOrFail($bill->created_by)->first()->name }}
+                                                    {{ $bill->createdBy->name }}
                                             </td>
                                             <td>
                                                 <button type="button" class="btn col-md-2 p-0 mx-1"

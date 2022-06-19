@@ -41,13 +41,7 @@
                 <td> <svg width="20px" viewBox="0 0 468.293 468.293"><circle style="fill:#ff556e;" cx="234.146" cy="234.146" r="234.146"></circle><polygon style="fill:#fff;" points="357.52,110.145 191.995,275.67 110.773,194.451 69.534,235.684 191.995,358.148   398.759,151.378 "></polygon></svg> </td> 
                 <td> <svg width="20px" viewBox="0 0 468.293 468.293"><circle style="fill:#ff556e;" cx="234.146" cy="234.146" r="234.146"></circle><polygon style="fill:#fff;" points="357.52,110.145 191.995,275.67 110.773,194.451 69.534,235.684 191.995,358.148   398.759,151.378 "></polygon></svg> </td> 
                 <td> <svg width="20px" viewBox="0 0 468.293 468.293"><circle style="fill:#ff556e;" cx="234.146" cy="234.146" r="234.146"></circle><polygon style="fill:#fff;" points="357.52,110.145 191.995,275.67 110.773,194.451 69.534,235.684 191.995,358.148   398.759,151.378 "></polygon></svg> </td> 
-            </tr>
-            <tr class='border-bottom'>
-                <td class="text-primary p-3 font-weight-bold">Uplaod invoice</td>
-                <td> Unlimited </td> 
-                <td> Unlimited </td> 
-                <td> Unlimited </td> 
-            </tr>
+            </tr> 
             <tr class='border-bottom'>
                 <td class="text-primary p-3 font-weight-bold">Businesses profiles</td>
                 <td>One</td>
@@ -55,21 +49,21 @@
                 <td>Unlimited</td>
             </tr>
             <tr class='border-bottom'>
-                <td class="text-primary p-3 font-weight-bold">Storage</td>
-                <td >1 Gb</td>
-                <td >3 Gb</td>
+                <td class="text-primary p-3 font-weight-bold">Uplaod Documents</td>
+                <td >50</td>
+                <td >500</td>
                 <td >Unlimited</td>
             </tr>
             <tr class='border-bottom'>
                 <td class="text-primary p-3 font-weight-bold">Team members</td>
-                <td >3</td>
+                <td >1</td>
                 <td >10</td>
                 <td >Unlimited</td>
             </tr> 
             <tr class='border-bottom'>
                 <td class="text-primary p-3 font-weight-bold">Monthly price</td>
                 <td class="text-primary p-3 font-weight-bold"><h3 style="font-family: 'Bebas Neue', cursive;">Free</h3></td>
-                <td class="text-primary p-3 font-weight-bold"><h3 style="font-family: 'Bebas Neue', cursive;">$ 49.00 <small> AUD </small></h3></td>
+                <td class="text-primary p-3 font-weight-bold"><h3 style="font-family: 'Bebas Neue', cursive;">$ 59.00 <small> AUD </small></h3></td>
                 <td class="text-primary p-3 font-weight-bold"><h3 style="font-family: 'Bebas Neue', cursive;">$ 99.00 <small> AUD </small></h3></td>
             </tr>
             <tr  > 

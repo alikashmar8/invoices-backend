@@ -28,7 +28,7 @@ class BusinessController extends Controller
     public function index()
     {
         // not sure if you need this line here, I kept it for now but I think we don't need it
-        $myBus = UserBusiness::where('user_id', Auth::user()->id)->get();
+        $myBusManagerCount = count(UserBusiness::where('user_id', Auth::user()->id)->where('role', 'MANAGER')->get());
 
         // now to get businesses you can use this calling instead of the loop below, after you check the code delete the comments plz :)
         $businesses =  Auth::user()->businesses;
@@ -42,10 +42,10 @@ class BusinessController extends Controller
 
         if (request()->is('api/*')) {
             //an api call
-            return response()->json(['businesses' => $businesses, 'myBus' => $myBus]);
+            return response()->json(['businesses' => $businesses, 'myBusManagerCount' => $myBusManagerCount]);
         } else {
             //a web call
-            return view('app.businesses.list-businesses', compact('businesses', 'myBus'));
+            return view('app.businesses.list-businesses', compact('businesses', 'myBusManagerCount'));
         }
     }
 
@@ -67,12 +67,12 @@ class BusinessController extends Controller
      */
     public function store(Request $request)
     {
-        $businesses = Auth::user()->businesses->count();
+        $businesses = count(UserBusiness::where('user_id', Auth::user()->id)->where('role', 'MANAGER')->get());
         // TODO: we will do it this way after we agree on structure
         // if ($businesses >= Auth::user()->plan->max_businesses_number) {
         //     return response()->json(['error' => 'You have reached the maximum number of businesses for your plan.']);
         // }
-        if(Auth::user()->plan_id < 3 && $businesses >= 1) return redirect('/plan/3');
+        if(Auth::user()->plan_id < 3 && $businesses > 0) return redirect('/plan-3');
         $business = new Business();
         $business->name = $request->name;
         $business->is_active = 1;

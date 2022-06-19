@@ -20,14 +20,14 @@ class PlansSeeder extends Seeder
             'name' => 'Basic',
             'price' => 0, 
             'businesses_profiles' => 1,
-            'number_docs' => 1000,
-            'team_members' => 3,
+            'number_docs' => 50,
+            'team_members' => 1,
         ]);
         DB::table('plans')->insert([
             'name' => 'Gold',
-            'price' => 49, 
+            'price' => 59, 
             'businesses_profiles' => 1,
-            'number_docs' => 5000,
+            'number_docs' => 500,
             'team_members' => 10,
         ]);
         DB::table('plans')->insert([

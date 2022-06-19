@@ -60,9 +60,9 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <p class='title h4 text-center'>
+                            <p class='title h4 text-center'> 
                                 <br>
-                                <a class="btn btn-success mt-4 text-white @if(Auth::user()->plan_id < 3) goGem  " @else "  data-toggle="modal" data-target="#CreateForm" @endif>
+                                <a class="btn btn-success mt-4 text-white @if(Auth::user()->plan_id < 3 && $myBusManagerCount > 0 ) goGem  " @else "  data-toggle="modal" data-target="#CreateForm" @endif>
                                     Add new business profile
                                 </a>
                             </p>

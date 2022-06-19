@@ -28,21 +28,19 @@ class UsersController extends Controller
         $user->plan = Plan::findOrFail($user->plan_id);
 
         $userStorage = 0;
-        $teamMembers = 1;
         $businesses =  $user->businesses()->allRelatedIds();
-        $businessesProfiles = count($businesses);
-        foreach ($businesses as $bus) {
-            $invoices = Invoice::where('business_id' , $bus)->get();
-            foreach($invoices as $inv){ 
-                $attachments = InvoiceAttachment::where('invoice_id' , $inv->id)->get();
-                foreach($attachments as $att){ 
-                    $userStorage += 1;
-                }
-            }
+        foreach ($businesses as $bus) { 
+            $userStorage += count(Invoice::where('business_id' , $bus)->get());
             $userStorage += count(Bill::where('business_id' , $bus )->get());
-            if( $businesses->last() != $bus) $teamMembers -=1;
-            $teamMembers += count(UserBusiness::where('business_id' , $bus)->get()) - 1;
-            $teamMembers += count(Invitation::where('business_id' , $bus)
+        }
+
+        $managedBusinesses = UserBusiness::where('user_id', Auth::user()->id)->where('role', 'MANAGER')->get();
+        $businessesProfiles = count($managedBusinesses);
+        $teamMembers = 1;
+        foreach ($managedBusinesses as $bus) {
+            
+            $teamMembers += count(UserBusiness::where('business_id' , $bus->business_id)->get()) -1;
+            $teamMembers += count(Invitation::where('business_id' , $bus->business_id)
                             ->where('status', 'PENDING')->get()) ;
 
         }
