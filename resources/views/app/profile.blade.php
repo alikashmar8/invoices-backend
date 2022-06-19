@@ -4,7 +4,7 @@
 
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5">{{Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->plan_end_date)) }}
     <div class="row d-flex justify-content-center">
         <div class="col-md-10">
             <div class="card-prof p-3 py-4">

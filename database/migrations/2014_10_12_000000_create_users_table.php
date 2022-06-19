@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('profile_picture')->default('img/profile.png');
             $table->unsignedBigInteger('plan_id')->nullable()->default(1); # TODO: Remove default value and plan by default on create
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('set null');
+            $table->date('plan_end_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->rememberToken();
             $table->timestamps();
         });
