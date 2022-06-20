@@ -4,7 +4,10 @@
 
 
 @section('content')
-<div class="container mt-5">{{Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->plan_end_date)) }}
+<div class="container mt-5">
+    {{Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->plan_end_date)) }}
+     
+     
     <div class="row d-flex justify-content-center">
         <div class="col-md-10">
             <div class="card-prof p-3 py-4">
@@ -254,9 +257,13 @@
                             <div style='margin:5px; padding :7px; display:inline-block;position: relative;'>
                                 <label for='imgFile'>
                                     <div class='avatar avatar-xl position-relative'>
-                                        <img src="{{asset($user->profile_picture)}}" id='imgSrc' alt="profile_picture" class=" rounded-circle shadow-sm" style='max-width:75px;max-height:75px;'>
-                                    </div>
-                                </label>
+                                        <img src="{{asset($user->profile_picture)}}" id='imgSrc' alt="profile_picture" class=" rounded-circle shadow-sm" style='max-width:75px;max-height:75px; position:relative'>
+                                         
+                                    </div> 
+                                    
+                                </label> 
+                                <i class="fa fa-info-circle text-primary" aria-hidden="true" onmouseover="document.getElementById('hint').style.display = 'inline-block'" onmouseleave="document.getElementById('hint').style.display = 'none'"></i> <small id='hint' class="hide text-primary" style="display: none">Click on the image to change it. Make sure to choose 1x1 image</small>
+
                                 <input type='file' name='profile_picture' style='display:none' accept="image/*" id='imgFile' onchange='readImg(this.files[0])'>
                                 <a id='removeBtn' style='display:none;z-index: 5;position: absolute;top: 0px;left: 5px;color: red;' onclick='removeImg()'>
                                     <i class="fas fa-times-circle text-danger"></i>

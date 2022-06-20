@@ -76,7 +76,11 @@ class BillsController extends Controller
         }
         $bill->save();
         
+        \QrCode::size(50) 
+                ->generate(asset('storage/pdf/'.$bill->id.'.pdf'), public_path('storage/QR/'.$bill->id.'.svg'));
 
+
+        $this->generatePDF($bill);
         return redirect('businesses/' . $request->business_id)->with('msg', 'bill');
     }
 
@@ -140,6 +144,7 @@ class BillsController extends Controller
         $bill->save();
         
 
+        $this->generatePDF($bill);
         return redirect('businesses/' . $request->business_id)->with('msg', 'bill');
     }
 
@@ -167,10 +172,13 @@ class BillsController extends Controller
             'due_date' => $bill->due_date,
             'payment_date' => $bill->payment_date,
             'notes' => $bill->notes,
+            'QR' => 'storage/QR/'.$bill->id.'.svg',
             'created_at' => Carbon::parse($bill->created_at)->format('l jS \\of F Y')
         ];
+
+        
         $pdf = Pdf::loadView('app.businesses.bills.pdfs.bill-pdf-view', $data);
         Storage::put('public/pdf/'. $bill->id . '.pdf', $pdf->output());
-        return $pdf->download($bill->id . '.pdf'); 
+        return 0;//$pdf->download($bill->id . '.pdf'); 
     }
 }

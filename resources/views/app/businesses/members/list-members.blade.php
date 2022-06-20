@@ -23,16 +23,18 @@
                                         <img src="{{asset($business->logo)}}" id='imgSrc' alt="profile_image"   class="w-100 border-radius-lg shadow-sm" style='max-width:75px;max-height:75px;'>
                                     </div>
                                 </label>
+                                
+                                <i class="fa fa-info-circle text-primary" aria-hidden="true" onmouseover="document.getElementById('hint').style.display = 'inline-block'" onmouseleave="document.getElementById('hint').style.display = 'none'"></i> <small id='hint' class="hide text-primary" style="display: none">Click on the image to change it. Make sure to choose 1x1 image</small>
                                 <input type='file'  name='logo' style='display:none' accept="image/*" id='imgFile'  onchange='readImg(this.files[0])'>
 
                             </div>
-                            <input type="text" name='name' class="form-control border-0 mt-2 mb-0" id='editBusinessName' value='{{ $business->name }}' placeholder="Business Name" required onkeypress="nameChanged()"> 
                             <!--div class="text-center">
                                 <img src="{{-- asset($business->logo) --}}" width="100" class="rounded-circle">
                             </div-->
                         </div>
                         <div class="col-md-5">
                             <div class="text-primary">
+                                <input type="text" name='name' class="form-control border-0 mt-2 mb-0" id='editBusinessName' value='{{ $business->name }}' placeholder="Business Name" required onkeypress="nameChanged()"> 
                                 <input type="text" name='abn' class="form-control border-0 mt-2 mb-0" id='editBusinessABN' value='{{ $business->abn }}' placeholder="ABN" onkeypress="nameChanged()"> 
                                 <input type="text" name='address' class="form-control border-0 mt-2 mb-0" id='editBusinessAddress' value='{{ $business->address }}' placeholder="Address" onkeypress="nameChanged()"> 
                                 <textarea  name='payment_method' rows='3' class="form-control border-0 mt-2 mb-0" id='editPaymentMethod' onkeypress="nameChanged()" placeholder="Payment Method" >@if($business->payment_method) {{$business->payment_method}} @else Account Name:

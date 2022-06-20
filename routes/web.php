@@ -13,36 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/pdf', function () {
-    $bill = App\Models\Bill::where('business_id' , 1 )->first();
-    $data = [
-        'mainLogo' => 'images/logo.png',
-        'clientName' => $bill->contact->name,
-        'clientEmail' => $bill->contact->email,
-        'clientPhone' => $bill->contact->phone_number,
-        'clientABN' => $bill->contact->abn,
-        'clientAddress' => $bill->contact->address,
-        'businessLogo' => $bill->business->logo,
-        'businessName' => $bill->business->name,
-        'businessABN' => $bill->business->abn,
-        'businessAddress' => $bill->business->address,
-        'payment_method' => $bill->business->payment_method,
-        'id' => $bill->id,
-        'title' => $bill->title,
-        'total' => $bill->total,
-        'GST' => $bill->gst,
-        'amount' =>  $bill->total + $bill->gst,
-        'is_paid' => $bill->is_paid,
-        'due_date' => $bill->due_date,
-        'payment_date' => $bill->payment_date,
-        'notes' => $bill->notes,
-        'created_at' => Carbon\Carbon::parse($bill->created_at)->format('l jS \\of F Y')
-    ];
-    $pdf = Barryvdh\DomPDF\Facade\Pdf::loadView('app.businesses.bills.pdfs.bill-pdf-view', $data);
-    Storage::put('public/pdf/'. $bill->id . '.pdf', $pdf->output());
-    return $pdf->download($bill->id . '.pdf');
-    return view('welcome');
-});
 Route::get('/e', function (){
     $user = App\Models\User::where('id', 1)->first();
         Mail::to('mk.farhat@hotmail.com')->send(new App\Mail\RenewPlansReminder($user));

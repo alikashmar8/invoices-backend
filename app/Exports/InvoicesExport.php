@@ -22,13 +22,13 @@ class InvoicesExport implements FromCollection, WithHeadings
     {
         return [
 
-            'Title', 'Total', 'Extra_amount', 'Discount', 'Discount_type', 'Reference_number',
+            'ID', 'Reference_number', 'Title', 'Total', 'GST', 'Discount', 'Discount_type', 
             'Paid' ,  'Due_date' , 'Payment_date' , 'Notes' , 'Created_by' ,   'Created_at'
         ];
     }
     public function collection()
     {
-        $invoices = Invoice::select('title', 'total', 'extra_amount', 'discount', 'discount_type', 'reference_number',
+        $invoices = Invoice::select('id', 'reference_number', 'title', 'total', 'gst', 'discount', 'discount_type',
         'is_paid' ,  'due_date' , 'payment_date' , 'notes' , 'created_by'  , 'created_at')
         ->where('business_id' , $this->id)->get();
         foreach($invoices as $inv){

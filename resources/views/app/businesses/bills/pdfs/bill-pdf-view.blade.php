@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<title>{{$id}}</title>
+        <link rel="icon" href="{{ asset('images/favicon.png') }}">
  
 
 		<!-- Invoice styling -->
@@ -232,6 +233,10 @@
                     </td>
                 </tr>
 			</table>
+			<div>
+				
+				<img src="{{ $QR }}" style="width: 120px"> 
+			</div>
 		</div> 
         <img src="{{ $mainLogo }}" style="object-fit: contain ;max-width: 220px">  
         

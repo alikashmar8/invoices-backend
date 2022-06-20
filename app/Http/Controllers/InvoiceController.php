@@ -221,13 +221,13 @@ class InvoiceController extends Controller
 
     public function exportIn($id)
     {
-        return Excel::download(new InvoicesExport($id), 'Invoices.xlsx');
+        return Excel::download(new InvoicesExport($id), 'Incoming_Invoices_'.Business::findOrFail($id)->name.'_'.Carbon::now()->format('Y-m-d').'.xlsx');
     }
 
 
     public function exportOut($id)
     {
-        return Excel::download(new InvoicesOutExport($id), 'Invoices.xlsx');
+        return Excel::download(new InvoicesOutExport($id), 'Outgoing_Invoices_'.Business::findOrFail($id)->name.'_'.Carbon::now()->format('Y-m-d').'.xlsx');
     }
 
 

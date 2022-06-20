@@ -43,13 +43,13 @@
                 <td> <svg width="20px" viewBox="0 0 468.293 468.293"><circle style="fill:#ff556e;" cx="234.146" cy="234.146" r="234.146"></circle><polygon style="fill:#fff;" points="357.52,110.145 191.995,275.67 110.773,194.451 69.534,235.684 191.995,358.148   398.759,151.378 "></polygon></svg> </td> 
             </tr> 
             <tr class='border-bottom'>
-                <td class="text-primary p-3 font-weight-bold">Businesses profiles</td>
+                <td class="text-primary p-3 font-weight-bold">Business profiles</td>
                 <td>One</td>
                 <td>One</td>
                 <td>Unlimited</td>
             </tr>
             <tr class='border-bottom'>
-                <td class="text-primary p-3 font-weight-bold">Uplaod Documents</td>
+                <td class="text-primary p-3 font-weight-bold">Upload Documents</td>
                 <td >50</td>
                 <td >500</td>
                 <td >Unlimited</td>
@@ -67,33 +67,36 @@
                 <td class="text-primary p-3 font-weight-bold"><h3 style="font-family: 'Bebas Neue', cursive;">$ 99.00 <small> AUD </small></h3></td>
             </tr>
             <tr  > 
+                
+                @guest
+                <td   colspan="4">
+                    <a href="/register" class="btn btn-link  " style="font-size: 1.2rem;
+                    line-height: 3.875rem;">  Create your new account now!  </a>  
+                 
+                    
+                </td>
+                @else
+
                 <td ></td>
                 <td class="p-1">
-                    <a class="Dis-btn-outline" disabled>Default</a>
+                    <a class="Dis-btn-outline" disabled>Registered</a>
                 </td>
                 <td >
-                    @guest
-                        <a href="/plan-2" class="Gold-btn-outline"> Register </a>
-                    @else
-                        @if(Auth::user()->plan_id >= 2 )
+                    @if(Auth::user()->plan_id >= 2 )
                         <a class="Dis-btn-outline" disable>Registered</a>
                         @else
                         <a href="/plan-2" class=" Gold-btn-outline "> Register </a>
-                        @endif
-                    @endguest
+                    @endif
                 </td>
                 <td>
-                    @guest
-                        <a href="/plan-3" class="Gem-btn-outline">Register</a>
-                    @else
-                        @if(Auth::user()->plan_id == 3 )
+                    @if(Auth::user()->plan_id == 3 )
                         <a class="Dis-btn-outline" disabled>Registered</a>
                         @else
                         
                         <a href="/plan-3" class="Gem-btn-outline">Register</a>
-                        @endif
-                    @endguest
+                    @endif
                 </td>
+                @endguest
             </tr>
             <br>
             </tbody>

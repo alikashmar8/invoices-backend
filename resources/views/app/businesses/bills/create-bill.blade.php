@@ -84,11 +84,7 @@
                         <label for="due_date">Due Date:</label>
                         <input type="date" id="due_date" name="due_date" value="{{ old('due_date') }}"
                             class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Notes/Payment method:</label>
-                        <textarea name="notes" class="form-control" id="notes" rows="3"></textarea>
-                    </div>
+                    </div> 
  
                 </div>
             </div>

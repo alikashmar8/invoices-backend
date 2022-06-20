@@ -64,17 +64,16 @@
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-3 m-auto">
-                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()">Outgoing
-                    Invoices</button>
+                <button class="btn btn-primary w-100 m-auto" id='incomingLink' onclick="getIncoming()"> Incoming Invoices</button>
             </div>
 
             <div class="col-md-3 m-auto">
-                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()">Incoming Invoices</button>
+                <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()"> Outgoing Invoices</button>
             </div>
-
             <div class="col-md-3 m-auto">
                 <button class="btn btn-link w-100 m-auto" id='dashboardLink' onclick="getDashboard()">Dashboard</button>
             </div>
+             
         </div>
     </div>
 
@@ -172,7 +171,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{ $invoice->id }} # {{ $invoice->reference_number }}
+                                                            {{ $invoice->id }} @if($invoice->reference_number) #{{ $invoice->reference_number }} @endif
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -211,7 +210,7 @@
                                                         <p style='white-space: pre-line;'>{{ $invoice->notes }}</p>
                                                         </p>
                                                         <p><b>Added by:</b> <img
-                                                                src="{{ asset(App\Models\User::findOrFail($invoice->created_by)->first()->profile_picture) }}"
+                                                                src="{{ asset($invoice->createdBy->profile_picture) }}"
                                                                 class="rounded-circle" style='max-width: 30px'>
                                                               {{ $invoice->createdBy->name }}
                                                         </p>
@@ -359,8 +358,8 @@
                                                 @endif
 
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
-                                                    href="/bills/{{ $bill->id }}/generate/pdf">
-                                                    <i class="fa fa-file-export text-primary"></i>
+                                                    href="/storage/pdf/{{ $bill->id }}.pdf" download>
+                                                    <i class="fa fa-file-download text-primary"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -371,7 +370,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{ $bill->id }} 
+                                                            {{ $bill->id }} To {{$bill->contact->name}}
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
@@ -410,11 +409,12 @@
                                                         <p style='white-space: pre-line;'>{{ $bill->notes }}</p>
                                                         </p>
                                                         <p><b>Added by:</b> <img
-                                                                src="{{ asset(App\Models\User::findOrFail($bill->created_by)->first()->profile_picture) }}"
+                                                                src="{{ asset($bill->createdBy->profile_picture) }}"
                                                                 class="rounded-circle" style='max-width: 30px'>
                                                             {{ $bill->createdBy->name }}
                                                         </p>
                                                         <p><b>Added on:</b> {{ $bill->created_at }} </p>
+                                                        <a class="btn btn-primary" href="http://127.0.0.1:8000/storage/pdf/{{$bill->id}}.pdf" target="_blank"> View online </a>
                                                          
                                                     </div>
                                                     <div class="modal-footer">
@@ -439,7 +439,7 @@
                     </div>
 
                     <div class="row noScrollBar p-3" style='overflow: scroll; display:none;' id='dashboardConten'>
-                        <h4>Incoming:</h4>
+                        <h4>Incoming Statistics:</h4>
                         <div class="row text-center my-2">
                             <div class="col-md-4">
                                 <h6>Total Paid: ${{ $totalPaid }}</h6>
@@ -447,10 +447,10 @@
                             <div class="col-md-4">
                                 <h6>Total Pending: ${{ $totalPending }}</h6>
                             </div>
-                            <div class="col-md-4"><a class="btn btn-dark "
-                                    href="/invoices/exportIn/{{ $business->id }}">Export invoices</a></div>
+                            <div class="col-md-4"><a class="btn btn-dark @if(Auth::user()->plan_id < 3  ) goGem  @endif"
+                                    href="/invoices/exportIn/{{ $business->id }}">Export data</a></div>
                         </div>
-                        <h4>Outgoing:</h4>
+                        <h4>Outgoing Statistics:</h4>
                         <div class="row text-center my-2">
                             <div class="col-md-4">
                                 <h6>Total Earnings: ${{ $totalEarning }}</h6>
@@ -458,8 +458,8 @@
                             <div class="col-md-4">
                                 <h6>Total Pending: ${{ $totalPendingEarn }}</h6>
                             </div>
-                            <div class="col-md-4"><a class="btn btn-dark "
-                                    href="/invoices/exportOut/{{ $business->id }}">Export invoices</a></div>
+                            <div class="col-md-4"><a class="btn btn-dark @if(Auth::user()->plan_id < 3  ) goGem  @endif "
+                                    href="/invoices/exportOut/{{ $business->id }}">Export data</a></div>
                         </div>
                     </div>
                 </div>
@@ -505,6 +505,9 @@
             document.getElementById('incomingConten').style.display = 'none';
             document.getElementById('outgoingConten').style.display = 'none';
             document.getElementById('dashboardConten').style.display = 'block';
+            @if ($current_user_business_details->role == App\Enums\UserRole::TEAM_MEMBER )
+                document.getElementById('dashboardConten').innerHTML = '<h3 class="text-secondary text-center"> The Dashboard page is not accessible to the team members.</h3>';
+            @endif
         }
 
 

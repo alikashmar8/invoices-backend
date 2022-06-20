@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Models\Business;
+use App\Models\Contact;
 use App\Models\Notification;
 use App\Models\UserBusiness;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use App\Models\Invitation;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
 use App\Models\User;
+use Carbon\Carbon;
 use BenSampo\Enum\Rules\EnumValue;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -128,9 +130,10 @@ class BusinessController extends Controller
             $totalPendingEarn = $bills->where('isPaid', false)->sum('total');
             Log::info('totalEarning using query: ' . $totalEarning);
             $totalEarning = $totalPendingEarn = 0 ;
-            foreach($bills as $inv){
-                if($inv->is_paid) $totalEarning += $inv->total;
-                else $totalPendingEarn += $inv->total;
+            foreach($bills as $bill){
+                if($bill->is_paid) $totalEarning += $bill->total;
+                else $totalPendingEarn += $bill->total;
+                $bill->contact = Contact::findOrFail($bill->contact_id);
             }
             Log::info('totalEarning using foreach: ' . $totalEarning);
 
@@ -200,8 +203,8 @@ class BusinessController extends Controller
         /*$img->orientate()->resize(1000, 1000, function ($constraint) {
             $constraint->aspectRatio();
         })->save($destinationPath . '/' . time() . $image->getClientOriginalName());*/
-        $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . time() .  $image->getClientOriginalName());
-        $path = $destinationPath . '/' . time() .  $image->getClientOriginalName();
+        $img->orientate()->resize(1000, 1000)->save($destinationPath . '/' . Carbon::now()->format('Y-m-d-H-i').  $image->getClientOriginalName());
+        $path = $destinationPath . '/' . Carbon::now()->format('Y-m-d-H-i') .  $image->getClientOriginalName();
 
         /*$imageName =pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME). time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = 'uploads/biz/'; //public_path('uploads/biz');
