@@ -37,7 +37,7 @@ Route::post('/businesses/{business}/make-favorite', [App\Http\Controllers\Busine
 Route::post('/businesses/{business}/leave', [App\Http\Controllers\BusinessController::class, 'leave'])->name('businesses.leave')->middleware('is_business_member');
 Route::get('/businesses/{business}/contacts', [App\Http\Controllers\BusinessController::class, 'getContacts'])->middleware('auth');
 Route::get('/businesses/{business}/members', [App\Http\Controllers\BusinessController::class, 'showMembers'])->middleware('auth');
-Route::post('/businesses/{business}/members', [App\Http\Controllers\BusinessController::class, 'addNewTeamMember'])->middleware('auth');
+Route::get('/businesses/{business}/inviteMembers', [App\Http\Controllers\BusinessController::class, 'inviteNewTeamMember'])->middleware('auth');
 Route::post('/businesses/{business}/members/{user}/remove', [App\Http\Controllers\BusinessController::class, 'removeTeamMember'])->middleware('is_business_manager');
 Route::post('/businesses/{business}/members/{user}/update-role', [App\Http\Controllers\BusinessController::class, 'updateRole'])->middleware('is_business_manager');
 

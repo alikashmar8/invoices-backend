@@ -20,6 +20,10 @@ use App\Models\Plan;
 use Illuminate\Support\Facades\Validator;
 use Image;
 
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InviteNewMember;
+
 class BusinessController extends Controller
 {
     /**
@@ -124,6 +128,15 @@ class BusinessController extends Controller
             }
             Log::info('totalPaid using foreach: ' . $totalPaid);
 
+            
+            $totalPaidGST = $invoices->where('isPaid', true)->sum('gst');
+            $totalPendingGST = $invoices->where('isPaid', false)->sum('gst');
+            $totalPaidGST = $totalPendingGST = 0 ;
+            foreach($invoices as $inv){
+                if($inv->is_paid) $totalPaidGST += $inv->gst;
+                else $totalPendingGST += $inv->gst;
+            }
+
             if($current_user_business_details->role == 'TEAM_MEMBER')  $bills =  $business->bills->where('created_by' , Auth::user()->id)->sortByDesc('created_at');
             else $bills =  $business->bills->sortByDesc('created_at');
             $totalEarning = $bills->where('isPaid', true)->sum('total');
@@ -137,7 +150,33 @@ class BusinessController extends Controller
             }
             Log::info('totalEarning using foreach: ' . $totalEarning);
 
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'bills', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn'));
+            $totalEarningGST = $bills->where('isPaid', true)->sum('gst');
+            $totalPendingEarnGST = $bills->where('isPaid', false)->sum('gst'); 
+            $totalEarningGST = $totalPendingEarnGST = 0 ;
+            foreach($bills as $bill){
+                if($bill->is_paid) $totalEarningGST += $bill->gst;
+                else $totalPendingEarnGST += $bill->gst; 
+            }
+
+            $monthlyInvoices =0;
+            /*$monthlyInvoices = $invoices
+            ->reduce(function ($item) {
+                return $item->total;
+            })
+            ->groupBy(function($item) { 
+                return Carbon::parse($item->created_at)->format('m');
+            }); 
+            foreach($monthlyInvoices as $inv){ 
+                $inv->monthlyPaid = 0;
+                foreach($inv as $i){ 
+                    $inv->monthlyPaid += $i->total; 
+                } 
+            }
+            $monthlyBills = $bills->groupBy(function($item) {
+                return Carbon::parse($item->created_at)->format('m');
+            });*/
+            
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'bills', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn','monthlyInvoices','totalPaidGST' , 'totalPendingGST','totalEarningGST' , 'totalPendingEarnGST' ));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
@@ -233,12 +272,12 @@ class BusinessController extends Controller
         return view('app.businesses.members.list-members', compact('business', 'invitations', 'current_user_business_details','teamMembers'));
     }
 
-    public function addNewTeamMember(Request $request, Business $business)
+    public function inviteNewTeamMember(Request $request, Business $business)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            
             'role' => ['required', new EnumValue(UserRole::class)],
         ]);
 
@@ -249,13 +288,17 @@ class BusinessController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-        $user->businesses()->attach([$business->id => ['role' => $request['role']]]);
+ 
+        $data = array(
+            'name' => $request->name,
+            'email' => $request->email,
+            'business' => $business->name,
+            'sender' => Auth::user()->name, 
+            'date' => Carbon::now(), 
+            'role' =>  $request['role']
+        );
+        Mail::to($request->email)->send(new InviteNewMember($data));
+  
 
         if (request()->is('api/*')) {
             return response()->json(['succeed' => true, 'business' => $business, 'user' => $user]);

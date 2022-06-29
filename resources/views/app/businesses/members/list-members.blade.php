@@ -246,8 +246,7 @@
             </div>
         </div>
     </div>
-</div>
-
+</div> 
 
 
 {{-- Add Member modal --}}
@@ -265,7 +264,7 @@
                     <form method="POST" id="memberCheckerIfExist" action="javascript:void(0)">
                         @csrf
                         <label for="email1" class="col-form-label text-md-end">
-                            Create a new member or invite an existing user:
+                            Invite new members to your team:
                         </label>
                         <input id="email1" type="email" class="form-control" name="email1" placeholder='Email' required>
                         <input type='hidden' name="id" value='{{ $business->id }}'>
@@ -278,8 +277,8 @@
                 <div class="row" id='createNewMember' style='display:none'>
                     <button class='btn btn-link w-auto' onclick='back()'><i class='fa fa-arrow-left  fa-xs'></i>
                         Back</button>
-                    <p class='text-success w-auto'> This email is not registered yet, create a new account: </p>
-                    <form method="POST" action="/businesses/{{ $business->id }}/members" enctype="multipart/form-data">
+                    <p class='text-success w-auto'> This email is not registered yet, send an invitation to join Ivoice Gem: </p>
+                    <form method="get" action="/businesses/{{ $business->id }}/inviteMembers" enctype="multipart/form-data">
                         @csrf
                         <div class="col-md-12">
                             <label for="name" class="col-form-label text-md-end">
@@ -287,21 +286,12 @@
                             </label>
                             <input id="name" type="name" class="form-control" name="name" value='' placeholder='Name' required autofocus>
 
-                            <label for="email" class="col-form-label text-md-end">
+                            <label for="email2" class="col-form-label text-md-end">
                                 Email address
                             </label>
                             <input id="email2" type="email" class="form-control" disabled>
-                            <input id="email22" type="email" style="display:none" name="email">
-
-                            <label for="password" class="col-form-label text-md-end">
-                                Password
-                            </label>
-                            <input id="password" type="password" class="form-control" value='' placeholder='Password' name="password">
-
-                            <label for="password_confirmation" class="col-form-label text-md-end">
-                                Confirm Password
-                            </label>
-                            <input id="password_confirmation" type="password" class="form-control" value='' placeholder='Confirm Password' name="password_confirmation">
+                            <input id="email22" type="hidden" style="display:none" name="email">
+ 
 
                             <label for="role" class="col-form-label text-md-end">
                                 Role
@@ -311,7 +301,7 @@
                                 <option value="TEAM_MEMBER" selected>Team Member</option>
                             </select>
 
-                            <button type="submit" class="btn btn-success text-white my-3">Submit</button>
+                            <button type="submit" class="btn btn-success text-white my-3">Send</button>
 
                         </div>
                     </form>

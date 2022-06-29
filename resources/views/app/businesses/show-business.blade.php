@@ -3,8 +3,8 @@
 @section('title', $business->name)
 
 
-@section('content')
-
+@section('content') 
+<br> 
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12">
@@ -71,7 +71,7 @@
                 <button class="btn btn-link w-100 m-auto" id='outgoingLink' onclick="getOutgoing()"> Outgoing Invoices</button>
             </div>
             <div class="col-md-3 m-auto">
-                <button class="btn btn-link w-100 m-auto" id='dashboardLink' onclick="getDashboard()">Dashboard</button>
+                <button class="btn btn-link w-100 m-auto" id='dashboardLink' onclick="getDashboard()" @if ($current_user_business_details->role == App\Enums\UserRole::TEAM_MEMBER ) style='display:none' @endif>Overview</button>
             </div>
              
         </div>
@@ -442,10 +442,10 @@
                         <h4>Incoming Statistics:</h4>
                         <div class="row text-center my-2">
                             <div class="col-md-4">
-                                <h6>Total Paid: ${{ $totalPaid }}</h6>
+                                <h6>Total Paid: ${{ $totalPaid }} - GST: {{$totalPaidGST}}</h6>
                             </div>
                             <div class="col-md-4">
-                                <h6>Total Pending: ${{ $totalPending }}</h6>
+                                <h6>Total Pending: ${{ $totalPending }} - GST: {{$totalPendingGST}}</h6>
                             </div>
                             <div class="col-md-4"><a class="btn btn-dark @if(Auth::user()->plan_id < 3  ) goGem  @endif"
                                     href="/invoices/exportIn/{{ $business->id }}">Export data</a></div>
@@ -453,10 +453,10 @@
                         <h4>Outgoing Statistics:</h4>
                         <div class="row text-center my-2">
                             <div class="col-md-4">
-                                <h6>Total Earnings: ${{ $totalEarning }}</h6>
+                                <h6>Total Earnings: ${{ $totalEarning }} - GST: {{$totalEarningGST}}</h6>
                             </div>
                             <div class="col-md-4">
-                                <h6>Total Pending: ${{ $totalPendingEarn }}</h6>
+                                <h6>Total Pending: ${{ $totalPendingEarn }} - GST: {{$totalPendingEarnGST}}</h6>
                             </div>
                             <div class="col-md-4"><a class="btn btn-dark @if(Auth::user()->plan_id < 3  ) goGem  @endif "
                                     href="/invoices/exportOut/{{ $business->id }}">Export data</a></div>
