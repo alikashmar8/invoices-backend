@@ -60,7 +60,7 @@
 				vertical-align: top;
 			}
 
-			.invoice-box table tr td:nth-child(2), .invoice-box table tr td:nth-child(3) {
+			.invoice-box table tr td:nth-child(2), .invoice-box table tr td:nth-child(3) ,.invoice-box table tr td:nth-child(4) {
 				text-align: right;
 			}
 
@@ -96,7 +96,7 @@
 				border-bottom: none;
 			}
 
-			.invoice-box table tr.total td:nth-child(2), .invoice-box table tr.total td:nth-child(3) {
+			.invoice-box table tr.total td:nth-child(2), .invoice-box table tr.total td:nth-child(3), .invoice-box table tr.total td:nth-child(4) {
 				border-top: 2px solid #eee;
 				font-weight: bold;
 			}
@@ -129,12 +129,12 @@
             
 			<table>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                         <p class="stamp"><b> @if($is_paid) Paid @else Pending @endif </b></p>
                     </td>
                 </tr>
 				<tr class="top">
-					<td colspan="3">
+					<td colspan="4">
 						<table>
                             
 
@@ -155,7 +155,7 @@
 				</tr>
 
 				<tr class="information">
-					<td colspan="3"> 
+					<td colspan="4"> 
 						<table>
 							<tr>
 								<td>
@@ -177,20 +177,33 @@
 						</table>
 					</td>
 				</tr>
-
+				
+				@if(count($bill_items) >0)
+				<tr>
+					<td colspan="4">
+						{{$title}}
+					</td>
+				</tr>
+				@endif
 				<tr class="heading">
 					<td>Description</td>
 
+					<td>@if(count($bill_items) >0) QTY @endif</td>
 					<td>GST</td>
 					<td>Price</td>
 				</tr>
 
-				<tr class="details">
-					<td>{{$title}}</td>
+				@if(count($bill_items) >0)
+					@foreach( $bill_items as $item)
+						<tr class="details">
+							<td>{{$item->description}}</td>
 
-					<td>{{$GST}}</td>
-					<td>{{$total}}</td>
-				</tr>
+							<td>{{$item->quantity}}</td>
+							<td>{{$item->gst}}</td>
+							<td>{{$item->item_price}}</td>
+						</tr>
+					@endforeach
+				@endif
                  
 
 				<!--tr class="heading">
@@ -216,14 +229,21 @@
 
 					<td>$10.00</td>
 				</tr-->
-
+				<tr class="total">
+					<td>@if(count($bill_items) >0) Sub total @else {{$title}} @endif</td>
+					<td> </td>
+					<td>{{$GST}}</td>
+					<td>{{$total}}</td>
+					
+				</tr>
 				<tr class="total">
 					<td></td>
+                    <td></td>
                     <td></td>
 					<td >Total: ${{$amount}}</td>
 				</tr> 
                 <tr>
-                    <td>
+                    <td  colspan="2">
                         <p > <b><i>Payment Method:</i></b></p>
                         <p style="white-space: pre"> {{$payment_method}}</p>
                     </td>

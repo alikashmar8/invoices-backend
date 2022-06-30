@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\bills_items;
 use App\Models\Contact;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -26,11 +27,7 @@ class BillsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'total' => 'required|numeric|min:0,max:9999999999',
-            'gst' => 'required|numeric|min:0,max:9999999999',
-            'payment_date' => 'required',
-            'notes' => 'max:255',
+            'title' => 'required|max:255',  
             'business_id' => 'required|exists:businesses,id',
         ]);
 
@@ -75,7 +72,22 @@ class BillsController extends Controller
             $bill->contact_id = $contacts->id;
         }
         $bill->save();
-        
+        if($request->get('bill_items')){
+            foreach ($request->get('bill_items') as $billItem) {
+
+                $bill_item = new bills_items(); 
+                $bill_item->description = $billItem['description'];
+                $bill_item->quantity = $billItem['quantity'];
+                $bill_item->gst = $billItem['gst'];
+                $bill_item->item_price = $billItem['item_price'];
+                $bill_item->bill_id = $bill->id;
+                $bill_item->save();
+                // More fields
+                
+                    //$shipment->shipment_details()->save($shipment_detail);
+                //$bill_item1 = new bills_items($bill_item);
+            }
+        }
         \QrCode::size(50) 
                 ->generate(asset('storage/pdf/'.$bill->id.'.pdf'), public_path('storage/QR/'.$bill->id.'.svg'));
 
@@ -91,7 +103,9 @@ class BillsController extends Controller
         if (count($businesses) < 1) {
             return redirect('/')->with('messageDgr', 'No business created.');
         }
-        return view('app.businesses.bills.edit-bill', compact('bill','contacts'));
+        $bill_items = bills_items::where('bill_id' , $bill->id)->get();
+        $maxId = bills_items::where('bill_id' , $bill->id)->max('id');
+        return view('app.businesses.bills.edit-bill', compact('bill','bill_items','contacts','maxId'));
     }
     public function update(Request $request){
 
@@ -142,7 +156,39 @@ class BillsController extends Controller
             $bill->contact_id = $contacts->id;
         }
         $bill->save();
-        
+
+        $items_collection = collect();
+        if($request->get('bill_items')){
+            print_r ($request->get('bill_items'));
+            foreach ($request->get('bill_items') as $billItem) {
+                 
+                if(bills_items::where('id', $billItem['id'])->exists()){ 
+                    $bill_item = bills_items::findOrFail($billItem['id']);
+                    $bill_item->description = $billItem['description'];
+                    $bill_item->quantity = $billItem['quantity'];
+                    $bill_item->gst = $billItem['gst'];
+                    $bill_item->item_price = $billItem['item_price']; 
+                    $bill_item->save();
+                }else{
+                    
+                    $bill_item = new bills_items(); 
+                    $bill_item->description = $billItem['description'];
+                    $bill_item->quantity = $billItem['quantity'];
+                    $bill_item->gst = $billItem['gst'];
+                    $bill_item->item_price = $billItem['item_price'];
+                    $bill_item->bill_id = $bill->id;
+                    $bill_item->save();
+                }
+                $items_collection->push($bill_item);
+            }
+        }
+
+        $old_items = bills_items::where('bill_id' , $bill->id)->get();
+        foreach($old_items as $old_item){
+            if(!$items_collection->contains('id',$old_item->id)){
+                 $old_item->delete() ;
+            }
+        }
 
         $this->generatePDF($bill);
         return redirect('businesses/' . $request->business_id)->with('msg', 'bill');
@@ -151,6 +197,7 @@ class BillsController extends Controller
     public function generatePDF(Bill $bill)
     { 
         //$bill = Bill::where('business_id' , 1 )->first();
+        $bill_items = bills_items::where('bill_id' , $bill->id)->get();
         $data = [
             'mainLogo' => 'images/logo.png',
             'clientName' => $bill->contact->name,
@@ -173,6 +220,7 @@ class BillsController extends Controller
             'payment_date' => $bill->payment_date,
             'notes' => $bill->notes,
             'QR' => 'storage/QR/'.$bill->id.'.svg',
+            'bill_items' => $bill_items,
             'created_at' => Carbon::parse($bill->created_at)->format('l jS \\of F Y')
         ];
 

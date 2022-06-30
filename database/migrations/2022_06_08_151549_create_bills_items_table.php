@@ -21,8 +21,8 @@ class CreateBillsItemsTable extends Migration
             $table->integer('quantity')->default(1); 
             $table->float('discount')->default(0);
             $table->float('total')->default(0);
-            $table->string('invoice_id');
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->string('bill_id');
+            $table->foreign('bill_id')->references('id')->on('bills')->onDelete('cascade');
             $table->timestamps();
         });
     }

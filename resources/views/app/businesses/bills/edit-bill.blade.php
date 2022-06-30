@@ -21,13 +21,97 @@
                         <input type="text" name="title" value="{{ $bill->title }}" class="form-control"
                             id="bill-name" required placeholder="Bill">
                     </div> 
-                    <i>table of content --> </i>
+                    
+                    
+                    <div class="form-group noScrollBar" style=" overflow: scroll;">
+                         
+                        <label for="title">
+                            Table of content (optional):
+                        </label>
+                        <table class="table w-100" id="contentTable" style="table-layout: fixed;">
+                            <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>QTY</th> 
+                                <th>GST	[A$]</th>
+                                <th>Item Price [A$]</th>	
+                                <th> <a class="btn  btn-success text-white" style='float: right;'onclick="addItem()"> Add </a> </th>
+                            </tr>
+                            </thead>
+                            <tbody id="contentTable">
+                                @if(count($bill_items)>0)
+                                    @foreach($bill_items as $item)
+                                    <tr id="{{$item->id}}" >  
+                                        <td> <textarea class="form-control" rows=1 name="bill_items[{{$item->id}}][description]" required>{{$item->description}}</textarea></td>   
+                                        <td>
+                                            <input type="number" name="bill_items[{{$item->id}}][quantity]" class="form-control" value={{$item->quantity}} required> 
+                                            
+                                            <input type="hidden" name="bill_items[{{$item->id}}][id]" value={{$item->id}} >
+                                        </td>   
+                                        <td><input type="number" name="bill_items[{{$item->id}}][gst]" class="form-control gst" value={{$item->gst}} oninput="calculate()" required>	</td>  
+                                        <td><input type="number" name="bill_items[{{$item->id}}][item_price]" class="form-control item_price" value={{$item->item_price}} oninput="calculate()" required></td>  
+                                        <td> <a class="btn btn-danger text-white" style="float: right;" onclick="removeItem({{$item->id}})"> <i class="fa fa-ban"></i> </a> </td>  
+                                        
+                                    </tr>
+                                    @endforeach
+                                @endif
+                            
+                            </tbody>
+ 
+                        </table>
+                        <script> 
+                            var contentTable = document.getElementById('contentTable');
+                            var itemId = {{$maxId}}+1; 
+                            function addItem(){
+                                itemId++ ; 
+                                var row = contentTable.insertRow(-1);
+                                row.setAttribute("id", itemId);
+                                var cell1 = row.insertCell(0);
+                                var cell2 = row.insertCell(1);
+                                var cell3 = row.insertCell(2);
+                                var cell4 = row.insertCell(3);
+                                var cell5 = row.insertCell(4); 
+                                cell1.innerHTML = '<textarea class="form-control" rows=1 name="bill_items[' + itemId + '][description]" required></textarea>';
+                                cell2.innerHTML = '<input type="number" name="bill_items[' + itemId + '][quantity]" class="form-control" value=1 min=0  required> <input type="hidden" name="bill_items[' + itemId + '][id]" value=' + itemId + ' >';
+                                cell3.innerHTML = '<input type="number" name="bill_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" value=0 min=0  required>	';
+                                cell4.innerHTML = '<input type="number" name="bill_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" value=0 min=0  required>';
+                                cell5.innerHTML = '<a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a>'; 
+                                 
+                               // contentTable.innerHTML +=  '<tr id="' + itemId + '" >  <td> <textarea class="form-control" rows=1 name="bill_items[' + itemId + '][description]" required></textarea></td>   <td><input type="number" name="bill_items[' + itemId + '][quantity]" class="form-control" required></td>   <td><input type="number" name="bill_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" required>	</td>  <td><input type="number" name="bill_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" required></td>  <td> <a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a> </td> </tr>';
+                            
+                                calculate();
+                            }
+                            function removeItem(id){
+                                document.getElementById(id).remove(); 
+                                
+                                calculate();
+                            }
+                            function calculate(){
+                                if(contentTable.rows.length-1  > 0 ){
+                                    var item_gst = document.getElementsByClassName("gst");
+                                    var item_price = document.getElementsByClassName("item_price");
+                                    var total_price =0 ;
+                                    var total_gst =0 ;
+                                    for (var i = 0; i < item_price.length; i++) {
+                                        if(!parseInt(item_price[i].value)) item_price[i].value =0;
+                                        if(!parseInt(item_gst[i].value)) item_gst[i].value =0;
+                                        total_price += parseInt(item_price[i].value);
+                                        total_gst += parseInt(item_gst[i].value);
+                                    }
+                                    document.getElementById('total').value = total_price;
+                                    document.getElementById('gst').value = total_gst; 
+                                }
+                            } 
+
+                        </script>
+                    </div>
+
                     <div class="form-group">
                         <label for="total" class="required">
                             Total Amount <small>AUD</small>:
                         </label>
                         <input type="number" name="total" value="{{ $bill->total }}" class="form-control"
-                            id="bill-amount" min="0" required>
+                            id="total" min="0" required>
                     </div>
                     
                     
@@ -36,7 +120,7 @@
                             Total GST <small>AUD</small>:
                         </label>
                         <input type="number" name="gst" value="{{ $bill->gst }}" class="form-control"
-                            id="bill-gst" min="0" required>
+                            id="gst" min="0" required>
                     </div>
 
                     <div class="form-check form-switch">
