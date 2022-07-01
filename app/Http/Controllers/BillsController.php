@@ -7,10 +7,14 @@ use App\Models\bills_items;
 use App\Models\Contact;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use App\Models\Business;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\Mail; 
+use App\Mail\ShareBill; 
 
 class BillsController extends Controller
 {
@@ -93,7 +97,11 @@ class BillsController extends Controller
 
 
         $this->generatePDF($bill);
-        return redirect('businesses/' . $request->business_id)->with('msg', 'bill');
+        if (isset($request->send_bill)) {
+            $request->email = null;
+            $this->ShareBill($bill, $request);
+        }
+        return redirect('businesses/' . $request->business_id)->with('msg', 'bill')->with('gocha', 'bill');
     }
 
     public function edit(Bill $bill){
@@ -191,7 +199,7 @@ class BillsController extends Controller
         }
 
         $this->generatePDF($bill);
-        return redirect('businesses/' . $request->business_id)->with('msg', 'bill');
+        return redirect('businesses/' . $request->business_id)->with('msg', 'bill')->with('gocha', 'bill');;
     }
 
     public function generatePDF(Bill $bill)
@@ -228,5 +236,24 @@ class BillsController extends Controller
         $pdf = Pdf::loadView('app.businesses.bills.pdfs.bill-pdf-view', $data);
         Storage::put('public/pdf/'. $bill->id . '.pdf', $pdf->output());
         return 0;//$pdf->download($bill->id . '.pdf'); 
+    }
+    public function ShareBill(Bill $bill, Request $request)
+    { 
+        echo $bill;
+        $data = array(
+            'billId' => $bill->id,
+            'billURL' => asset('storage/pdf/'.$bill->id.'.pdf'),
+            'billQR' => asset('storage/QR/'.$bill->id.'.svg'),
+            'business' => Business::findOrFail($bill->business_id)->name,
+            'sender' => Auth::user()->name,
+        );
+        if($request->email == null){
+            Mail::to(Contact::findOrFail($bill->contact_id)->email)->send(new ShareBill($data));
+        }else{
+            Mail::to($request->email)->send(new ShareBill($data));
+            //return response()->json(['success' => true]);//->with('messageSuc', 'Invoice sent successfully'); 
+            return back()->with('msg', 'bill');
+        }
+        
     }
 }

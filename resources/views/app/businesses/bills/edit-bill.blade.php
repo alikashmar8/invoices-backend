@@ -110,7 +110,7 @@
                         <label for="total" class="required">
                             Total Amount <small>AUD</small>:
                         </label>
-                        <input type="number" name="total" value="{{ $bill->total }}" class="form-control"
+                        <input type="number" name="total" value="{{ $bill->total }}" oninput="calculate()" class="form-control"
                             id="total" min="0" required>
                     </div>
                     
@@ -119,7 +119,7 @@
                         <label for="total" class="required">
                             Total GST <small>AUD</small>:
                         </label>
-                        <input type="number" name="gst" value="{{ $bill->gst }}" class="form-control"
+                        <input type="number" name="gst" value="{{ $bill->gst }}" oninput="calculate()"class="form-control"
                             id="gst" min="0" required>
                     </div>
 

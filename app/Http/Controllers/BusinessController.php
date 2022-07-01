@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Invitation;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
+use App\Models\InvoiceItem;
 use App\Models\User;
 use Carbon\Carbon;
 use BenSampo\Enum\Rules\EnumValue;
@@ -123,10 +124,12 @@ class BusinessController extends Controller
             Log::info('totalPending using query: ' . $totalPending);
             $totalPaid = $totalPending = 0 ;
             foreach($invoices as $inv){
+                $inv->items = InvoiceItem::where('invoice_id' , $inv->id)->get();
                 if($inv->is_paid) $totalPaid += $inv->total;
                 else $totalPending += $inv->total;
             }
             Log::info('totalPaid using foreach: ' . $totalPaid);
+            
 
             
             $totalPaidGST = $invoices->where('isPaid', true)->sum('gst');

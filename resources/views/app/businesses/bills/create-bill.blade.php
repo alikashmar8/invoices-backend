@@ -178,10 +178,35 @@
                                 <label  class="required">Name:</label>
                                 <input type="text" name="contact_name" id='contact_name' required  class="form-control" >
                             </div>
-                            <div class="form-group">
-                                <label >Email:</label>
-                                <input type="email" name="contact_email"   class="form-control"  >
+
+                            <div class="form-check form-switch p-0">
+                                <style>
+                                    .form-check-input:checked {
+                                        background-color: #ff556e;
+                                        border-color: #ff556e;
+                                    }
+        
+                                    .form-check-input:focus {
+                                        border-color: #ff556e90;
+                                        outline: 0;
+                                        box-shadow: 0 0 0 0.25rem #ff556e80;
+                                    }
+        
+                                </style>
+                                <input name="send_bill" class="form-check-input mx-0 my-1 px-2 position-relative" type="checkbox"
+                                checked id="send_bill" onclick="send_bill_set()">
+                                <label class="form-check-label px-2" for="send_bill">Send the invoice after creating it</label>
+
                             </div>
+
+                            <div class="form-group">
+                                
+                                
+                                <label class="">Email:</label>
+                                <input type="email" name="contact_email" id="contact_email"  class="form-control" required >
+                                 
+                            </div>
+                            
                             <div class="form-group">
                                 <label >ABN:</label>
                                 <input type="text" name="contact_abn"  class="form-control"  >
@@ -201,12 +226,22 @@
                                 if(selectContact.value !=0 ) {
                                     document.getElementById('new_user').style.display = "none";
                                     document.getElementById('contact_name').required = false;
+                                    document.getElementById('contact_email').required = false;
                                 }
                                 else {
                                     document.getElementById('new_user').style.display = "block";
                                     document.getElementById('contact_name').required = true;
+                                    document.getElementById('contact_email').required = true;
                                 }
                             }
+                            function send_bill_set(){
+                                if (document.getElementById("send_bill").checked) {
+                                    document.getElementById("contact_email").setAttribute("required", "");
+                                }else{
+                                    document.getElementById("contact_email").removeAttribute("required");
+                                }
+                            }
+
                         </script>
 
                     </div>

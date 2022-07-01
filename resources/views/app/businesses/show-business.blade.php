@@ -5,6 +5,9 @@
 
 @section('content') 
 <br> 
+    <div style="width: 100%; height:100%; position: absolute; text-align:center;display:none; z-index:1050; background: white;" id="gocha">
+        
+    </div>
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12">
@@ -152,7 +155,7 @@
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
                                                     href="/invoices/{{ $invoice->id }}/edit">
                                                     <i class="fa fa-edit text-primary"></i>
-                                                </a>
+                                                </a> 
 
                                                 @if ($current_user_business_details->role == 'MANAGER' || $current_user_business_details->role == 'CO_MANAGER')
                                                     <button type="button" class="btn col-md-2 p-0 mx-1"
@@ -167,7 +170,7 @@
                                         <!-- show invoice modal -->
                                         <div class="modal fade" id="showModal-{{ $invoice->id }}" tabindex="1"
                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class=" modal-dialog" role="document">
+                                            <div class=" modal-dialog" style='width:90%; max-width:90%' role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
@@ -216,7 +219,46 @@
                                                         </p>
 
                                                         <p><b>Added on:</b> {{ $invoice->created_at }} </p>
-                                                        @if ($invoice->attachments)
+                                                        <p >
+                                                            @if (count($invoice->items) >0)
+                                                            
+                                                                <p><b>Items Details: </b></p>
+                                                                <div class="row  " id="heading">
+                                                                    <div class="col-3 border border-dark">Description</div>
+                                                                    <div class="col-3 border border-dark">QTY</div>
+                                                                    <div class="col-3 border border-dark">GST</div>
+                                                                    <div class="col-3 border border-dark">Item Price</div>
+                                                                </div> 
+                                                                
+                                                                @foreach($invoice->items as $item)
+                                                                 
+                                                                <div class="row  " >
+                                                                    <div class="col-3 border border-dark"> {{ $item->description}}</div>
+                                                                    <div class="col-3 border border-dark">{{$item->quantity}}</div>
+                                                                    <div class="col-3 border border-dark">{{$item->gst}}</div>
+                                                                    <div class="col-3 border border-dark">{{$item->item_price}}</div>
+                                                                </div> 
+                                                                @endforeach
+                                                               {{-- <table class="">
+                                                                    <tr>
+                                                                        <th> Description</th>
+                                                                        <th> QTY</th>
+                                                                        <th> GST</th>
+                                                                        <th> Item Price</th>
+                                                                    </tr>
+                                                                    @foreach($invoice->items as $item)
+                                                                    <tr>
+                                                                        <td> {{ $item->description}}</td>
+                                                                        <td> {{$item->quantity}}</td>
+                                                                        <td> {{$item->gst}} </td>
+                                                                        <td> {{$item->item_price}}</td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                        
+                                                                </table>--}}
+                                                            @endif
+                                                        </p>
+                                                        @if (count($invoice->attachments) >0)
                                                             <p><b>Attachments</b></p>
                                                             @foreach ($invoice->attachments as $attach)
                                                                 <!--a href="{{-- asset($attach->url) --}}" class='btn btn-info'  download="">Doc-{{ $loop->index + 1 }} </a-->
@@ -344,6 +386,11 @@
                                                     <i class="fa fa-expand text-primary" aria-hidden="true"></i>
                                                 </button>
 
+                                                <button type="button" class="btn col-md-2 p-0 mx-1"
+                                                    data-target="#shareModal-{{ $bill->id }}" data-toggle="modal">
+                                                    <i class="fa fa-share text-primary" aria-hidden="true"></i>
+                                                </button>
+
                                                 <a type="button" class="btn col-md-2 p-0 mx-1"
                                                     href="/bills/{{ $bill->id }}/edit">
                                                     <i class="fa fa-edit text-primary"></i>
@@ -427,6 +474,70 @@
                                         <script>
                                             billsList.push(['{{ $bill->id }}', '{{ $bill->created_at }}']);
                                         </script>
+
+                                        <!-- share bill modal -->
+                                        <div class="modal fade" id="shareModal-{{ $bill->id }}" tabindex="1"
+                                            role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class=" modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            Send bill #{{ $bill->id }}  
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" id="output_content">
+                                                        <form class="form" method='get' name='shareForm{{$bill->id}}' id="shareForm{{$bill->id}}" action="javascript:void(0)" >
+                                                            @csrf
+                                                        <div class="form-group">
+                                 
+                                                            <label class="">Email:</label>
+                                                            <input type="email" name="email"  class="form-control" value="{{$bill->contact->email}}" required >
+                                                             
+                                                        </div>
+                                                         
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" id='submit-{{$bill->id}}' class="btn btn-success">Send</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <script>
+                                                        //var ids = '{{$bill->id}}'; ids = ids.replace('characterToReplace', '');
+                                                        var url{{ $loop->index }}= "/shareBill/{{$bill->id}}"; 
+                                                        if ($("#shareForm{{$bill->id}}").length > 0) {
+                                                            $("#shareForm{{$bill->id}}").validate({
+                                                                submitHandler: function(form) {
+                                                                    
+                                                                    $('#submit-{{$bill->id}}').html('Please Wait...');
+                                                                    $("#submit-{{$bill->id}}"). attr("disabled", true);
+                                                                    $.ajax({ 
+                                                                        url: url{{ $loop->index }},
+                                                                        type: "GET",
+                                                                        data: $('#shareForm{{$bill->id}}').serialize(),
+                                                                        success: function( response ) {
+                                                                        alert('Invoice sent successfully');
+                                                                        $('#submit-{{$bill->id}}').html('Send');
+                                                                        $("#submit-{{$bill->id}}"). attr("disabled", false);
+                                                                        
+                                                                        document.getElementById("shareForm{{$bill->id}}").reset(); 
+                                                                        }
+                                                                    });
+                                                                }
+                                                            })
+                                                        }
+                                                    </script>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                          
+
                                     @endforeach
                                 @else
                                     <tr>
@@ -621,6 +732,7 @@
         </div>
     </div>
 
+           
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
     </script>
@@ -692,6 +804,18 @@
             .filter(function(value, index) {
                 return value > 20 ? true : false;
             });
+
     </script>
 
+<script>
+    @if(session()->has('gocha')) 
+        document.getElementById("gocha").style.display = "block";
+        var image = "{{asset('img/tick.gif')}}";
+        document.getElementById("gocha").innerHTML = "<img src="+  image+ " >        <h2>Gocha!</h2>"
+        function hideGicha() {
+            document.getElementById("gocha").style.display = "none";
+        }
+        setTimeout("hideGicha()", 3000); 
+    @endif
+</script>
 @endsection

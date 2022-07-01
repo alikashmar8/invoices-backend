@@ -62,6 +62,7 @@ Route::post('/bills', [App\Http\Controllers\BillsController::class, 'store'])->m
 Route::get('/bills/{bill}/edit', [App\Http\Controllers\BillsController::class, 'edit'])->middleware('auth');
 Route::post('/bills/update', [App\Http\Controllers\BillsController::class, 'update'])->name('bills.update')->middleware('auth');
 Route::get('/bills/{bill}/generate/pdf', [App\Http\Controllers\BillsController::class, 'generatePDF']);
+Route::get('/shareBill/{bill}', [App\Http\Controllers\BillsController::class, 'ShareBill'])->name('shareBill')->middleware('auth');
 
 Route::get('/contacts/business/{business}', [App\Http\Controllers\ContactsController::class, 'index'])->name('contacts.index')->middleware('auth');
 Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'store'])->name('contacts.store')->middleware('auth');
