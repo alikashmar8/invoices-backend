@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/e', function (){
     $user = App\Models\User::where('id', 1)->first();
         Mail::to('mk.farhat@hotmail.com')->send(new App\Mail\RenewPlansReminder($user));
-        return view('welcome');;
+        return view('welcome');
 });
 Route::get('/', function () {
     return view('welcome');

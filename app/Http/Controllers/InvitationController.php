@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\NewNotification;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificationReceived;
 
 class InvitationController extends Controller
 {
@@ -93,6 +97,12 @@ class InvitationController extends Controller
         $invitation->notification_id = $notify->id;
         $invitation->save();
 
+        //$user->notify(new NewNotification);
+        $data = array(
+            'name' => $user->name,
+            'number' => count(Notification::where('user_id' , $user->id)->where('is_read' , 0)->get()),
+        );
+        Mail::to($user->email)->send(new NotificationReceived($data));
 
         if (request()->is('api/*')) {
             //an api call
@@ -156,6 +166,16 @@ class InvitationController extends Controller
         $notification->is_read = 0;
         $notification->save();
 
+        $user = User::where('id' , $notification->user_id)->first();
+        if($user != null ){
+            $data = array(
+                'name' => $user->name,
+                'number' => count(Notification::where('user_id' , $user->id)->where('is_read' , 0)->get()),
+            );
+            Mail::to($user->email)->send(new NotificationReceived($data));
+        }
+        
+
         if (request()->is('api/*')) {
             //an api call
             return response()->json(['rejected' => true]);
@@ -203,6 +223,14 @@ class InvitationController extends Controller
         $notify->message = Auth::user()->name . ' is now ' . $invitation->role . ' in your ' . $invitation->business->name . ' team';;
         $notify->user_id = UserBusiness::where('business_id', $invitation->business->id)->where('role', 'MANAGER')->first()->user_id;
         $notify->save();
+        $user = User::where('id' , $notify->user_id)->first();
+        if($user != null ){
+            $data = array(
+                'name' => $user->name,
+                'number' => count(Notification::where('user_id' , $user->id)->where('is_read' , 0)->get()),
+            );
+            Mail::to($user->email)->send(new NotificationReceived($data));
+        }
 
         if (request()->is('api/*')) {
             //an api call

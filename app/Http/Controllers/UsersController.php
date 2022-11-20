@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PaymentCompleted;
 use App\Models\Notification;
 use Image;
 class UsersController extends Controller
@@ -145,6 +147,14 @@ class UsersController extends Controller
         Auth::user()->plan_id = $request->id;
         Auth::user()->plan_end_date = Carbon::now()->addMonths(1);
         Auth::user()->save();
+
+        $data = array(
+            'name' => Auth::user()->name,
+            'price' => $plan->price,
+            'plan' => $plan->name, 
+        );
+        Mail::to(Auth::user()->email)->send(new PaymentCompleted($data));
+         
         return redirect('/profile/'.Auth::user()->id)->with( 'messageSuc' , 'Registration completed successfully.');
     }
 }
