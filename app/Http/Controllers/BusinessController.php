@@ -13,6 +13,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
 use App\Models\InvoiceItem;
 use App\Models\User;
+use App\Models\BillAccess;
 use Carbon\Carbon;
 use BenSampo\Enum\Rules\EnumValue;
 use \Illuminate\Support\Facades\Auth;
@@ -150,6 +151,7 @@ class BusinessController extends Controller
                 if($bill->is_paid) $totalEarning += $bill->total;
                 else $totalPendingEarn += $bill->total;
                 $bill->contact = Contact::findOrFail($bill->contact_id);
+                $bill->bill_accesses = BillAccess::where('bill_id' ,$bill->id )->get();
             }
             Log::info('totalEarning using foreach: ' . $totalEarning);
 

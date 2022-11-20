@@ -33,6 +33,7 @@ class CreateBillsTable extends Migration
             $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users');
+            $table->integer('restricted')->default(1);
             $table->timestamps();
         });
     }

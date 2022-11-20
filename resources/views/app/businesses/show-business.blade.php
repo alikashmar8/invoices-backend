@@ -181,7 +181,7 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body" id="output_content">
+                                                    <div class="modal-body" id="output_content1">
                                                         <p><b>Title:</b> {{ $invoice->title }} </p>
                                                         <p><b>Total amount:</b> ${{ $invoice->total }} <small>AUD</small>
                                                         </p>
@@ -424,7 +424,7 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body" id="output_content">
+                                                    <div class="modal-body" id="output_content2">
 
                                                         <p><b>Title:</b> {{ $bill->title }}</p>
                                                         <p><b>Total amount:</b> ${{ $bill->total }} <small>AUD</small>
@@ -461,7 +461,7 @@
                                                             {{ $bill->createdBy->name }}
                                                         </p>
                                                         <p><b>Added on:</b> {{ $bill->created_at }} </p>
-                                                        <a class="btn btn-primary" href="http://127.0.0.1:8000/storage/pdf/{{$bill->id}}.pdf" target="_blank"> View online </a>
+                                                        <a class="btn btn-primary" href="{{asset('storage/pdf/'.$bill->id .'.pdf')}}" target="_blank"> View online </a>
                                                          
                                                     </div>
                                                     <div class="modal-footer">
@@ -482,35 +482,120 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            Send bill #{{ $bill->id }}  
+                                                            Share bill #{{ $bill->id }}  
                                                         </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body" id="output_content">
-                                                        <form class="form" method='get' name='shareForm{{$bill->id}}' id="shareForm{{$bill->id}}" action="javascript:void(0)" >
-                                                            @csrf
-                                                        <div class="form-group">
-                                 
-                                                            <label class="">Email:</label>
-                                                            <input type="email" name="email"  class="form-control" value="{{$bill->contact->email}}" required >
-                                                             
+                                                    <div class="modal-body" >
+                                                        <b>General access</b>
+                                                        <div class="row">
+                                                            <form class="form" method='post' name='changeAccessForm' id="changeAccessForm{{$bill->id}}" action="javascript:void(0)" >
+                                                                @csrf
+                                                                <div class="col-md-8">
+                                                                    <select class="form-control" name='restricted' onchange="changeAccessDone{{ $loop->index }}(this.value)">
+                                                                        <option value=1 >Restricted </option>
+                                                                        <option value=0>Not restricted</option>
+                                                                    </select>
+                                                                    <small id='changeAccessHint{{ $loop->index }}'></small>
+                                                                    <script>
+                                                                        function changeAccessDone{{ $loop->index }}(value){
+                                                                            if(value == 1){
+                                                                                document.getElementById('changeAccessHint{{ $loop->index }}').innerHTML = '<i class="fas fa-lock"></i> Only people with access can open the bill';
+                                                                                document.getElementById('peopleWithAccess{{ $loop->index }}').style.display = 'block';
+                                                                            }
+                                                                                
+                                                                            else {
+                                                                                document.getElementById('changeAccessHint{{ $loop->index }}').innerHTML = '<i class="fas fa-lock-open"></i> Anyone with the link can open the bill';
+                                                                                document.getElementById('peopleWithAccess{{ $loop->index }}').style.display = 'none';
+                                                                            }
+                                                                                
+                                                                            document.getElementById('changeAccessBtn{{ $bill->id }}').disabled = false;
+                                                                        }
+                                                                    </script>
+                                                                </div>                                                                
+                                                                <div class="col-md-4">
+                                                                    <button type="submit" id='changeAccessBtn{{ $bill->id }}' class="btn btn-info" disabled> Update </button>
+                                                                </div>
+                                                            </form>
                                                         </div>
-                                                         
+                                                        
+                                                        <div id="peopleWithAccess{{ $loop->index }}">
+                                                            <hr>
+                                                            <b>People with access</b>
+                                                            <div id="peopleWithAccessAppend{{ $loop->index }}"> 
+                                                            @if(count($bill->bill_accesses ) > 0 )
+                                                                @foreach($bill->bill_accesses as $access)
+                                                                    <div class="row" >
+                                                                
+                                                                        <form class="form" method='post' name='removeAccess' id="deleteAccess{{$access->id}}" action="javascript:void(0)" >
+                                                                            @csrf
+                                                                            <p class="m-0" id="deletePar-{{$access->id}}">
+                                                                                {{$access->email}}
+                                                                                <button type="submit" id='deleteSubmit-{{$access->id}}' class="btn btn-link" >
+                                                                                    <i class="fas fa-trash-alt text-danger"></i>
+                                                                                </button> 
+                                                                             </p> 
+                                                                        </form> 
+                                                                    
+                                                                    </div>
+                                                                    <script>
+                                                                         
+                                                                        if ($("#deleteAccess{{$access->id}}").length > 0) {
+                                                                            $("#deleteAccess{{$access->id}}").validate({
+                                                                                submitHandler: function(form) { 
+                                                                                    //$('#submit-{{$access->id}}').html('Please Wait...');
+                                                                                    $("#deleteSubmit-{{$access->id}}"). attr("disabled", true);
+                                                                                    $.ajax({ 
+                                                                                        url: "/removeAccess-{{$access->id}}",
+                                                                                        type: "post",
+                                                                                        data: $('#deleteAccess{{$access->id}}').serialize(),
+                                                                                        success: function( response ) {
+                                                                                        //alert('Invoice sent successfully');
+                                                                                        //$('#submit-{{$access->id}}').html('Sent!');
+                                                                                        $("#deleteSubmit-{{$access->id}}").css('display','none');
+                                                                                        $("#deletePar-{{$access->id}}").css('text-decoration-line','line-through') ;
+                                                                                         
+                                                                                        //document.getElementById("deleteAccess{{$access->id}}").reset(); 
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            })
+                                                                        }
+                                                                    </script>
+
+                                                                @endforeach
+                                                             
+                                                            @endif
+                                                            
+                                                            </div>
+                                                            <hr>
+                                                            <b>Add people to access</b>
+                                                            <div class="row">
+                                                                <form class="form" method='get' name='addAccessForm{{$bill->id}}' id="addAccessForm{{$bill->id}}" action="javascript:void(0)" >
+                                                                    @csrf
+                                                                    <div class="col-md-8">
+                                                                        <input type="email" name="email" id='email-{{$bill->id}}' class="form-control" required >
+                                                                        <small>This bill will be sent to the added people</small>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <button type="submit" id='submit-{{$bill->id}}' class="btn btn-success">Add</button> 
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" id='submit-{{$bill->id}}' class="btn btn-success">Send</button>
-                                                        </form>
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Close</button>
+                                                        <button class="btn btn-primary" onclick="navigator.clipboard.writeText(window.location.host + '/access/{{$bill->id }}'); this.innerHTML='Copied'; ">Copy link</button>
+                                                        <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
                                                     </div>
                                                     <script>
-                                                        //var ids = '{{$bill->id}}'; ids = ids.replace('characterToReplace', '');
-                                                        var url{{ $loop->index }}= "/shareBill/{{$bill->id}}"; 
-                                                        if ($("#shareForm{{$bill->id}}").length > 0) {
-                                                            $("#shareForm{{$bill->id}}").validate({
+                                                        var url{{ $loop->index }}= "/shareBill/{{$bill->id}}";
+                                                        if ($("#addAccessForm{{$bill->id}}").length > 0) {
+                                                            $("#addAccessForm{{$bill->id}}").validate({
                                                                 submitHandler: function(form) {
                                                                     
                                                                     $('#submit-{{$bill->id}}').html('Please Wait...');
@@ -518,18 +603,78 @@
                                                                     $.ajax({ 
                                                                         url: url{{ $loop->index }},
                                                                         type: "GET",
-                                                                        data: $('#shareForm{{$bill->id}}').serialize(),
+                                                                        data: $('#addAccessForm{{$bill->id}}').serialize(),
                                                                         success: function( response ) {
-                                                                        alert('Invoice sent successfully');
-                                                                        $('#submit-{{$bill->id}}').html('Send');
+                                                                        
+     
+var par = document.createElement("p");  
+par.innerHTML = document.getElementById('email-{{$bill->id}}').value
+par.classList.add("text-success");
+par.classList.add("m-0");
+{{--
+var divRow = document.createElement("div");
+divRow.classList.add("row");
+divRow.classList.add("mt-3");
+
+var divCol8 = document.createElement("div");
+divCol8.classList.add("col-md-8");
+divRow.appendChild(divCol8);
+
+var divCol4 = document.createElement("div");
+divCol4.classList.add("col-md-4");
+divRow.appendChild(divCol4);
+
+var input = document.createElement("INPUT");
+input.classList.add("form-control");
+input.disabled = true;
+input.value = document.getElementById('email-{{$bill->id}}').value;
+divCol8.appendChild(input);
+
+var paragraph = document.createElement("button");
+paragraph.classList.add("btn");
+paragraph.classList.add("btn-success"); 
+paragraph.innerHTML = "Sent!";
+divCol4.appendChild(paragraph);
+
+var aRemove = document.createElement("a");
+aRemove.classList.add("btn");
+aRemove.classList.add("btn-link");
+aRemove.innerHTML = '<i class="fas fa-trash-alt text-danger"></i>';
+divCol4.appendChild(aRemove);
+--}}
+
+document.getElementById("peopleWithAccessAppend{{ $loop->index }}").appendChild(par);
+
+                                                                        $('#submit-{{$bill->id}}').html('Add');
                                                                         $("#submit-{{$bill->id}}"). attr("disabled", false);
                                                                         
-                                                                        document.getElementById("shareForm{{$bill->id}}").reset(); 
+                                                                        document.getElementById("addAccessForm{{$bill->id}}").reset(); 
                                                                         }
                                                                     });
                                                                 }
                                                             })
                                                         }
+
+                                                        if ($("#changeAccessForm{{$bill->id}}").length > 0) {
+                                                            $("#changeAccessForm{{$bill->id}}").validate({
+                                                                submitHandler: function(form) {
+                                                                    
+                                                                    $('#changeAccessBtn{{$bill->id}}').html('Please Wait...');
+                                                                    $("#changeAccessBtn{{$bill->id}}").attr("disabled", true);
+                                                                    $.ajax({ 
+                                                                        url: '/changeAccessForm/{{$bill->id}}',
+                                                                        type: "post",
+                                                                        data: $('#changeAccessForm{{$bill->id}}').serialize(),
+                                                                        success: function( response ) {
+                                                                            $('#changeAccessBtn{{$bill->id}}').html('Updated!');
+                                                                            $("#changeAccessBtn{{$bill->id}}").attr("disabled", false);
+                                                                            //document.getElementById("changeAccessForm{{$bill->id}}").reset(); 
+                                                                        }
+                                                                    });
+                                                                }
+                                                            })
+                                                        }
+
                                                     </script>
                                                     
                                                 </div>
@@ -705,7 +850,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="output_content">
+                <div class="modal-body" id="output_content3">
                     <form method="POST" id='leave_business_form' action="/businesses/{{ $business->id }}/leave"
                         enctype="multipart/form-data">
                         @csrf

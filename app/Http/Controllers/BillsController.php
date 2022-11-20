@@ -8,6 +8,7 @@ use App\Models\Contact;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Models\Business;
+use App\Models\BillAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -239,7 +240,7 @@ class BillsController extends Controller
     }
     public function ShareBill(Bill $bill, Request $request)
     { 
-        echo $bill;
+        
         $data = array(
             'billId' => $bill->id,
             'billURL' => asset('storage/pdf/'.$bill->id.'.pdf'),
@@ -248,12 +249,51 @@ class BillsController extends Controller
             'sender' => Auth::user()->name,
         );
         if($request->email == null){
-            Mail::to(Contact::findOrFail($bill->contact_id)->email)->send(new ShareBill($data));
+            $email = Contact::findOrFail($bill->contact_id)->email;
+            if(count(BillAccess::where('email', $email)->where('bill_id',$bill->id )->get()) ==0 ){
+                $billAccess = new BillAccess();
+                $billAccess->email = $email;
+                $billAccess->bill_id = $bill->id;
+                $billAccess->save();
+            }
+            Mail::to($email)->send(new ShareBill($data));
         }else{
+            if(count(BillAccess::where('email', $request->email)->where('bill_id',$bill->id )->get()) ==0 ){
+                $billAccess = new BillAccess();
+                $billAccess->email = $request->email;
+                $billAccess->bill_id = $bill->id;
+                $billAccess->save();
+            }
             Mail::to($request->email)->send(new ShareBill($data));
-            //return response()->json(['success' => true]);//->with('messageSuc', 'Invoice sent successfully'); 
-            return back()->with('msg', 'bill');
+            //return response()->json(['success' => true , 'emailAdded' =>$request->email]);//->with('messageSuc', 'Invoice sent successfully'); 
+            return back()->with('msg', 'bill');//->with('emailAdded' ,$request->email );
         }
         
+    }
+    public function changeAccessForm(Bill $bill, Request $request)
+    {
+        $bill->restricted = $request->restricted;
+        $bill->save();
+        return response()->json(['success' => true]); 
+
+    }
+    public function removeAccess($id) 
+    {
+        $access = BillAccess::where('id',$id)->first();
+        if($access != null){
+            $access->delete();
+        }
+        return response()->json(['success' => true]);
+    }
+    public function accessBill(Bill $bill)
+    {
+        if($bill->restricted == 0){
+            return redirect('/storage/pdf/'. $bill->id . '.pdf');
+        }
+        $exists = Business::where('id' , $bill->business_id)->first()->users->contains(Auth::user());
+        if(!$exists && count(BillAccess::where('email', Auth::user()->email)->where('bill_id',$bill->id )->get()) ==0 ){
+            return redirect('/')->with('messageDgr', 'Access denied, you are not permitted to access this bill.');
+        }
+        return redirect('/storage/pdf/'. $bill->id . '.pdf');
     }
 }
