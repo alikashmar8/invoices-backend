@@ -311,7 +311,7 @@
                     <button class='btn btn-link w-auto' onclick='back()'><i class='fa fa-arrow-left fa-xs'></i>
                         Back</button>
 
-                    <form method="POST" action='/invitations'>
+                    <form method="POST" action='/invitations' id='sendInviteForm'>
                         @csrf
                         <input type='hidden' name="business_id" value='{{ $business->id }}'>
                         <h4>Invite this user:</h4>
@@ -335,8 +335,16 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success text-white my-3">Submit</button>
                     </form>
+                        <button onclick="submitInviteForm()" id="sendInviteFormBtn" 
+                                class="btn btn-success text-white m-3 col-md-3" >Submit</button>
+                    
+                    <script>
+                        function submitInviteForm(){
+                            document.getElementById("sendInviteFormBtn").disabled = true;
+                            document.getElementById("sendInviteForm").submit();
+                        }
+                    </script>
                 </div>
 
                 <div class="modal-footer">

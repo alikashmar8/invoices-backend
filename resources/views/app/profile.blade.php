@@ -201,19 +201,23 @@
                                                         type: "post",
                                                         data: $('#delete_{{$not->id}}').serialize(),
                                                         success: function( response ) {
+                                                            if(document.getElementById('tr_{{$not->id}}').style.fontWeight  =='bold') {
+                                                                 
+                                                                numberOfNotifications_int -= 1;
+                                                                numberOfNotifications.innerHTML = numberOfNotifications_int;
+                                                            }   
+                                                             
                                                             $('#btn_{{ $not->id}}').css('display', 'none');
-                                                            $('#btn_separator_{{ $not->id}}').css('display', 'none');
-                                                            
+                                                            $('#btn_separator_{{ $not->id}}').css('display', 'none'); 
                                                             $('#tr_{{$not->id}}').css('display', 'none');
-                                                                   
-                                                            numberOfNotifications_int -= 1;
-                                                            numberOfNotifications.innerHTML = numberOfNotifications_int;
+                                                            
                                                                     
                                                         }
                                                     });
                                                 }
                                             })
                                         } 
+                                        if(numberOfNotifications_int < 0 ) numberOfNotifications_int = 0;
                                     </script> 
                                 </td>
                                 <td>{{\Carbon\Carbon::parse($not->created_at)->format('g:i A d/m/Y') }}</td>
