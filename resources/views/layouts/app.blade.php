@@ -126,8 +126,8 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Invoice Gem</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="/"><img src="{{ asset('images/logo.svg') }}"
-                    alt="alternative"></a>
+            <a class="navbar-brand logo-image" href="/"><img src="{{ asset('images/logo.png') }}"
+                    alt="alternative" style="width: 130px; height: auto;"></a>
 
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"

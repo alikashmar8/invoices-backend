@@ -11,17 +11,17 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-container">
-                        <h1>Mobile App Landing Page</h1>
-                        <p class="p-large p-heading">Start focusing on your goals and get more things done with Sync mobile application. It's the first app to harness the power of social connections to help you stay focused and get organized</p>
-                        <a class="btn-solid-lg" href="#your-link"><i class="fab fa-apple"></i>DOWNLOAD</a>
-                        <a class="btn-solid-lg" href="#your-link"><i class="fab fa-google-play"></i>DOWNLOAD</a>
+                        <h1>Welcome to Invoice Gem</h1>
+                        <p class="p-large p-heading">Your advanced incoming and outgoing invoices management system on the go.</p>
+                        <a class="btn-solid-lg" href="/login"> <i class="fa fa-certificate" aria-hidden="true"></i> Get started for FREE</a>
+                        <a class="btn-solid-lg" href="#how-works"> <i class="fa fa-flag-checkered" aria-hidden="true"></i> How it works?</a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/header-iphone.png" alt="alternative">
+                        <img class="img-fluid" src="images/main.gif" alt="alternative" style="width: 90%;">
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -53,11 +53,11 @@
                     
                     <!-- Card -->
                     <div class="card">
-                        <div class="card-image">
-                            <i class="fas fa-users"></i>
+                        <div class="card-image"> 
+                            <i class="fas fa-fast-forward" aria-hidden="true"></i>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Identify Goals</h5>
+                            <h5 class="card-title">Fast tracking</h5>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -65,10 +65,10 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image green">
-                            <i class="fas fa-code"></i>
+                            <i class="fas fa-clock" aria-hidden="true"></i>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Situation Analysis</h5>
+                            <h5 class="card-title">Available 24/7</h5>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -76,10 +76,10 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image red">
-                            <i class="fas fa-cog"></i>
+                            <i class="fas fa-industry" aria-hidden="true"></i>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Tasks Settings</h5>
+                            <h5 class="card-title">All industries</h5>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -90,7 +90,7 @@
                             <i class="fas fa-comments"></i>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Social Interaction</h5>
+                            <h5 class="card-title">Customer support</h5>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -98,10 +98,10 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image blue">
-                            <i class="fas fa-rocket"></i>
+                            <i class="fas fa-lock" aria-hidden="true"></i>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Get Things Done</h5>
+                            <h5 class="card-title">Secures process</h5>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -118,29 +118,35 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="image-container">
-                        <img class="img-fluid" src="images/description-1-app.png" alt="alternative">
+                    <div class="image-container text-center" >
+                        <img class="img-fluid" src="images/about.jpg" style=" max-height: 100%;">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="text-container">
-                        <h2>Organize Your Time And Start Getting Results</h2>
-                        <p>Sync is the first mobile app on the market to harness the power of social connections to help you stop procrastinating and start getting things done. Give it a try and see the changes right away</p>
+                        <h2>About Invoice Gem</h2>
+                        <p>
+                            Invoice Gem is an Australian owned business located in Sydney. We provide an advaced smart system for online invoice tracking. With us you will be able to add all your incoiming and outgoing insoivces quicly and easly on to go. From now on, you don't have to spend time of filling your business expences and payments neither stack them in your files.
+
+                        </p>
+                        <p>
+                            Invoice Gem system is suitable for all buinsess types and sizes. With us you get access to add multiple team members to your business profile where they can manage the invoices with you. As well ass having the ability to register multiple buinsess profiles.
+                        </p> 
                         <ul class="list-unstyled li-space-lg">
                             <li class="media">
                                 <i class="fas fa-square"></i>
-                                <div class="media-body">Analyse and evaluate your current status and productivity</div>
+                                <div class="media-body">Save time in tracking all your incoming and outgoing invoices.</div>
                             </li>
                             <li class="media">
                                 <i class="fas fa-square"></i>
-                                <div class="media-body">Begin monitoring your day to day routine with Sync app</div>
+                                <div class="media-body">Ensure fast and secured process on the go.  </div>
                             </li>
                             <li class="media">
                                 <i class="fas fa-square"></i>
-                                <div class="media-body">See the improved results in no more than a couple of weeks</div>
+                                <div class="media-body">Manage your account anytime online.  </div>
                             </li>
                         </ul>
-                        <a class="btn-solid-reg popup-with-move-anim" href="#description-1-details-lightbox">LIGHTBOX</a>
+                        <a class="btn-solid-reg " href="/register">Register now</a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -149,46 +155,7 @@
     <!-- end of description 1 -->
 
     
-    <!-- Description 1 Details Lightbox -->
-	<!-- Details Lightbox -->
-	<div id="description-1-details-lightbox" class="lightbox-basic zoom-anim-dialog mfp-hide">
-        <div class="row">
-            <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
-			<div class="col-lg-8">
-                <div class="image-container">
-                    <img class="img-fluid" src="images/description-1-details-lightbox.jpg" alt="alternative">
-                </div> <!-- end of image-container -->
-			</div>
-			<div class="col-lg-4">
-                <h3>Goals Setting</h3>
-				<hr>
-                <p>The app can easily help you track your personal development evolution if you take the time to set it up.</p>
-                <h4>User Feedback</h4>
-                <p>This is a great app which can help you save time and make your live easier. And it will help improve your productivity.</p>
-                <ul class="list-unstyled li-space-lg">
-                    <li class="media">
-                        <i class="far fa-check-square"></i><div class="media-body">Splash screen panel</div>
-                    </li>
-                    <li class="media">
-                        <i class="far fa-check-square"></i><div class="media-body">Statistics graph report</div>
-                    </li>
-                    <li class="media">
-                        <i class="far fa-check-square"></i><div class="media-body">Events calendar layout</div>
-                    </li>
-                    <li class="media">
-                        <i class="far fa-check-square"></i><div class="media-body">Location details screen</div>
-                    </li>
-                    <li class="media">
-                        <i class="far fa-check-square"></i><div class="media-body">Onboarding steps interface</div>
-                    </li>
-                </ul>
-                <a class="btn-solid-reg mfp-close page-scroll" href="#download">DOWNLOAD</a> <button class="btn-outline-reg mfp-close as-button" type="button">BACK</button>
-			</div>
-		</div> <!-- end of row -->
-    </div> <!-- end of lightbox-basic -->
-    <!-- end of details lightbox -->
-    <!-- end of description 1 details lightbox -->
-
+     
 
 
     <!-- Description 2 -->
@@ -201,13 +168,19 @@
                         <!-- Tabs Links -->
                         <ul class="nav nav-tabs" id="cedoTabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true"><i class="far fa-clock"></i>Schedule</a>
+                                <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Create
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false"><i class="fas fa-list"></i>Tracking</a>
+                                <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">
+                                    <i class="fas fa-list"></i>Manage
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false"><i class="far fa-calendar-alt"></i>Organize</a>
+                                <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">
+                                    <i class="far fa-calendar-alt"></i>Organise
+                                </a>
                             </li>
                         </ul>
                         <!-- end of tabs links -->
@@ -216,54 +189,80 @@
                         <div class="tab-content" id="cedoTabsContent">
                             <!-- Tab -->
                             <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1">
-                                <p><strong>Schedule tasks</strong> to keep track of their completion. Sync provides multiple scheduling options including alarms and reminders.</p>
+                                <p><strong>Generate</strong> new incoming and outgoing invoices in simple clicks:</p>
                                 <ul class="list-unstyled li-space-lg">
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">You can always add new tasks or change the settings of existing ones in your calendar view or the app control panel</div>
+                                        <div class="media-body">
+                                            Save your incoming invoices on time and attach a copy of the otiginal one.
+                                        </div>
                                     </li>
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">It's easy to stay focused on your most important daily activities that will get you closer to meeting your goals</div>
+                                        <div class="media-body">
+                                            Create new outgoing invoices and share them with others.
+                                        </div>
                                     </li>
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">Use phone reminders to free up your long term memory which will reduce stress and make you more productive</div>
+                                        <div class="media-body">
+                                            Allow different access types for other users to view your generated invoices.
+                                        </div>
                                     </li>
                                 </ul>
-                                <a class="btn-solid-reg page-scroll" href="terms-conditions.html">TERMS</a> <a class="btn-outline-reg page-scroll" href="privacy-policy.html">PRIVACY</a>
+                                
                             </div> <!-- end of tab-pane -->
                             <!-- end of tab -->
 
                             <!-- Tab -->
                             <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2">
-                                <p><strong>Keep track of everything</strong> and analyse your progress while using the app. In less than a month you should be seeing improved results when it comes to time management and task prioritization</p>
-                                <p><strong>Anyone can enjoy the app</strong> no matter their gender, age, occupation or location in the world. Sync's algorithms have been built to be flexible and functional for any person in the world</p>
-                                <p><strong>Achieve the impossible</strong> just by carefully monitoring your progress and keeping the app updated with daily operations. It's easier than you think and it only takes a couple of minutes</p>
-                                <a class="red" href="terms-conditions.html">Terms & Conditions >></a>
+                                <p><strong>Control</strong> your buisiness expences and profits easily: </p>
+                                
+                                <ul class="list-unstyled li-space-lg">
+                                    <li class="media">
+                                        <i class="far fa-check-square"></i>
+                                        <div class="media-body">
+                                            Access your saved invoices 24/7 online using and smart device.
+                                        </div>
+                                    </li>
+                                    <li class="media">
+                                        <i class="far fa-check-square"></i>
+                                        <div class="media-body">
+                                            Create a team linked to you business profile and allow them to add invoices as well.
+                                        </div>
+                                    </li>
+                                    <li class="media">
+                                        <i class="far fa-check-square"></i>
+                                        <div class="media-body">
+                                            Register as many business profile as you need and manage them easutly on one platform.
+                                        </div>
+                                    </li>
+                                </ul>
                             </div> <!-- end of tab-pane -->
                             <!-- end of tab -->
 
                             <!-- Tab -->
                             <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
-                                <p><strong>Use the power of social interactivity</strong> to keep you motivated and focused on your daily and long term goals. It's revolutionary</p>
+                                <p><strong>Arrange</strong> your business's payments and documents:</p>
                                 <ul class="list-unstyled li-space-lg">
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">Commiting to something in front of a crowd gives you little room to walk back on your promise and makes you push on</div>
+                                        <div class="media-body">
+                                            Get your paid and pending payments counted and prepaired for Tax.
+                                        </div>
                                     </li>
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">No more frustrations of loosing focus and not being efficient. Sync main purpose is to solve just that and make you happy</div>
+                                        <div class="media-body">
+                                            Export your saved invoices onto your device anytime through Excel files.
+                                        </div>
                                     </li>
                                     <li class="media">
                                         <i class="far fa-check-square"></i>
-                                        <div class="media-body">It's the first mobile app that can turn you in a better organized person without the pressure of failing like other systems</div>
-                                    </li>
-                                    <li class="media">
-                                        <i class="far fa-check-square"></i>
-                                        <div class="media-body">Recognized by a lot of trainers and life coaches Sync is the number one tool they recommend time management</div>
-                                    </li>
+                                        <div class="media-body">
+                                            Filter and find any invoice saved in your account easly and quickly.
+                                        </div>
+                                    </li> 
                                 </ul>
                             </div> <!-- end of tab-pane -->
                             <!-- end of tab -->
@@ -274,7 +273,8 @@
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/description-2-app.png" alt="alternative">
+                        <img class="img-fluid" src="images/why-us.png" style="    border-radius: 50%;
+                        box-shadow: 0px 5px 15px 0.5px;">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
