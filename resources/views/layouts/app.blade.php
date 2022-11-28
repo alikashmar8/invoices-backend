@@ -144,19 +144,19 @@
 
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/description')) active @endif"
-                                href="/#description">DESCRIPTION <span class="sr-only">(current)</span></a>
+                                href="/#description">About <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/features')) active @endif"
-                                href="/#features">FEATURES</a>
+                                href="/#features">Features</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/screens')) active @endif"
-                                href="/#screens">SCREENS</a>
+                                href="/#testimonials">Testimonials</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link page-scroll @if (str_contains($currentURL, '/pricing')) active @endif"
-                                href="/pricing">PRICING</a>
+                                href="/pricing">Pricing</a>
                         </li>
 
                         <li class="nav-item px-2">

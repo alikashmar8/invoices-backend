@@ -272,8 +272,8 @@
                     </div> <!-- end of tabs-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
-                    <div class="image-container">
-                        <img class="img-fluid" src="images/why-us.png" style="    border-radius: 50%;
+                    <div class="image-container text-center">
+                        <img class="img-fluid" src="images/why-us.png" style="      margin-top: 60px;                        border-radius: 50%;
                         box-shadow: 0px 5px 15px 0.5px;">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
@@ -289,7 +289,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h2>Special Features</h2>
-                    <p class="p-heading">Sync's features are designed to help you improve your time management skills and become a better organized person. Organize your tasks, schedule your appointments and meet your personal development goals with Sync</p>
+                    <p class="p-heading">
+                        Advanced powerful features that make your invoicing easier provided by Invoice Gem
+                    </p>
                 </div> <!-- end of div -->
             </div> <!-- end of div -->
             <div class="row">
@@ -298,48 +300,54 @@
                         <li class="media">
                             <span class="fa-stack">
                                 <i class="fas fa-circle fa-stack-2x"></i>
-                                <i class="fas fa-users fa-stack-1x"></i>
+                                <i class="fas fas fa-walking fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Goal Setting</h4>
-                                <p>Like any self improving process, everything starts with setting your goals and committing to them</p>
+                                <h4>On the go</h4>
+                                <p>Submit all your incoming invoices and receipts quickly to be saved.  </p>
                             </div>
                         </li>
                         <li class="media">
                             <span class="fa-stack">
                                 <i class="fas fa-circle fa-stack-2x green"></i>
-                                <i class="fas fa-code fa-stack-1x"></i>
+                                <i class="fas fa-users fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Situation Analysis</h4>
-                                <p>Sync provides a well designed and ergonomic visual editor for you to edit your quick notes</p>
+                                <h4>Working with team?</h4>
+                                <p>
+                                    Create your own team to submit their invoices into one linked profile.
+                                </p>
                             </div>
                         </li>
                         <li class="media">
                             <span class="fa-stack">
                                 <i class="fas fa-circle fa-stack-2x red"></i>
-                                <i class="fas fa-cog fa-stack-1x"></i>
+                                <i class="fas fa-building fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Tasks Settings</h4>
-                                <p>Each option packaged in the app's menus is provided in order to improve you personally</p>
+                                <h4>Multiple business accounts</h4>
+                                <p>
+                                    Create and manage unlimited business profiles in one place.
+                                </p>
                             </div>
                         </li>
                     </ul>
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
-                    <img class="img-fluid" src="images/features-app.jpg" alt="alternative">
+                    <img class="img-fluid" src="images/feature.png" alt="alternative">
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
                     <ul class="list-unstyled li-space-lg">
                         <li class="media">
                             <span class="fa-stack">
                                 <i class="fas fa-circle fa-stack-2x yellow"></i>
-                                <i class="fas fa-comments fa-stack-1x"></i>
+                                <i class="fas fa-money-bill-wave fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Social Interaction</h4>
-                                <p>Schedule your appointments, meetings and periodical evaluations using the tools</p>
+                                <h4>Send bills </h4>
+                                <p>
+                                    Forward outgoing invoices and get paid with a few clicks.  
+                                </p>
                             </div>
                         </li>
                         <li class="media">
@@ -348,8 +356,10 @@
                                 <i class="fas fa-rocket fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Get Things Done</h4>
-                                <p>Reading focus mode for long form articles, ebooks and other materials with long text</p>
+                                <h4>Get things done</h4>
+                                <p>
+                                    Access your robust dashboard for all your paid and pending incoming and outgoing invoices.
+                                </p>
                             </div>
                         </li>
                         <li class="media">
@@ -358,8 +368,10 @@
                                 <i class="fas fa-download fa-stack-1x"></i>
                             </span>
                             <div class="media-body">
-                                <h4>Good Foundation</h4>
-                                <p>Get a solid foundation for your self development efforts. Try Sync mobile app for devices</p>
+                                <h4>Export data</h4>
+                                <p>
+                                    Download your tracked invoices anytime prepared for tax and accounting purposes.
+                                </p>
                             </div>
                         </li>
                     </ul>
@@ -369,7 +381,62 @@
     </div> <!-- end of basic-2 -->
     <!-- end of features -->
 
+    
+    <!-- Download -->
+    <div id="download" class="basic-3 counter" style="    background-color: #e8eff6;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <!-- Counter -->
+                    <div id="counter">
+                        <div class="cell">
+                            <i class="fas fa-users"></i>
+                            <div class="counter-value number-count" data-count="231">1</div>
+                            <p class="counter-info">Happy Users</p>
+                        </div>
+                        <div class="cell">
+                            <i class="fas fa-code green"></i>
+                            <div class="counter-value number-count" data-count="3853">1</div>
+                            <p class="counter-info">Uploaded Docs</p>
+                        </div>
+                        <div class="cell">
+                            <i class="fas fa-building red"></i>
+                            <div class="counter-value number-count" data-count="316">1</div>
+                            <p class="counter-info">Business Accounts</p>
+                        </div>
+                        <div class="cell">
+                            <i class="fas fa-star yellow"></i>
+                            <div class="counter-value number-count" data-count="127">1</div>
+                            <p class="counter-info">Good Reviews</p>
+                        </div> 
+                    </div>
+                    <!-- end of counter -->
+    
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+        
+        <div class="deco-white-circle-1">
+            <img src="images/decorative-white-circle.svg" alt="alternative">
+        </div> <!-- end of deco-white-circle-1 -->
+        <div class="deco-white-circle-2">
+            <img src="images/decorative-white-circle.svg" alt="alternative">
+        </div> <!-- end of deco-white-circle-2 -->
+        <div class="deco-blue-circle">
+            <img src="images/decorative-blue-circle.svg" alt="alternative">
+        </div> <!-- end of deco-blue-circle -->
+        <div class="deco-yellow-circle">
+            <img src="images/decorative-yellow-circle.svg" alt="alternative">
+        </div> <!-- end of deco-yellow-circle -->
+        <div class="deco-green-diamond">
+            <img src="images/decorative-green-diamond.svg" alt="alternative">
+        </div> <!-- end of deco-yellow-circle -->
+    </div> <!-- end of basic-3 -->
+    <!-- end of download -->
 
+
+{{--
     <!-- Screenshots -->
     <div id="screens" class="slider">
         <div class="container">
@@ -479,12 +546,58 @@
     <!-- end of screenshots -->
 
 
+<!-- Statistics -->
+<div class="counter">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <!-- Counter -->
+                <div id="counter">
+                    <div class="cell">
+                        <i class="fas fa-users"></i>
+                        <div class="counter-value number-count" data-count="231">1</div>
+                        <p class="counter-info">Happy Users</p>
+                    </div>
+                    <div class="cell">
+                        <i class="fas fa-code green"></i>
+                        <div class="counter-value number-count" data-count="385">1</div>
+                        <p class="counter-info">Issues Solved</p>
+                    </div>
+                    <div class="cell">
+                        <i class="fas fa-cog red"></i>
+                        <div class="counter-value number-count" data-count="159">1</div>
+                        <p class="counter-info">Good Reviews</p>
+                    </div>
+                    <div class="cell">
+                        <i class="fas fa-comments yellow"></i>
+                        <div class="counter-value number-count" data-count="127">1</div>
+                        <p class="counter-info">Case Studies</p>
+                    </div>
+                    <div class="cell">
+                        <i class="fas fa-rocket blue"></i>
+                        <div class="counter-value number-count" data-count="211">1</div>
+                        <p class="counter-info">Orders Received</p>
+                    </div>
+                </div>
+                <!-- end of counter -->
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+    
+</div> <!-- end of counter -->
+<!-- end of statistics -->
+--}}
+
+
+
     <!-- Testimonials -->
-    <div class="cards-2">
+    <div id='testimonials' class="cards-2 bg-white">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>User Testimonials</h2>
+                    <h2>Testimonials</h2>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
             <div class="row">
@@ -587,172 +700,12 @@
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
+        
     </div> <!-- end of cards-2 -->
     <!-- end of testimonials -->
 
 
-    <!-- Statistics -->
-    <div class="counter">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    
-                    <!-- Counter -->
-                    <div id="counter">
-                        <div class="cell">
-                            <i class="fas fa-users"></i>
-                            <div class="counter-value number-count" data-count="231">1</div>
-                            <p class="counter-info">Happy Users</p>
-                        </div>
-                        <div class="cell">
-                            <i class="fas fa-code green"></i>
-                            <div class="counter-value number-count" data-count="385">1</div>
-                            <p class="counter-info">Issues Solved</p>
-                        </div>
-                        <div class="cell">
-                            <i class="fas fa-cog red"></i>
-                            <div class="counter-value number-count" data-count="159">1</div>
-                            <p class="counter-info">Good Reviews</p>
-                        </div>
-                        <div class="cell">
-                            <i class="fas fa-comments yellow"></i>
-                            <div class="counter-value number-count" data-count="127">1</div>
-                            <p class="counter-info">Case Studies</p>
-                        </div>
-                        <div class="cell">
-                            <i class="fas fa-rocket blue"></i>
-                            <div class="counter-value number-count" data-count="211">1</div>
-                            <p class="counter-info">Orders Received</p>
-                        </div>
-                    </div>
-                    <!-- end of counter -->
-
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of counter -->
-    <!-- end of statistics -->
-
-
-    <!-- Download -->
-    <div id="download" class="basic-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="image-container">
-                        <img class="img-fluid" src="images/download-iphone.png" alt="alternative">
-                    </div> <!-- end of image-container -->
-                    <p class="p-large">Do you feel like you're wasting time with small stuff instead of working towards your goals? Start using Sync to organize your time and get a grip on your personal development</p>
-                    <a class="btn-solid-lg" href="#your-link"><i class="fab fa-apple"></i>DOWNLOAD</a>
-                    <a class="btn-solid-lg" href="#your-link"><i class="fab fa-google-play"></i>DOWNLOAD</a>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-        <div class="deco-white-circle-1">
-            <img src="images/decorative-white-circle.svg" alt="alternative">
-        </div> <!-- end of deco-white-circle-1 -->
-        <div class="deco-white-circle-2">
-            <img src="images/decorative-white-circle.svg" alt="alternative">
-        </div> <!-- end of deco-white-circle-2 -->
-        <div class="deco-blue-circle">
-            <img src="images/decorative-blue-circle.svg" alt="alternative">
-        </div> <!-- end of deco-blue-circle -->
-        <div class="deco-yellow-circle">
-            <img src="images/decorative-yellow-circle.svg" alt="alternative">
-        </div> <!-- end of deco-yellow-circle -->
-        <div class="deco-green-diamond">
-            <img src="images/decorative-green-diamond.svg" alt="alternative">
-        </div> <!-- end of deco-yellow-circle -->
-    </div> <!-- end of basic-3 -->
-    <!-- end of download -->
-
-{{--
-    <!-- Footer -->
-    <div class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="footer-col first">
-                        <h5>About Sync</h5>
-                        <p class="p-small">Sync is a landing page HTML template built with Bootstrap 4 for presenting mobile apps</p>
-                    </div> <!-- end of footer-col -->
-                    <div class="footer-col second">
-                        <h5>Contact Info</h5>
-                        <ul class="list-unstyled li-space-lg p-small">
-                            <li class="media">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div class="media-body">22 Innovation Street, CA, US</div>
-                            </li>
-                            <li class="media">
-                                <i class="fas fa-envelope"></i>
-                                <div class="media-body"><a href="#your-link">office@syncmobile.com</a></div>
-                            </li>
-                            <li class="media">
-                                <i class="fas fa-phone-alt"></i>
-                                <div class="media-body"><a href="#your-link">+44 376 945 23</a></div>
-                            </li>
-                        </ul>
-                    </div> <!-- end of footer-col -->
-                    <div class="footer-col third">
-                        <h5>Value Links</h5>
-                        <ul class="list-unstyled li-space-lg p-small">
-                            <li><a href="terms-conditions.html">Terms & Conditions</a></li>
-                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                            <li><a href="article-details.html">Article Details</a></li>
-                        </ul>
-                    </div> <!-- end of footer-col -->
-                    <div class="footer-col fourth">
-                        <h5>Other Apps</h5>
-                        <ul class="list-unstyled li-space-lg p-small">
-                            <li><a href="#your-link">Scientific Calculator</a></li>
-                            <li><a href="#your-link">Advanced Timer</a></li>
-                            <li><a href="#your-link">Music Store</a></li>
-                        </ul>
-                    </div> <!-- end of footer-col -->
-                    <div class="footer-col fifth">
-                        <span class="fa-stack">
-                            <a href="#your-link">
-                                <i class="fas fa-circle fa-stack-2x"></i>
-                                <i class="fab fa-facebook-f fa-stack-1x"></i>
-                            </a>
-                        </span>
-                        <span class="fa-stack">
-                            <a href="#your-link">
-                                <i class="fas fa-circle fa-stack-2x"></i>
-                                <i class="fab fa-twitter fa-stack-1x"></i>
-                            </a>
-                        </span>
-                        <span class="fa-stack">
-                            <a href="#your-link">
-                                <i class="fas fa-circle fa-stack-2x"></i>
-                                <i class="fab fa-pinterest-p fa-stack-1x"></i>
-                            </a>
-                        </span>
-                        <span class="fa-stack">
-                            <a href="#your-link">
-                                <i class="fas fa-circle fa-stack-2x"></i>
-                                <i class="fab fa-instagram fa-stack-1x"></i>
-                            </a>
-                        </span>
-                    </div> <!-- end of footer-col -->
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of footer -->  
-    <!-- end of footer -->
-
-
-    <!-- Copyright -->
-    <div class="copyright">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p class="p-small">Copyright © 2020 <a href="https://inovatik.com">Inovatik</a> - All rights reserved</p>
-                </div> <!-- end of col -->
-            </div> <!-- enf of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of copyright --> 
-    <!-- end of copyright -->
-     --}}
+    
+ 
 @endsection
 
