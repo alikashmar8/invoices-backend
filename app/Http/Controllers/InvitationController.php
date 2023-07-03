@@ -85,7 +85,7 @@ class InvitationController extends Controller
         <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/accept">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
 
-            <button type="submit" class="btn btn-link text-success">Accept</a>
+            <button type="submit" class="btn btn-link text-success" >Accept</a>
         </form>
          <form method="post" style=" display:inline-block" action="/invitations/' . $invitation->id . '/reject">
             <input type="hidden" name="notification_id" value="' . $notify->id . '" />
@@ -199,7 +199,16 @@ class InvitationController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
+        //clicking on accept button several times
+        if( count(UserBusiness::where('business_id', $invitation->business->id)->where('user_id', Auth::user()->id)->get()) >0 ){
+            if (request()->is('api/*')) {
+                //an api call
+                return response()->json(['accepted' => true]);
+            } else {
+                //a web call
+                return redirect('/businesses/' . $invitation->business->id)->with('messageSuc', 'Invitation accepted.');
+            }
+        }
         $invitation->status = InvitationStatus::ACCEPTED;
         $invitation->save();
 
