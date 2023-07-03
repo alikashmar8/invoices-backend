@@ -83,9 +83,9 @@
                                 var cell4 = row.insertCell(3);
                                 var cell5 = row.insertCell(4);
                                 cell1.innerHTML = '<textarea class="form-control" rows=1 name="invoice_items[' + itemId + '][description]" required></textarea>';
-                                cell2.innerHTML = '<input type="number" name="invoice_items[' + itemId + '][quantity]" class="form-control" value=1 min=0  required>';
-                                cell3.innerHTML = '<input type="number" name="invoice_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" value=0 min=0  required>	';
-                                cell4.innerHTML = '<input type="number" name="invoice_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" value=0 min=0  required>';
+                                cell2.innerHTML = '<input type="number"  name="invoice_items[' + itemId + '][quantity]" class="form-control" value=1 min=0  required>';
+                                cell3.innerHTML = '<input type="number" step="0.01" name="invoice_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" value=0 min=0  required>	';
+                                cell4.innerHTML = '<input type="number" step="0.01" name="invoice_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" value=0 min=0  required>';
                                 cell5.innerHTML = '<a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a>';
 
                                // contentTable.innerHTML +=  '<tr id="' + itemId + '" >  <td> <textarea class="form-control" rows=1 name="invoice_items[' + itemId + '][description]" required></textarea></td>   <td><input type="number" name="invoice_items[' + itemId + '][quantity]" class="form-control" required></td>   <td><input type="number" name="invoice_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" required>	</td>  <td><input type="number" name="invoice_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" required></td>  <td> <a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a> </td> </tr>';
@@ -106,8 +106,8 @@
                                     for (var i = 0; i < item_price.length; i++) {
                                         if(!parseInt(item_price[i].value)) item_price[i].value =0;
                                         if(!parseInt(item_gst[i].value)) item_gst[i].value =0;
-                                        total_price += parseInt(item_price[i].value);
-                                        total_gst += parseInt(item_gst[i].value);
+                                        total_price += parseFloat(item_price[i].value);
+                                        total_gst += parseFloat(item_gst[i].value);
                                     }
                                     document.getElementById('total').value = total_price;
                                     document.getElementById('gst').value = total_gst; 
@@ -121,7 +121,7 @@
                         <label for="total" class="required">
                             Total Amount <small>AUD</small>:
                         </label>
-                        <input type="number" name="total" value="{{ old('total') }}"  oninput="calculate()" class="form-control"
+                        <input type="number" name="total" step="0.01" value="{{ old('total') }}"  oninput="calculate()" class="form-control"
                             id="total" min="0" required>
                     </div>
 
@@ -129,7 +129,7 @@
                         <label for="total" class="required">
                             Total GST <small>AUD</small>:
                         </label>
-                        <input type="number" name="gst" value="{{ old('gst') }}"  oninput="calculate()" class="form-control"
+                        <input type="number" step="0.01" name="gst" value="{{ old('gst') }}"  oninput="calculate()" class="form-control"
                             id="gst" min="0" required>
                     </div>
 
@@ -179,7 +179,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="discount">Discount:</label>
-                                    <input type="number" name="discount" value="{{ old('discount', 0) }}"
+                                    <input type="number" step="0.01" name="discount" value="{{ old('discount', 0) }}"
                                         class="form-control" value="0" min="0" id="discount">
                                 </div>
                                 <div class="col-md-6">

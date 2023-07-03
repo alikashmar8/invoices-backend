@@ -44,12 +44,12 @@
                                     <tr id="{{$item->id}}" >  
                                         <td> <textarea class="form-control" rows=1 name="bill_items[{{$item->id}}][description]" required>{{$item->description}}</textarea></td>   
                                         <td>
-                                            <input type="number" name="bill_items[{{$item->id}}][quantity]" class="form-control" value={{$item->quantity}} required> 
+                                            <input type="number" step="0.01" name="bill_items[{{$item->id}}][quantity]" class="form-control" value={{$item->quantity}} required> 
                                             
                                             <input type="hidden" name="bill_items[{{$item->id}}][id]" value={{$item->id}} >
                                         </td>   
-                                        <td><input type="number" name="bill_items[{{$item->id}}][gst]" class="form-control gst" value={{$item->gst}} oninput="calculate()" required>	</td>  
-                                        <td><input type="number" name="bill_items[{{$item->id}}][item_price]" class="form-control item_price" value={{$item->item_price}} oninput="calculate()" required></td>  
+                                        <td><input type="number" step="0.01" name="bill_items[{{$item->id}}][gst]" class="form-control gst" value={{$item->gst}} oninput="calculate()" required>	</td>  
+                                        <td><input type="number" step="0.01" name="bill_items[{{$item->id}}][item_price]" class="form-control item_price" value={{$item->item_price}} oninput="calculate()" required></td>  
                                         <td> <a class="btn btn-danger text-white" style="float: right;" onclick="removeItem({{$item->id}})"> <i class="fa fa-ban"></i> </a> </td>  
                                         
                                     </tr>
@@ -73,8 +73,8 @@
                                 var cell5 = row.insertCell(4); 
                                 cell1.innerHTML = '<textarea class="form-control" rows=1 name="bill_items[' + itemId + '][description]" required></textarea>';
                                 cell2.innerHTML = '<input type="number" name="bill_items[' + itemId + '][quantity]" class="form-control" value=1 min=0  required> <input type="hidden" name="bill_items[' + itemId + '][id]" value=' + itemId + ' >';
-                                cell3.innerHTML = '<input type="number" name="bill_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" value=0 min=0  required>	';
-                                cell4.innerHTML = '<input type="number" name="bill_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" value=0 min=0  required>';
+                                cell3.innerHTML = '<input type="number" step="0.01" name="bill_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" value=0 min=0  required>	';
+                                cell4.innerHTML = '<input type="number" step="0.01" name="bill_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" value=0 min=0  required>';
                                 cell5.innerHTML = '<a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a>'; 
                                  
                                // contentTable.innerHTML +=  '<tr id="' + itemId + '" >  <td> <textarea class="form-control" rows=1 name="bill_items[' + itemId + '][description]" required></textarea></td>   <td><input type="number" name="bill_items[' + itemId + '][quantity]" class="form-control" required></td>   <td><input type="number" name="bill_items[' + itemId + '][gst]" class="form-control gst" oninput="calculate()" required>	</td>  <td><input type="number" name="bill_items[' + itemId + '][item_price]" class="form-control item_price" oninput="calculate()" required></td>  <td> <a class="btn btn-danger text-white" style="float: right;" onclick="removeItem(' + itemId + ')"> <i class="fa fa-ban"></i> </a> </td> </tr>';
@@ -95,8 +95,8 @@
                                     for (var i = 0; i < item_price.length; i++) {
                                         if(!parseInt(item_price[i].value)) item_price[i].value =0;
                                         if(!parseInt(item_gst[i].value)) item_gst[i].value =0;
-                                        total_price += parseInt(item_price[i].value);
-                                        total_gst += parseInt(item_gst[i].value);
+                                        total_price += parseFloat(item_price[i].value);
+                                        total_gst += parseFloat(item_gst[i].value);
                                     }
                                     document.getElementById('total').value = total_price;
                                     document.getElementById('gst').value = total_gst; 
@@ -110,7 +110,7 @@
                         <label for="total" class="required">
                             Total Amount <small>AUD</small>:
                         </label>
-                        <input type="number" name="total" value="{{ $bill->total }}" oninput="calculate()" class="form-control"
+                        <input type="number" step="0.01" name="total" value="{{ $bill->total }}" oninput="calculate()" class="form-control"
                             id="total" min="0" required>
                     </div>
                     
@@ -119,7 +119,7 @@
                         <label for="total" class="required">
                             Total GST <small>AUD</small>:
                         </label>
-                        <input type="number" name="gst" value="{{ $bill->gst }}" oninput="calculate()"class="form-control"
+                        <input type="number" step="0.01" name="gst" value="{{ $bill->gst }}" oninput="calculate()"class="form-control"
                             id="gst" min="0" required>
                     </div>
 
