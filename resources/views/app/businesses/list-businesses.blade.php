@@ -30,8 +30,8 @@
                                                 <div class="avatar avatar-xl " alt="Logo">
                                                     <img class='w-100 border-radius-lg shadow-sm' src='{{ $bus->logo }}'>
                                                 </div>
-                                                <h4 class='w-auto my-auto'>
-                                                    {{ $bus->name }}
+                                                <h4 class='w-auto my-auto '>
+                                                    {{ $bus->name }}  
                                                 </h4>
                                                 <div
                                                     style='position: absolute;width: fit-content;right: 57px;top: 50%;transform: translateY(-50%);'>

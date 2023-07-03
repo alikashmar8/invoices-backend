@@ -3,7 +3,7 @@
 @section('title', $business->name)
 
 
-@section('content') 
+@section('content')  
 <br> 
     <div style="width: 100%; height:100%; position: absolute; text-align:center;display:none; z-index:1050; background: white;" id="gocha">
         
@@ -86,7 +86,19 @@
                 <div class="card px-3 ">
                     <div class="row noScrollBar" style='overflow: scroll;' id='incomingConten'>
                         <div class=" bg-light bg-gradient">
-                            <a href='/invoices/create' class="btn btn-success w-25"> Create new </a>
+                            <a @if ($user_has_suitable_plan ==1 ) 
+                                href='/invoices/create' 
+                                @endif
+                                class="btn btn-success w-25 text-white
+                                @if ( $user_has_suitable_plan ==0 && $current_user_business_details->role == App\Enums\UserRole::MANAGER )
+                                gogem
+                                @endif
+                                "> 
+                                @if ( $user_has_suitable_plan ==0 && $current_user_business_details->role == App\Enums\UserRole::TEAM_MEMBER )
+                                Access suspended
+                                @else 
+                                Create new
+                                @endif </a>
 
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterInvoices()"> Filter </a>
                             <div class="row p-2" id="filterInvoices">
@@ -323,7 +335,19 @@
 
                     <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
                         <div class=" bg-light bg-gradient">
-                            <a href='/bills/create' class="btn btn-success w-25"> Create new </a>
+                            <a @if ($user_has_suitable_plan ==1 ) 
+                            href='/bills/create'
+                            @endif
+                            class="btn btn-success w-25 text-white
+                            @if ( $user_has_suitable_plan ==0 && $current_user_business_details->role == App\Enums\UserRole::MANAGER )
+                            gogem
+                            @endif
+                            "> 
+                            @if ( $user_has_suitable_plan ==0 && $current_user_business_details->role == App\Enums\UserRole::TEAM_MEMBER )
+                            Access suspended
+                            @else 
+                            Create new
+                            @endif </a> 
 
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterBills()"> Filter </a>
                             <div class="row p-2" id="filterBills">

@@ -114,8 +114,42 @@ class BusinessController extends Controller
     public function show(Business $business)
     {
         $exists = $business->users->contains(Auth::user());
+        $user_has_suitable_plan = 1 ;
         if ($exists) {
+            //get user details 
             $current_user_business_details = UserBusiness::where('business_id', $business->id)->where('user_id', Auth::user()->id)->first();
+
+            //check if user plan is suitable for manager:
+            if($current_user_business_details->role == 'MANAGER'){
+                //how many businesses deos this manager have?
+                $user_manage_to = UserBusiness::where('user_id', Auth::user()->id)->where('role' , 'MANAGER')->get();
+                //in case this manager has more than one business, he can't access other than the first business:
+                if(Auth::user()->plan_id < 3 && count($user_manage_to) > 1 && $user_manage_to[0]->business_id != $business->id ) {
+                    $user_has_suitable_plan = 0 ; 
+                }
+            }
+            //check if user has suitable plan as TEAM_MEMBER
+            else{
+                //how is the manager?
+                $manager = User::where( 'id' , UserBusiness::where('business_id', $business->id)->where('role' , 'MANAGER')->first()->user_id)->first() ;
+                //how many business deos the manager has?
+                $manager_manage_to = UserBusiness::where('user_id', $manager->id)->where('role' , 'MANAGER')->get();
+                //on basic plan, the team member cant access
+                if($manager->plan_id ==1 ) $user_has_suitable_plan = 0 ;
+                //on gold plan:
+                elseif($manager->plan_id ==2 ) {
+                    //if manager has multiple businesses, team member can't access
+                    if( count($manager_manage_to) > 1  ) $user_has_suitable_plan = 0 ; 
+                    // if manager has one business and more than 10 team members, tem member can't access 
+                    else{
+                        if( count(UserBusiness::where('business_id', $business->id)->get()) > 10 ) $user_has_suitable_plan = 0 ;
+                    }
+                } 
+
+            }
+            
+            
+            //redirect to business page 
             if($current_user_business_details->role == 'TEAM_MEMBER') $invoices =  $business->invoices->where('created_by' , Auth::user()->id)->sortByDesc('created_at');
             else $invoices =  $business->invoices->sortByDesc('created_at');
             // TODO: query Still under testing (better than loops)
@@ -181,7 +215,7 @@ class BusinessController extends Controller
                 return Carbon::parse($item->created_at)->format('m');
             });*/
             
-            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'bills', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn','monthlyInvoices','totalPaidGST' , 'totalPendingGST','totalEarningGST' , 'totalPendingEarnGST' ));
+            return view('app.businesses.show-business', compact('business', 'current_user_business_details', 'invoices' ,'bills', 'totalPaid' , 'totalPending','totalEarning','totalPendingEarn','monthlyInvoices','totalPaidGST' , 'totalPendingGST','totalEarningGST' , 'totalPendingEarnGST', 'user_has_suitable_plan' ));
         } else {
             return redirect('/')->with('messageDgr', 'Access Denied.');
         }
