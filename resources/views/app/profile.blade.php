@@ -61,6 +61,7 @@
                 <div class="row text-center">
                     
                     <h2 class="{{$user->plan->name}}Text">{{$user->plan->name}} Plan</h2>
+                    @if($user->plan->id > 1)<h5 class="mt-2 mb-2">Expiry date: {{$user->plan_end_date}}</h5>@endif
                     <div class="col-md-4">
                         <div class="card">
                             <h4> Uplaoded Documents </h4>

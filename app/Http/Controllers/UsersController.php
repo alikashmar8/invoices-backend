@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PaymentCompleted;
 use App\Models\Notification;
 use Image;
+use App\Mail\RenewPlansReminder;
 class UsersController extends Controller
 {
     public function profile(User $user)
@@ -28,6 +29,14 @@ class UsersController extends Controller
             return redirect('/')->with( 'messageDgr' , 'Access Denied.');
         }
         $notifications = $user->notifications()->latest()->get();
+
+        //expired plan for user
+        if( ($user->plan_id > 1) && (Carbon::now()->diffInDays(Carbon::parse($user->plan_end_date), false) < 0)) {
+            
+            $user->plan_id = 1 ;
+            $user->save();
+        }
+
         $user->plan = Plan::findOrFail($user->plan_id);
 
         $userStorage = 0;
@@ -47,6 +56,8 @@ class UsersController extends Controller
                             ->where('status', 'PENDING')->get()) ;
 
         }
+
+        
  
         if( request()->is('api/*')){
             //an api call

@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <div class="card-header">
                                             <label for="card-element">
-                                                Enter your credit card information {{$amount}}  
+                                                Enter your credit card information   
                                             </label>
                                         </div> 
                                         <div class="card-body">
