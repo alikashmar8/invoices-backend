@@ -20,7 +20,11 @@ Route::get('/e', function (){
 });
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('w');
+Route::get('/support', function () {
+    return view('support');
+})->name('support');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

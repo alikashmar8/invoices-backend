@@ -44,7 +44,7 @@ class RenewPlansReminderCommand extends Command
     {
         $users = User::where('plan_id' , '>' , 1)->get();
         foreach($users as $user){  
-            $user->expire = Carbon::now()->diffInDays(Carbon::parse($user->plan_end_date));
+            $user->expire = Carbon::now()->diffInDays(Carbon::parse($user->plan_end_date), false);
             if( $user->expire < 3 && $user->expire >= 0){
                 Mail::to('mk.farhat@hotmail.com')->send(new RenewPlansReminder($user));
             }
