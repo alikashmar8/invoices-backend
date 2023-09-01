@@ -148,7 +148,7 @@
                     <div class="card-body">
                         <p>Name: {{Auth::user()->name}}</p>
                         <p>Email: {{Auth::user()->email}}</p>
-                        <p>Date: {{Carbon\Carbon::now()->format('Y-m-d')}}</p>
+                        <p>Expiry Date: {{Carbon\Carbon::parse( $expiryDate )->format('d-m-Y')}}</p>
                         <p>Service: {{$plan->name}} Plan for ${{$plan->price}}/mo.</p>
                     </div>
                     
@@ -156,5 +156,13 @@
             </div>
         </div>
     </div>
+</div>
+<BR><BR>
+<div class="container text-center mt-5 ">
+    <small> For your privacy and safety from digital threats, please note that Invoice Gem does not store your card details. To renew your plan, kindly log in to your account and recharge it before the expiry date to continue enjoying our premium services.
+    </small>
+    <small>
+        Are you busy and have multiple due dates? The good news is that you can purchase plan extensions well before your current plan expires, ensuring uninterrupted service. Additionally, our system will send you a friendly reminder email before the expiry date.
+    </small>
 </div>
 @endsection

@@ -126,10 +126,25 @@ class UsersController extends Controller
     }
     public function registerPlan($id)
     {
-        $plan = Plan::findOrFail($id);
-        if(Auth::user()->plan_id >= $id){
-            return redirect('/profile/'.Auth::user()->id)->with( 'messageWrg' , 'You are currently registered in '. Plan::findOrFail(Auth::user()->plan_id)->name.' plan.');
+
+        if( $id == 2  ){
+            if(Auth::user()->plan_end_date > Carbon::now()) $expiryDate = Carbon::parse(Auth::user()->plan_end_date)->addMonths(1);
+            else $expiryDate = Carbon::now()->addMonths(1);
         }
+        elseif ( $id ==3 ){
+            if( Auth::user()->plan_id == 3 ){
+                if(Auth::user()->plan_end_date > Carbon::now()) $expiryDate = Carbon::parse(Auth::user()->plan_end_date)->addMonths(1);
+                else $expiryDate = Carbon::now()->addMonths(1);
+            }
+            else{
+                $expiryDate = Carbon::now()->addMonths(1);
+            }
+        }
+        else{
+            return redirect('/pricing');
+        }
+        $plan = Plan::findOrFail($id);
+         
         // Enter Your Stripe Secret
         \Stripe\Stripe::setApiKey('sk_test_51HywjtC3KTL075dcARHpuSgf8trC3awdHpWBgHYmfInB7nbYTSYNnHBlLRaOPFOffMODwAvpkjZB1kzjuRrFumxv00H2p0JX7t');
          
@@ -145,7 +160,7 @@ class UsersController extends Controller
         $intent = $payment_intent->client_secret;
 
         
-        return view('plan.checkout' ,compact('plan','amount','intent'));
+        return view('plan.checkout' ,compact('plan','amount','intent', 'expiryDate'));
     }
     public function transfer(Request $request)
     {
@@ -157,8 +172,24 @@ class UsersController extends Controller
 		$payment->is_paid = 1 ;
 		$payment->plan_id = $request->id; 
         $payment->save();
+        if( $request->id == 2 ){
+            if(Auth::user()->plan_end_date > Carbon::now()) Auth::user()->plan_end_date = Carbon::parse(Auth::user()->plan_end_date)->addMonths(1);
+            else Auth::user()->plan_end_date = Carbon::now()->addMonths(1);
+        }
+        elseif ( $request->id ==3 ){
+            if( Auth::user()->plan_id == 3 ){
+                if(Auth::user()->plan_end_date > Carbon::now()) Auth::user()->plan_end_date = Carbon::parse(Auth::user()->plan_end_date)->addMonths(1);
+                else Auth::user()->plan_end_date = Carbon::now()->addMonths(1);
+            }
+            else{
+                Auth::user()->plan_end_date = Carbon::now()->addMonths(1);
+            }
+        }
+        else{
+            return redirect('/pricing');
+        }
         Auth::user()->plan_id = $request->id;
-        Auth::user()->plan_end_date = Carbon::now()->addMonths(1);
+
         Auth::user()->save();
 
         $data = array(

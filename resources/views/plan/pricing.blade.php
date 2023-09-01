@@ -101,20 +101,20 @@
                 @else
 
                 <td ></td>
-                <td class="p-1">
-                    <a class="Dis-btn-outline" disabled>Registered</a>
+                <td class="p-1 py-5">
+                    <!--a class="Dis-btn-outline" disabled>Registered</a-->
                 </td>
                 <td >
-                    @if(Auth::user()->plan_id >= 2 )
-                        <a class="Dis-btn-outline" disable>Registered</a>
-                        @else
+                    @if(Auth::user()->plan_id == 2 )
+                        <a href="/plan-2" class=" Gold-btn-outline ">Renew</a>
+                    @else
                         <a href="/plan-2" class=" Gold-btn-outline "> Register </a>
                     @endif
                 </td>
                 <td>
                     @if(Auth::user()->plan_id == 3 )
-                        <a class="Dis-btn-outline" disabled>Registered</a>
-                        @else
+                        <a href="/plan-3" class=" Gem-btn-outline ">Renew</a>
+                    @else
                         
                         <a href="/plan-3" class="Gem-btn-outline">Register</a>
                     @endif
