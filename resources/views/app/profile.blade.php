@@ -19,7 +19,7 @@
                     <div class="px-4 mt-1">
                         <p class="fonts-prof">
                             @if(count(Auth::user()->businesses) > 0)
-                            You've created {{count(Auth::user()->businesses)}} business profile(s)
+                            You've {{count(Auth::user()->businesses)}} business profile(s)
                             @else
                             <a class='btn btn-link' href="/businesses">Create your business profile</a>
                             @endif
@@ -65,6 +65,7 @@
                     <div class="col-md-4">
                         <div class="card">
                             <h4> Uplaoded Documents </h4>
+                             
                             <p>{{$userStorage}} /   @if($user->plan->number_docs == -1) <i class="fa fa-infinity text-success" ></i> </p>
                                                     @else {{$user->plan->number_docs}}  {{--<input type="range" class="form-range" min='0' max='{{$user->plan->number_docs}}' value='{{$userStorage}}' disabled>--}}  </p>
                             <div class='w-100 bg-secondary my-1' style="height: 10px;border-radius: 10px;">
@@ -108,7 +109,11 @@
 </div>
 
 
+@if(count($notifications))
+<Br><BR><hr>
 <div class="container mt-5" id='Notifications'>
+    
+    <h4 class=""> Notifications</h4>
     <div class="row d-flex justify-content-center">
         <div class="col-md-12">
             <div class="card px-3  ">
@@ -240,7 +245,7 @@
         </div>
     </div>
 </div>
-
+@endif
 {{--EditProfileForm--}}
 <div class="modal fade" id="EditProfileForm" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class=" modal-dialog" role="document">

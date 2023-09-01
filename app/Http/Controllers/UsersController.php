@@ -40,10 +40,12 @@ class UsersController extends Controller
         $user->plan = Plan::findOrFail($user->plan_id);
 
         $userStorage = 0;
-        $businesses =  $user->businesses()->allRelatedIds();
+        $businesses =  $user->businesses()->get();//->allRelatedIds();
+        
         foreach ($businesses as $bus) { 
-            $userStorage += count(Invoice::where('business_id' , $bus)->get());
-            $userStorage += count(Bill::where('business_id' , $bus )->get());
+            foreach( $bus->invoices  as $iv){
+                $userStorage += count($iv->attachments);
+            } 
         }
 
         $managedBusinesses = UserBusiness::where('user_id', Auth::user()->id)->where('role', 'MANAGER')->get();
