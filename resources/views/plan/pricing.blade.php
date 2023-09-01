@@ -5,8 +5,31 @@
 
 @section('content')
 <style>@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');</style>
+<div class="py-5 header bg-white " style=" border-bottom: 3px solid #eee;">
+    <div class="container"  >
+        <div class="deco-blue-circle">
+            <img src="images/decorative-blue-circle.svg" alt="alternative">
+        </div>
+        <div class="deco-green-diamond">
+            <img src="images/decorative-green-diamond.svg" alt="alternative">
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+    <h1>
+        Supercharge your business. <font style="color: #ff556e; font-weight: initial"><BR>Start free.</font>
+    </h1>
 
-<div class="container ">
+            </div>
+            <div class="col-md-4">
+<img src="images/pricingBanner1.jpg"  style="width: 100% ; position; absolute;">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5 pt-5 ">
+    <p style="font-size: x-large;">Get the best value at every stage of your invoice management journey.</p>
+    <BR>
     <div class="row  my-2 noScrollBar" style='overflow: scroll;'> 
         <table class="table-striped table-hover ">
             <colgroup>
