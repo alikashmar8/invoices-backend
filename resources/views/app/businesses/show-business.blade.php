@@ -85,7 +85,7 @@
             <div class="col-md-12">
                 <div class="card px-3 ">
                     <div class="row noScrollBar" style='overflow: scroll;' id='incomingConten'>
-                        <div class=" bg-light bg-gradient">
+                        <div class=" bg-light bg-gradient p-3">
                             <a @if ($user_has_suitable_plan ==1 ) 
                                 href='/invoices/create' 
                                 @endif
@@ -101,26 +101,28 @@
                                 @endif </a>
 
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterInvoices()"> Filter </a>
-                            <div class="row p-2" id="filterInvoices">
+                            <div class="row p-4" id="filterInvoices">
                                 <div class="col-md-4">
-                                    <label>Starting date:</label>
-                                    <input type="date" id='startingDate' class="form-control">
+                                    <label>Starting date for invoices:</label>
+                                    <input type="date" id='startingDateI' class="form-control" <?php if(isset($_GET['startI']) ) echo "value='" . $_GET['startI'] . "'" ; ?> >
                                 </div>
                                 <div class="col-md-4 ">
-                                    <label>Ending date:</label>
-                                    <input type="date" id='endingDate' class="form-control">
-                                </div>
-                                <div class="col-md-4 ">
-                                    <a class='btn btn-success text-white form-control ' onclick="setFilterInvoices()">Set
-                                    </a>
-
-                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterInvoices()">Clear
-                                    </a>
+                                    <label>Ending date for invoices:</label>
+                                    <input type="date" id='endingDateI' class="form-control"  <?php if(isset($_GET['endI']) ) echo "value='" . $_GET['endI'] . "'" ; ?> >
+                                </div> 
+                                <div class="col-md-4 m-auto"> 
+                                    <a class='btn btn-success text-white form-control ' style="width: fit-content" onclick="setFilterInvoices()">
+                                        Show result
+                                    </a> 
+                                    <a class='btn btn-danger text-white form-control'  style="width: fit-content" onclick="clearFilterInvoices()">
+                                        Clear
+                                    </a> 
                                 </div>
                             </div>
-                            <script>
+
+                            <!-- old filter script>
                                 var invoicesList = [];
-                            </script>
+                            </script -->
                         </div>
                         <table class='table table-striped table-hover table-responsive-sm' id='myDataTable'>
                             <thead>
@@ -128,9 +130,7 @@
                                     <td class="filterhead">#</td>
                                     <td class="filterhead">Title</td>
                                     <td class="filterhead">Amount</td>
-                                    <td class="filterhead">Status</td>
-                                    <td class="filterhead">Reference #</td>
-                                    <td class="filterhead">Added by</td>
+                                    <td class="filterhead">Status</td> 
                                     <td>Actions</td>
                                 </tr>
                             </thead>
@@ -138,6 +138,14 @@
                             <tbody>
                                 @if (count($invoices))
                                     @foreach ($invoices as $invoice)
+                                    <?php 
+                                        if(isset($_GET['startI']) ){
+                                            if( $invoice->created_at <= $_GET['startI'] ) continue;
+                                        }
+                                        if(isset($_GET['endI']) &&  $_GET['endI'] != ''  ){
+                                            if( $invoice->created_at > $_GET['endI'] ) continue;
+                                        }
+                                    ?>
                                         <tr id='{{ $invoice->id }}'>
                                             <td>{{ $invoice->id }}</td>
                                             <td>{{ $invoice->title }}</td>
@@ -152,12 +160,7 @@
                                                         style='white-space: nowrap;'>Not Paid - Due:
                                                         {{ $invoice->due_date }} </a>
                                                 @endif
-                                            </td>
-                                            <td>{{ $invoice->reference_number }}</td>
-                                            <td><img src="{{ asset($invoice->createdBy->profile_picture) }}"
-                                                    class="rounded-circle" style='max-width: 30px'>
-                                                {{ $invoice->createdBy->name }}
-                                            </td>
+                                            </td> 
                                             <td>
                                                 <button type="button" class="btn col-md-2 p-0 mx-1"
                                                     data-target="#showModal-{{ $invoice->id }}" data-toggle="modal">
@@ -319,9 +322,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <script>
+                                        <!-- old filter script>
                                             invoicesList.push(['{{ $invoice->id }}', '{{ $invoice->created_at }}']);
-                                        </script>
+                                        </script -->
                                     @endforeach
                                 @else
                                     <tr>
@@ -334,7 +337,7 @@
                     </div>
 
                     <div class="row noScrollBar" style='overflow: scroll; display:none;' id='outgoingConten'>
-                        <div class=" bg-light bg-gradient">
+                        <div class=" bg-light bg-gradient p-3">
                             <a @if ($user_has_suitable_plan ==1 ) 
                             href='/bills/create'
                             @endif
@@ -350,19 +353,21 @@
                             @endif </a> 
 
                             <a class="btn btn-info w-25 float-right text-white" onclick="showFilterBills()"> Filter </a>
-                            <div class="row p-2" id="filterBills">
+                            <div class="row p-4" id="filterBills">
                                 <div class="col-md-4">
-                                    <label>Starting date:</label>
-                                    <input type="date" id='startingDateB' class="form-control">
+                                    <label>Starting date for bills:</label>
+                                    <input type="date" id='startingDateB' class="form-control"  <?php if(isset($_GET['startB']) ) echo "value='" . $_GET['startB'] . "'" ; ?>  >
                                 </div>
                                 <div class="col-md-4 ">
-                                    <label>Ending date:</label>
-                                    <input type="date" id='endingDateB' class="form-control">
+                                    <label>Ending date for bills:</label>
+                                    <input type="date" id='endingDateB' class="form-control"  <?php if(isset($_GET['endB']) ) echo "value='" . $_GET['endB'] . "'" ; ?>  >
                                 </div>
-                                <div class="col-md-4 ">
-                                    <a class='btn btn-success text-white form-control ' onclick="setFilterBills()">Set </a>
-
-                                    <a class='btn btn-danger text-white form-control' onclick="clearFilterBills()">Clear
+                                <div class="col-md-4 m-auto">
+                                    <a class='btn btn-success text-white form-control ' style="width: fit-content" onclick="setFilterBills()">
+                                        Show result
+                                    </a> 
+                                    <a class='btn btn-danger text-white form-control' style="width: fit-content" onclick="clearFilterBills()">
+                                        Clear
                                     </a>
                                 </div>
                             </div>
@@ -376,8 +381,7 @@
                                     <td class="filterhead1">#</td>
                                     <td class="filterhead1">Title</td>
                                     <td class="filterhead1">Amount</td>
-                                    <td class="filterhead1">Status</td>
-                                    <td class="filterhead1">Added by</td>
+                                    <td class="filterhead1">Status</td> 
                                     <td>Actions</td>
                                 </tr>
                             </thead>
@@ -385,6 +389,14 @@
                             <tbody>
                                 @if (count($bills))
                                     @foreach ($bills as $bill)
+                                    <?php 
+                                        if(isset($_GET['startB']) ){ 
+                                            if( $bill->created_at <= $_GET['startB'] ) continue;
+                                        }
+                                        if(isset($_GET['endB']) &&  $_GET['endB'] != ''  ){
+                                            if( $bill->created_at > $_GET['endB'] ) continue;
+                                        }
+                                    ?>
                                         <tr id="{{ $bill->id }}">
                                             <td>{{ $bill->id }}</td>
                                             <td>{{ $bill->title }}</td>
@@ -399,11 +411,7 @@
                                                         style='white-space: nowrap;'>Not Paid - Due:
                                                         {{ $bill->due_date }} </a>
                                                 @endif
-                                            </td>
-                                            <td><img src="{{ asset($bill->createdBy->profile_picture) }}"
-                                                    class="rounded-circle" style='max-width: 30px'>
-                                                    {{ $bill->createdBy->name }}
-                                            </td>
+                                            </td> 
                                             <td>
                                                 <button type="button" class="btn col-md-2 p-0 mx-1"
                                                     data-target="#showModal-{{ $bill->id }}" data-toggle="modal">
@@ -747,6 +755,7 @@ document.getElementById("peopleWithAccessAppend{{ $loop->index }}").appendChild(
         </div>
     </div>
 
+     
     <script>
         function getIncoming() {
             document.getElementById('incomingLink').classList.add("btn-primary");
@@ -790,7 +799,7 @@ document.getElementById("peopleWithAccessAppend{{ $loop->index }}").appendChild(
             @endif
         }
 
-
+        //old filter JS
         var filterInvoice = false;
         document.getElementById('filterInvoices').style.display = 'none';
 
@@ -803,26 +812,19 @@ document.getElementById("peopleWithAccessAppend{{ $loop->index }}").appendChild(
                 filterInvoice = false;
             }
         }
-
+        <?php if( (isset($_GET['startI'])  && $_GET['startI']!='') || (isset($_GET['endI'])  && $_GET['endI']!='')  ) {echo "showFilterInvoices();";} ?>
+        var currentUrl = window.location.href.split("?")[0]; 
+        
         function setFilterInvoices() {
-            invoicesList.forEach(setFunction);
-        }
-
-        function setFunction(item, index) {
-            clearFilterInvoices();
-            var filterDate = new Date(item[1]);
-            var endingDate = new Date(document.getElementById('endingDate').value);
-            var startingDate = new Date(document.getElementById('startingDate').value);
-            if (filterDate.getTime() < startingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
-            if (filterDate.getTime() > endingDate.getTime()) document.getElementById(item[0]).style.display = 'none';
+            window.location.replace( currentUrl 
+            
+            + "?startI=" + document.getElementById('startingDateI').value + "&endI=" + document.getElementById('endingDateI').value 
+            + "&startB=" + document.getElementById('startingDateB').value + "&endB=" + document.getElementById('endingDateB').value
+            );
         }
 
         function clearFilterInvoices() {
-            invoicesList.forEach(clearFunction);
-        }
-
-        function clearFunction(item, index) {
-            document.getElementById(item[0]).style.display = 'table-row';
+            window.location.replace( currentUrl);
         }
 
         var filterBill = false;
@@ -836,31 +838,22 @@ document.getElementById("peopleWithAccessAppend{{ $loop->index }}").appendChild(
                 document.getElementById('filterBills').style.display = 'none';
                 filterBill = false;
             }
-        }
-
+        } 
+        <?php if( (isset($_GET['startB']) && $_GET['startB']!='') || (isset($_GET['endB']) && $_GET['endB']!='') ) {echo "showFilterBills();";} ?>
         function setFilterBills() {
-            billsList.forEach(setFunctionB);
+            window.location.replace( currentUrl 
+            + "?startI=" + document.getElementById('startingDateI').value + "&endI=" + document.getElementById('endingDateI').value 
+            + "&startB=" + document.getElementById('startingDateB').value + "&endB=" + document.getElementById('endingDateB').value
+            + "&setO=tr" );
         }
-
-        function setFunctionB(itemB, index) {
-            clearFilterBills();
-            var filterDateB = new Date(itemB[1]);
-            var endingDateB = new Date(document.getElementById('endingDateB').value);
-            var startingDateB = new Date(document.getElementById('startingDateB').value);
-            if (filterDateB.getTime() < startingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
-            if (filterDateB.getTime() > endingDateB.getTime()) document.getElementById(itemB[0]).style.display = 'none';
-        }
-
+        <?php if( isset($_GET['setO']) && $_GET['setO']=='tr') {echo 'setTimeout(getOutgoing, 1000);';} ?>
         function clearFilterBills() {
-            billsList.forEach(clearFunctionB);
-        }
-
-        function clearFunctionB(itemB, index) {
-            document.getElementById(itemB[0]).style.display = 'table-row';
-        }
+            window.location.replace( currentUrl);
+        } 
+        
+        //end old filter
         @if(session()->has('msg')) 
-
-        getOutgoing();
+            setTimeout(getOutgoing, 1000);
         @endif
     </script>
     <!-- Leave business modal -->
